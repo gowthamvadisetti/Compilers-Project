@@ -5,7 +5,7 @@ file_location=sys.argv[1]
 #token specification
 keywords=['BEGIN','class','ensure','nil','self','when','END','def','false','not','super','while','alias','defined','for','or','then','yield','and','do','if','redo','true','begin','else','in','rescue','undef','break','elsif','module','retry','unless','case','end','next','return','until']
 operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET','POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT','COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS','MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR','BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS','COMPARISON','DOUBLE_EQUALS','TRIPLE_EQUALS','NOT_EQUALS','EQUAL_TILDE','BANG_TILDE','LOGICAL_AND','LOGICAL_OR','INCL_RANGE','EXCL_RANGE','EQUALS','MODULO_EQUALS','DIVIDE_EQUALS','MINUS_EQUALS','PLUS_EQUALS','OR_EQUALS','AND_EQUALS','RIGHT_SHIFT_EQUALS','LEFT_SHIFT_EQUALS','MULTIPLY_EQUALS','LOGICAL_AND_EQUALS','LOGICAL_OR_EQUALS','POWER_EQUALS','WORD_NOT','WORD_AND','WORD_OR']
-tokens=keywords+operators+['IDENTIFIER','NUMBER','PLUS']
+tokens=keywords+operators+['IDENTIFIER','NUMBER','FLOAT','PLUS']
 
 reserved={}
 
@@ -74,6 +74,14 @@ def t_NUMBER(t):
 		print("Integer value too large %d", t.value)
 		t.value = 0
 	return t
+def t_FLOAT(t):
+	r'\d+\.\d+'
+	try:
+		t.value = float(t.value)
+	except ValueError:
+		print("Integer value too large %d", t.value)
+		t.value = 0
+	return t
 
 t_ignore = "\t"
 
@@ -91,10 +99,18 @@ fp=open(file_location,'r')
 file_contents=fp.read()
 print file_contents+"\n\n\n"
 lex.input(file_contents) #give ruby file input
-print "TOKEN VALUE"
+print "TOKEN OCCURENCES VALUES"
+tok_dict={}
 while True:
 	tok=lex.token()
 	if not tok:
 		break
 	else:
-		print tok.type,tok.value
+		if tok.type in tok_dict.keys():
+			tok_dict[tok.type][0]+=1
+			tok_dict[tok.type][1].append(tok.value)
+		else:
+			tok_dict[tok.type]=[1,[tok.value]]
+			# print tok.type,tok.value
+for tok in tok_dict.keys():
+	print tok,tok_dict[tok][0],tok_dict[tok][1]
