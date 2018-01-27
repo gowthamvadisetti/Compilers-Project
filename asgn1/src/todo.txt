@@ -1,0 +1,20 @@
+tokens left
+IS_DEFINED- actually defined? is the keyword
+GLOBAL
+STRING2
+HERE_DOC
+REGEX,
+COMMENT-not in bnf what to do?
+NUMBERS-int,float defined need verification
+brackets?
+delimiters
+=>  --map operator done need verification
+question mark - done
+some more symobls 
+$- created
+\-probably not needed
+: -created
+:: - already created
++@,-@ -- done need verification
+~   already done need verification
+" created by mistake is it needed?

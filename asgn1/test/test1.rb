@@ -5,12 +5,15 @@ z=1
 if defined? x
 	x []=z
 end
-z+=b**3
+z+=b**3.3
 l/=ab+41545454
 if 1<=>2 && 1==1
 	zr%=1
 end
 for i in 0..5
-a|=100
+a='cccd'
 end
+$var2
+:newvar
+::newvar2
 END

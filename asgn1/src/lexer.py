@@ -3,15 +3,17 @@ import sys
 file_location=sys.argv[1]
 
 #token specification
+
+
 keywords=['BEGIN','class','ensure','nil','self','when','END','def','false','not','super','while','alias','defined','for','or','then','yield','and','do','if','redo','true','begin','else','in','rescue','undef','break','elsif','module','retry','unless','case','end','next','return','until']
-operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET','POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT','COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS','MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR','BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS','COMPARISON','DOUBLE_EQUALS','TRIPLE_EQUALS','NOT_EQUALS','EQUAL_TILDE','BANG_TILDE','LOGICAL_AND','LOGICAL_OR','INCL_RANGE','EXCL_RANGE','EQUALS','MODULO_EQUALS','DIVIDE_EQUALS','MINUS_EQUALS','PLUS_EQUALS','OR_EQUALS','AND_EQUALS','RIGHT_SHIFT_EQUALS','LEFT_SHIFT_EQUALS','MULTIPLY_EQUALS','LOGICAL_AND_EQUALS','LOGICAL_OR_EQUALS','POWER_EQUALS','IS_DEFINED','WORD_NOT','WORD_AND','WORD_OR']
-tokens=keywords+operators+['IDENTIFIER','NUMBER','FLOAT','STRING','STRING2','HEREDOC','REGEXP']
+operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET','POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT','COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS','MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR','BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS','COMPARISON','DOUBLE_EQUALS','TRIPLE_EQUALS','NOT_EQUALS','EQUAL_TILDE','BANG_TILDE','LOGICAL_AND','LOGICAL_OR','INCL_RANGE','EXCL_RANGE','EQUALS','MODULO_EQUALS','DIVIDE_EQUALS','MINUS_EQUALS','PLUS_EQUALS','OR_EQUALS','AND_EQUALS','RIGHT_SHIFT_EQUALS','LEFT_SHIFT_EQUALS','MULTIPLY_EQUALS','LOGICAL_AND_EQUALS','LOGICAL_OR_EQUALS','POWER_EQUALS','WORD_NOT','WORD_AND','WORD_OR','MAP','PLUS_AT','MINUS_AT']
+tokens=keywords+operators+['IDENTIFIER','FLOAT','NUMBER','STRING','STRING2','HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK']
 
 reserved={}
 
 for word in keywords:
 	reserved[word]=word
-
+# reserved['defined']='defined?'
 t_CONSTANT_RESOLUTION=r'::'
 t_ELEMENT_REFERENCE=r'\[\]'
 t_ELEMENT_SET=r'\[\]='
@@ -57,14 +59,30 @@ t_MULTIPLY_EQUALS=r'\*='
 t_LOGICAL_AND_EQUALS=r'&&='
 t_LOGICAL_OR_EQUALS=r'\|\|='
 t_POWER_EQUALS=r'\*\*='
-t_IS_DEFINED=r'defined\?'
 t_WORD_NOT=r'not'
 t_WORD_AND=r'and'
 t_WORD_OR=r'or'
+t_MAP=r'=>'
+t_PLUS_AT=r'\+@'
+t_MINUS_AT=r'\-@'
 
 def t_IDENTIFIER(t):
 	r'[a-zA-Z_][a-zA-Z_0-9_]*'
 	t.type = reserved.get(t.value,'IDENTIFIER')# Check for reserved words
+	return t
+
+# def t_IS_DEFINED(t):
+# 	r'defined\?'
+# 	t.type = reserved.get(t.value,'IS_DEFINED')# Check for reserved words
+# 	return t
+
+def t_FLOAT(t):
+	r'\d+\.\d+'
+	try:
+		t.value = float(t.value)
+	except ValueError:
+		print("Integer value too large %d", t.value)
+		t.value = 0
 	return t
 
 def t_NUMBER(t):
@@ -75,16 +93,17 @@ def t_NUMBER(t):
 		print("Integer value too large %d", t.value)
 		t.value = 0
 	return t
-def t_FLOAT(t):
-	r'\d+\.\d+'
-	try:
-		t.value = float(t.value)
-	except ValueError:
-		print("Integer value too large %d", t.value)
-		t.value = 0
-	return t
 
+t_STRING=r'\".*\"|\'.*\''
+t_STRING2=r''
+t_HEREDOC=r''
+T_REGEXP=r''
+t_DOUBLE_QUOTE=r'\"'
+t_DOLLAR=r'\$'
+t_COLON=r':'
+t_QUESTION_MARK=r'\?'
 t_ignore = " \t"
+
 
 def t_newline(t):
 	r'\n+'
