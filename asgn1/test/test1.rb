@@ -16,4 +16,14 @@ end
 $var2
 :newvar
 ::newvar2
+/this/
+%Qedsadsfdfadssjklle
+%rabcda
+<<ab
+fdfaf
+ab
+$z
+$@
+$var
+$-x
 END

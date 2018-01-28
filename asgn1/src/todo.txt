@@ -1,9 +1,9 @@
 tokens left
-IS_DEFINED- actually defined? is the keyword
-GLOBAL
-STRING2
-HERE_DOC
-REGEX,
+IS_DEFINED- actually defined? is the keyword????-change to defined
+GLOBAL-needs verification
+STRING2-done but character start and end verification left for parser
+HERE_DOC-match start and end identifier left for parser
+REGEX-done but character start and end verification left for parser
 COMMENT-not in bnf what to do?
 NUMBERS-int,float defined need verification
 brackets?

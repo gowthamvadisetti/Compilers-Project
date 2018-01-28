@@ -7,7 +7,7 @@ file_location=sys.argv[1]
 
 keywords=['BEGIN','class','ensure','nil','self','when','END','def','false','not','super','while','alias','defined','for','or','then','yield','and','do','if','redo','true','begin','else','in','rescue','undef','break','elsif','module','retry','unless','case','end','next','return','until']
 operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET','POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT','COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS','MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR','BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS','COMPARISON','DOUBLE_EQUALS','TRIPLE_EQUALS','NOT_EQUALS','EQUAL_TILDE','BANG_TILDE','LOGICAL_AND','LOGICAL_OR','INCL_RANGE','EXCL_RANGE','EQUALS','MODULO_EQUALS','DIVIDE_EQUALS','MINUS_EQUALS','PLUS_EQUALS','OR_EQUALS','AND_EQUALS','RIGHT_SHIFT_EQUALS','LEFT_SHIFT_EQUALS','MULTIPLY_EQUALS','LOGICAL_AND_EQUALS','LOGICAL_OR_EQUALS','POWER_EQUALS','WORD_NOT','WORD_AND','WORD_OR','MAP','PLUS_AT','MINUS_AT']
-tokens=keywords+operators+['IDENTIFIER','FLOAT','NUMBER','STRING','STRING2','HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK']
+tokens=keywords+operators+['IDENTIFIER','FLOAT','NUMBER','GLOBAL','STRING','STRING2','HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK']
 
 reserved={}
 
@@ -93,11 +93,11 @@ def t_NUMBER(t):
 		print("Integer value too large %d", t.value)
 		t.value = 0
 	return t
-
+t_GLOBAL=r'(\$[a-zA-Z_][a-zA-Z_0-9_]*)|(\$\-.)|(\$.)'
 t_STRING=r'\".*\"|\'.*\''
-t_STRING2=r''
-t_HEREDOC=r''
-T_REGEXP=r''
+t_STRING2=r'%(Q|q|x)..*.'
+t_HEREDOC=r'<<([a-zA-Z_][a-zA-Z_0-9_]*|(\".*\"|\'.*\'))\n.*\n[a-zA-Z_][a-zA-Z_0-9_]*'
+t_REGEXP=r'(\/.*\/([iop])?)|(%r..*.)'
 t_DOUBLE_QUOTE=r'\"'
 t_DOLLAR=r'\$'
 t_COLON=r':'
@@ -110,7 +110,7 @@ def t_newline(t):
 	t.lexer.lineno += t.value.count("\n")
 
 def t_error(t):
-	print("Illegal character '%s'" % t.value[0])
+	print("ILLEGAL CHARACTER '%s'" % t.value[0])
 	t.lexer.skip(1)
 
 #build the lexer
