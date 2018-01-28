@@ -1,7 +1,8 @@
 all:
-	cp src/lexer.py bin/lexer.py
-	chmod +x bin/lexer.py
-	mv bin/lexer.py bin/lexer
-
+	python -m compileall src/lexer.py
+	mv src/lexer.pyc bin/lexer
+	chmod +x bin/lexer
 clean:
-	rm bin/*
+	rm -f bin/*
+	rm -f lex
+	rm -f sys
