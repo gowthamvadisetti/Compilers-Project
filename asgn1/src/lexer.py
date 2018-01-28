@@ -125,7 +125,7 @@ fp=open(file_location,'r')
 file_contents=fp.read()
 # print file_contents+"\n\n\n"
 lex.input(file_contents) #give ruby file input
-print "TOKEN OCCURENCES VALUES"
+print "TOKEN OCCURENCES LEXEMES"
 tok_dict={}
 while True:
 	tok=lex.token()
@@ -133,8 +133,11 @@ while True:
 		break
 	else:
 		if tok.type in tok_dict.keys():
-			tok_dict[tok.type][0]+=1
-			tok_dict[tok.type][1].append(tok.value)
+			if not tok.value in tok_dict[tok.type][1]:
+				tok_dict[tok.type][0]+=1
+				tok_dict[tok.type][1].append(tok.value)
+			else:
+				tok_dict[tok.type][0]+=1
 		else:
 			tok_dict[tok.type]=[1,[tok.value]]
 			# print tok.type,tok.value
