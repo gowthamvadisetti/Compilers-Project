@@ -3,10 +3,38 @@ import sys
 
 file_location=sys.argv[1]
 
+<<<<<<< HEAD
 #token declaration
 keywords=['BEGIN','class','ensure','nil','self','when','END','def','false','not','super','while','alias','defined','for','or','then','yield','and','do','if','redo','true','begin','else','in','rescue','undef','break','elsif','module','retry','unless','case','end','next','return','until']
 operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET','POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT','COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS','MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR','BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS','COMPARISON','DOUBLE_EQUALS','TRIPLE_EQUALS','NOT_EQUALS','EQUAL_TILDE','BANG_TILDE','LOGICAL_AND','LOGICAL_OR','INCL_RANGE','EXCL_RANGE','EQUALS','MODULO_EQUALS','DIVIDE_EQUALS','MINUS_EQUALS','PLUS_EQUALS','OR_EQUALS','AND_EQUALS','RIGHT_SHIFT_EQUALS','LEFT_SHIFT_EQUALS','MULTIPLY_EQUALS','LOGICAL_AND_EQUALS','LOGICAL_OR_EQUALS','POWER_EQUALS','WORD_NOT','WORD_AND','WORD_OR','MAP','PLUS_AT','MINUS_AT']
 tokens=keywords+operators+['IDENTIFIER','FLOAT','INT','GLOBAL','STRING','STRING2','HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK','OPEN_BRACKET','CLOSE_BRACKET','OPEN_FLOWER','CLOSE_FLOWER','OPEN_SQUARE','CLOSE_SQUARE','COMMA','DOT','SEMI_COLON','AT_THE_RATE']
+=======
+#token specification
+keywords=['BEGIN','class','ensure','nil','self','when','END',
+			'def','false','not','super','while','alias',
+			'defined','for','or','then','yield','and',
+			'do','if','redo','true','begin','else','in','rescue',
+			'undef','break','elsif','module','retry','unless','case',
+			'end','next','return','until']
+
+operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET',
+			'POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT',
+			'COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS',
+			'MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR',
+			'BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS',
+			'COMPARISON','DOUBLE_EQUALS','TRIPLE_EQUALS','NOT_EQUALS',
+			'EQUAL_TILDE','BANG_TILDE','LOGICAL_AND','LOGICAL_OR',
+			'INCL_RANGE','EXCL_RANGE','EQUALS','MODULO_EQUALS',
+			'DIVIDE_EQUALS','MINUS_EQUALS','PLUS_EQUALS','OR_EQUALS',
+			'AND_EQUALS','RIGHT_SHIFT_EQUALS','LEFT_SHIFT_EQUALS',
+			'MULTIPLY_EQUALS','LOGICAL_AND_EQUALS','LOGICAL_OR_EQUALS',
+			'POWER_EQUALS','WORD_NOT','WORD_AND','WORD_OR','MAP','PLUS_AT','MINUS_AT']
+
+tokens=keywords+operators+['IDENTIFIER','FLOAT','NUMBER','GLOBAL','STRING','STRING2',
+							'HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK',
+							'OPEN_BRACKET','CLOSE_BRACKET','OPEN_FLOWER','CLOSE_FLOWER','OPEN_SQUARE',
+							'CLOSE_SQUARE','COMMA','DOT','SEMI_COLON','AT_THE_RATE']
+>>>>>>> 59255ad1d741740a936cb7560169ea6ded3a17c7
 
 reserved={}
 
@@ -89,7 +117,11 @@ def t_INT(t):
 	return t
 
 t_GLOBAL=r'(\$[a-zA-Z_][a-zA-Z_0-9_]*)|(\$\-.)|(\$.)'
+<<<<<<< HEAD
 t_STRING=r'\'([^\\\']+|\\.)*\' | \"([^\\\"]+|\\.)*\"'
+=======
+t_STRING=r'\"^\"*\"|\'.*\''
+>>>>>>> 59255ad1d741740a936cb7560169ea6ded3a17c7
 t_STRING2=r'%(Q|q|x)..*.'
 t_HEREDOC=r'<<([a-zA-Z_][a-zA-Z_0-9_]*|(\".*\"|\'.*\'))\n.*\n[a-zA-Z_][a-zA-Z_0-9_]*'
 t_REGEXP=r'(\/.*\/([iop])?)|(%r..*.)'

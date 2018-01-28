@@ -12,3 +12,6 @@ a=0
 for i in 0..5
 a+=1
 end
+
+
+` #illegal character
