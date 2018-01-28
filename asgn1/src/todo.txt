@@ -6,8 +6,8 @@ HERE_DOC-match start and end identifier left for parser
 REGEX-done but character start and end verification left for parser
 COMMENT-not in bnf what to do?
 NUMBERS-int,float defined need verification
-brackets?
-delimiters
+brackets?--done need verification
+delimiters--done need verification
 =>  --map operator done need verification
 question mark - done
 some more symobls 

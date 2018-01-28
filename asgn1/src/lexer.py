@@ -7,13 +7,13 @@ file_location=sys.argv[1]
 
 keywords=['BEGIN','class','ensure','nil','self','when','END','def','false','not','super','while','alias','defined','for','or','then','yield','and','do','if','redo','true','begin','else','in','rescue','undef','break','elsif','module','retry','unless','case','end','next','return','until']
 operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET','POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT','COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS','MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR','BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS','COMPARISON','DOUBLE_EQUALS','TRIPLE_EQUALS','NOT_EQUALS','EQUAL_TILDE','BANG_TILDE','LOGICAL_AND','LOGICAL_OR','INCL_RANGE','EXCL_RANGE','EQUALS','MODULO_EQUALS','DIVIDE_EQUALS','MINUS_EQUALS','PLUS_EQUALS','OR_EQUALS','AND_EQUALS','RIGHT_SHIFT_EQUALS','LEFT_SHIFT_EQUALS','MULTIPLY_EQUALS','LOGICAL_AND_EQUALS','LOGICAL_OR_EQUALS','POWER_EQUALS','WORD_NOT','WORD_AND','WORD_OR','MAP','PLUS_AT','MINUS_AT']
-tokens=keywords+operators+['IDENTIFIER','FLOAT','NUMBER','GLOBAL','STRING','STRING2','HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK']
+tokens=keywords+operators+['IDENTIFIER','FLOAT','NUMBER','GLOBAL','STRING','STRING2','HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK','OPEN_BRACKET','CLOSE_BRACKET','OPEN_FLOWER','CLOSE_FLOWER','OPEN_SQUARE','CLOSE_SQUARE','COMMA','DOT','SEMI_COLON']
 
 reserved={}
 
 for word in keywords:
 	reserved[word]=word
-# reserved['defined']='defined?'
+
 t_CONSTANT_RESOLUTION=r'::'
 t_ELEMENT_REFERENCE=r'\[\]'
 t_ELEMENT_SET=r'\[\]='
@@ -102,6 +102,15 @@ t_DOUBLE_QUOTE=r'\"'
 t_DOLLAR=r'\$'
 t_COLON=r':'
 t_QUESTION_MARK=r'\?'
+t_OPEN_BRACKET=r'\('
+t_CLOSE_BRACKET=r'\)'
+t_OPEN_FLOWER=r'\{'
+t_CLOSE_FLOWER=r'\}'
+t_OPEN_SQUARE=r'\['
+t_CLOSE_SQUARE=r'\]'
+t_COMMA=r'\,'
+t_DOT=r'\.'
+t_SEMI_COLON=r';'
 t_ignore = " \t"
 
 
@@ -117,7 +126,7 @@ def t_error(t):
 lex.lex()
 fp=open(file_location,'r')
 file_contents=fp.read()
-print file_contents+"\n\n\n"
+# print file_contents+"\n\n\n"
 lex.input(file_contents) #give ruby file input
 print "TOKEN OCCURENCES VALUES"
 tok_dict={}
