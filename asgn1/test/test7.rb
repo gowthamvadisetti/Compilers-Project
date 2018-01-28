@@ -1,0 +1,9 @@
+#regex,heredoc,string2
+:newvar
+::newvar2
+/this/
+%Qedsadsfdfadssjklle
+%rabcda
+<<ab
+fdfaf
+ab
