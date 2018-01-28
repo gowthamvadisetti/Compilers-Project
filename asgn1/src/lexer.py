@@ -110,7 +110,7 @@ def t_NUMBER(t):
 	return t
 
 t_GLOBAL=r'(\$[a-zA-Z_][a-zA-Z_0-9_]*)|(\$\-.)|(\$.)'
-t_STRING=r'\".*\"|\'.*\''
+t_STRING=r'\"^\"*\"|\'.*\''
 t_STRING2=r'%(Q|q|x)..*.'
 t_HEREDOC=r'<<([a-zA-Z_][a-zA-Z_0-9_]*|(\".*\"|\'.*\'))\n.*\n[a-zA-Z_][a-zA-Z_0-9_]*'
 t_REGEXP=r'(\/.*\/([iop])?)|(%r..*.)'
