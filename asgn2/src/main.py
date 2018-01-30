@@ -25,7 +25,10 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].in1=words[3]
 			ir[curr].out=words[2]
 		elif words[1] in ['+','-','*','/','%']:
-			pass
+			ir[curr].typ="arithmetic"
+			ir[curr].in1=words[3]
+			ir[curr].in2=words[4]
+			ir[curr].out=words[2]
 		elif words[1]=="ifgoto":
 			ir[curr].typ="ifgoto"
 			ir[curr].op=words[2]
@@ -35,15 +38,19 @@ def parse_input(file_location,ir,leaders):
 			leaders.append(int(words[5]))
 			leaders.append(ir[curr].lineno+1)
 		elif words[1]=="call":
-			pass
+			ir[curr].typ="call"
+			ir[curr].in1=words[2]
 		elif words[1]=="ret":
-			pass
+			ir[curr].typ="ret"
 		elif words[1]=="label":
-			pass
+			ir[curr].typ="label"
+			ir[curr].in1=words[2]
 		elif words[1]=="print":
-			pass
+			ir[curr].typ="print"
+			ir[curr].in1=words[2]
 		elif words[1]=="scan":
-			pass
+			ir[curr].typ="scan"
+			ir[curr].out=words[2]
 		curr+=1
 
 ir=[]
