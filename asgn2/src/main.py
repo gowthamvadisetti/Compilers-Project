@@ -1,13 +1,14 @@
 #To Supply data structures to code generator
 import sys
+import codegen
 class Instruction3AC:
 	typ=""#if goto,goto,assignemnt,arithmetic
 	in1=""
 	in2=""
 	out=""
 	target=None
-	lineno=None
 	op=""	#=,+,-,*,/,%,ifgoto,call,ret,label,print,scan
+	lineno=None
 
 def parse_input(file_location,ir,leaders):
 	#to read ir code to Instruction3AC format
@@ -52,10 +53,19 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].typ="scan"
 			ir[curr].out=words[2]
 		curr+=1
+	leaders=sorted(leaders)
+	fp.close()
+	return
 
+def create_symbol_table(ir,leaders,symbol_table):
+	pass
 ir=[]
 leaders=[1]
+symbol_table=[]
 file_location=sys.argv[1]
 parse_input(file_location,ir,leaders)
-print(ir[0].typ)
+for i in ir:
+	print i.in1,i.in2,i.out,i.typ,i.op
 print(leaders)
+create_symbol_table(ir,leaders,symbol_table)
+codegen.generate_code(ir,leaders,symbol_table)
