@@ -2,12 +2,12 @@
 import sys
 import codegen
 class Instruction3AC:
-	typ=""#if goto,goto,assignemnt,arithmetic
-	in1=""
-	in2=""
-	out=""
+	typ=None#if goto,goto,assignemnt,arithmetic
+	in1=None
+	in2=None
+	out=None
 	target=None
-	op=""	#=,+,-,*,/,%,ifgoto,call,ret,label,print,scan
+	op=None	#=,+,-,*,/,%,ifgoto,call,ret,label,print,scan
 	lineno=None
 
 def parse_input(file_location,ir,leaders):
@@ -58,6 +58,10 @@ def parse_input(file_location,ir,leaders):
 	return
 
 def create_symbol_table(ir,leaders,symbol_table):
+	'''need to separate blocks and deal with them individually
+	first assign default values and then do back scanning to 
+	assign proper values to each variable
+	for each line a map {var name -> [live or dead,next use in line]}'''
 	pass
 ir=[]
 leaders=[1]
@@ -67,5 +71,9 @@ parse_input(file_location,ir,leaders)
 for i in ir:
 	print i.in1,i.in2,i.out,i.typ,i.op
 print(leaders)
+'''better to separate blocks here itself or later?
+what happens to symbol table for each block after it ends?
+
+'''
 create_symbol_table(ir,leaders,symbol_table)
 codegen.generate_code(ir,leaders,symbol_table)
