@@ -1,0 +1,2 @@
+ASSUMPTIONS MADE ALONG THE WAY:
+line numbers and actual line numbers in ir are same
