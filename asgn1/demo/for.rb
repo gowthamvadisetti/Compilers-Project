@@ -10,7 +10,7 @@ loop do
 		
 
 	if i >= 0
-		puts "Yes"
+		puts "\"Yes"
 
 	else
 		puts "No"
