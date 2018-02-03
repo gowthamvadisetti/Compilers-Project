@@ -107,5 +107,6 @@ for i in range(len(leaders)):
 	else:
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
-	codegen.generate_code(ir,leaders,symbol_attach)
+	mips=codegen.generate_code(ir,block_start,block_end,symbol_attach)
+print mips
 print(symbol_attach)

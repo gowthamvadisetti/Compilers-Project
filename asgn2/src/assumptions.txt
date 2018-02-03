@@ -1,2 +1,6 @@
 ASSUMPTIONS MADE ALONG THE WAY:
 line numbers and actual line numbers in ir are same
+no a=a+b types for now
+register contains single variable
+variable is in single location
+i.e, 1 variable 1 register
