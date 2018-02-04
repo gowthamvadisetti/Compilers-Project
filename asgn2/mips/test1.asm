@@ -1,17 +1,18 @@
 .data
 a: .word 0
-bb: .word 0
-c: .word 0
 .text
 main:
-li $t0,2
+line1: li $t0,40
 move $t0,$t0
-li $t1,7
-move $t1,$t1
-sllv $t2,$t0,$t1
-li $v0,1
-move $a0,$t2
+sw $t0,a
+line2: lw $t0,a
+li $t1,5
+add $t0,$t0,$t1
+sw $t0,a
+line2: lw $t0,a
+li $t1,50
+ble $t0,$t1,line2
+line3: li $v0,1
+move $a0,$t0
 syscall
-sw $t2,c
-sw $t1,bb
 sw $t0,a

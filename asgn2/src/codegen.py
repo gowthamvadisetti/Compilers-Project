@@ -2,6 +2,8 @@
 addr_desc={}
 reg_desc={}
 mips=""#mips code
+mips_length=0
+length_map={}
 registers=["$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7","$t8","$t9","$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7"]
 # registers=registers[:4]
 def getEmptyRegister():
@@ -14,9 +16,11 @@ def getEmptyRegister():
 def end_block():
 	global reg_desc
 	global mips
+	global mips_length
 	print (reg_desc)
-	for i in reg_desc:
+	for i in reg_desc.keys():
 		mips+="sw "+i+","+reg_desc[i]+"\n"
+		mips_length+=1
 		addr_desc[reg_desc[i]]=["memory",None]
 		del reg_desc[i]
 
@@ -25,6 +29,7 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 	global reg_desc
 	global registers
 	global mips
+	global mips_length
 	reg=None
 	if (variable in addr_desc) and addr_desc[variable][0]=="register":
 		reg=addr_desc[variable][1]
@@ -36,8 +41,10 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
+				mips_length+=1
 			else:
 				mips+="li "+reg+","+str(variable)+"\n"
+				mips_length+=1
 	else:
 		# print "is it"
 		maxnextuse=line
@@ -58,11 +65,14 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 			reg_desc[reg]=variable
 			addr_desc[variable]=["register",reg]
 		mips+="sw "+reg+","+reqvar+"\n"
+		mips_length+=1
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
+				mips_length+=1
 			else:
 				mips+="li "+reg+","+str(variable)+"\n"
+				mips_length+=1
 	return reg
 
 def generate_code(ir,block_start,block_end,symbol_attach):
@@ -80,77 +90,111 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global addr_desc
 	global reg_desc
 	global mips
+	global mips_length
+	global length_map
 	for i in range(block_start,block_end+1):
+		if ir[i].typ != "label":
+			mips+="line"+str(ir[i].lineno)+": "
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if ir[i].op=="+":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="add "+reg3+","+reg1+","+reg2+"\n"
+				mips_length+=1
 			elif ir[i].op=="-":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="sub "+reg3+","+reg1+","+reg2+"\n"
+				mips_length+=1
 			elif ir[i].op=="*":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="mult "+reg1+","+reg2+"\n"
+				mips_length+=1
 				mips+="mflo "+reg3+"\n"
+				mips_length+=1
 			elif ir[i].op=="/":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="div "+reg1+","+reg2+"\n"
+				mips_length+=1
 				mips+="mflo "+reg3+"\n"
+				mips_length+=1
 			elif ir[i].op=="%":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="div "+reg1+","+reg2+"\n"
+				mips_length+=1
 				mips+="mfhi "+reg3+"\n"
+				mips_length+=1
 			elif ir[i].op=="=":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="move "+reg2+","+reg1+"\n"
+				mips_length+=1
 		elif ir[i].typ=="logical":									#logical operaters
 				if ir[i].op=="|":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="or "+reg3+","+reg1+","+reg2+"\n"
+					mips_length+=1
 				elif ir[i].op=="^":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="xor "+reg3+","+reg1+","+reg2+"\n"
+					mips_length+=1
 				elif ir[i].op==">>":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="srlv "+reg3+","+reg1+","+reg2+"\n"
+					mips_length+=1
 				elif ir[i].op=="<<":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="sllv "+reg3+","+reg1+","+reg2+"\n"
+					mips_length+=1
 				elif ir[i].op=="&":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="and "+reg3+","+reg1+","+reg2+"\n"
+					mips_length+=1
 		elif ir[i].typ=="print":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			mips+="li $v0,1\n"
+			mips_length+=1
 			mips+="move $a0,"+reg1+"\n"
+			mips_length+=1
 			mips+="syscall\n"
+			mips_length+=1
 		elif ir[i].typ=="scan":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			mips+="li $v0,5\n"
+			mips_length+=1
 			mips+="syscall\n"
+			mips_length+=1
 			mips+="move "+reg1+",$v0"+"\n"
+			mips_length+=1
 		elif ir[i].typ=="ifgoto":
-			pass
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+			# reg3=getreg(ir[i],"temp",symbol_attach,i,False)
+			# mips+="sub "+reg3+","+reg1+","+reg2+"\n"
+			# mips_length+=1
+			if ir[i].op=="leq":
+				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				mips_length+=1
+			elif i[i].op=="geq":
+				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				mips_length+=1
 	end_block()
 	return mips
