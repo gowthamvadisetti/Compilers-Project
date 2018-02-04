@@ -80,6 +80,8 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global addr_desc
 	global reg_desc
 	global mips
+	global is_exit
+	is_exit = True
 	for i in range(block_start,block_end+1):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if ir[i].op=="+":
@@ -153,14 +155,21 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 
 		elif ir[i].typ == "label":
 			mips+=ir[i].in1+":\n"
+			is_exit = False;
 		elif ir[i].typ == "call":
 			mips+="jal "+ir[i].in1 + "\n"
 			if ir[i].in2 != None:
 				mips+="sw $v0,"+ir[i].in2+"\n"
 		elif ir[i].typ == "ret":
 			if ir[i].in1 != None:
-				mips+="lw $v0,"+ir[i].in1+"\n"
-			mips+="jr $ra\n"
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				mips+="move $v0,"+reg1+"\n"
+			if is_exit == False:
+				mips+="jr $ra\n"
+			else:
+				mips+="li $v0,10\n"
+        		mips+="syscall\n"
+        		is_exit = False
 
 		elif ir[i].typ=="ifgoto":
 			pass
