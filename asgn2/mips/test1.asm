@@ -1,28 +1,45 @@
 .data
 a: .word 0
-e: .word 0
 d: .word 0
 f: .word 0
+i: .word 0
+h: .word 0
+k: .word 0
 c: .word 0
+p: .word 0
+b: .word 0
+e: .word 0
 .text
 main:
-lw $t0,a
+li $t0,2
+move $t0,$t0
+li $t1,3
+move $t1,$t1
+li $t2,4
+move $t2,$t2
+li $t3,4
+move $t3,$t3
+move $t4,$t1
+mult $t4,$t0
+mflo $t4add $t4,$t0,$t1
+lw $t5,f
 li $v0,5
 syscall
-move $t0,$v0
-li $t1,2
-add $t1,$t0,$t1
-add $t2,$t1,$t0
-add $t3,$t2,$t1
-add $t4,$t3,$t1
-li $v0,1
-move $a0,$t4
+move $t5,$v0
+add $t6,$t5,$t2
+add $t7,$t1,$t3
+mult $t0,$t5
+mflo $t8div $t1,$t7
+mflo $t9li $v0,1
+move $a0,$t9
 syscall
-li $v0,1
-move $a0,$t2
-syscall
-sw $t3,e
-sw $t2,d
-sw $t1,c
+sw $t9,k
+sw $t8,p
+sw $t3,d
+sw $t2,c
+sw $t1,b
 sw $t0,a
-sw $t4,f
+sw $t7,i
+sw $t6,h
+sw $t5,f
+sw $t4,e
