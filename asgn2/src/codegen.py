@@ -97,19 +97,19 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="mult "+reg1+","+reg2+"\n"
-				mips+="mflo "+reg3
+				mips+="mflo "+reg3+"\n"
 			elif ir[i].op=="/":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="div "+reg1+","+reg2+"\n"
-				mips+="mflo "+reg3
+				mips+="mflo "+reg3+"\n"
 			elif ir[i].op=="%":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="div "+reg1+","+reg2+"\n"
-				mips+="mfhi "+reg3
+				mips+="mfhi "+reg3+"\n"
 			elif ir[i].op=="=":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
