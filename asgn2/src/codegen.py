@@ -15,7 +15,7 @@ def end_block():
 	global reg_desc
 	global mips
 	print (reg_desc)
-	for i in reg_desc:
+	for i in reg_desc.keys():
 		mips+="sw "+i+","+reg_desc[i]+"\n"
 		addr_desc[reg_desc[i]]=["memory",None]
 		del reg_desc[i]
