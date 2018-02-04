@@ -2,7 +2,7 @@
 
 i = 6
 
-loop do
+while(true) do
 
 	if (i < 6 || i > 8 || i == 7)
 		break
