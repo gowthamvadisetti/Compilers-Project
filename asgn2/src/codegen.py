@@ -8,14 +8,14 @@ def getEmptyRegister():
 	global reg_desc
 	global registers
 	for i in registers:
-		if not reg_desc.has_key(i):
+		if not (i in reg_desc):
 			return i
 	return  None
 def end_block():
 	global reg_desc
 	global mips
 	print (reg_desc)
-	for i in reg_desc.keys():
+	for i in reg_desc:
 		mips+="sw "+i+","+reg_desc[i]+"\n"
 		addr_desc[reg_desc[i]]=["memory",None]
 		del reg_desc[i]
@@ -26,7 +26,7 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 	global registers
 	global mips
 	reg=None
-	if addr_desc.has_key(variable) and addr_desc[variable][0]=="register":
+	if (variable in addr_desc) and addr_desc[variable][0]=="register":
 		reg=addr_desc[variable][1]
 	elif getEmptyRegister() is not None:
 		reg=getEmptyRegister()
@@ -43,7 +43,7 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 		maxnextuse=line
 		reqvar=None
 		for i in reg_desc.keys():
-			if symbol_attach[line].has_key(reg_desc[i]) and symbol_attach[line][reg_desc[i]][1] is not None:
+			if (reg_desc[i] in symbol_attach[line]) and symbol_attach[line][reg_desc[i]][1] is not None:
 				if symbol_attach[line][reg_desc[i]][1] > maxnextuse:
 					reqvar=reg_desc[i]
 					reg=i
@@ -150,5 +150,5 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			mips+="li $v0,5\n"
 			mips+="syscall\n"
 			mips+="move "+reg1+",$v0"+"\n"
-	end_block()
+	#end_block()
 	return mips
