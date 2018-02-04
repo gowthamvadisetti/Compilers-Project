@@ -1,8 +1,4 @@
-1,=,a,10
-2,=,b,1
-3,=,d,1
-4,*,d,d,a
-5,+,b,b,1
-6,ifgoto,leq,b,5,4
-7,print,a
-8,ret
+1,=,bb,1
+2,+,bb,bb,1
+3,ifgoto,leq,bb,2,2
+4,print,bb

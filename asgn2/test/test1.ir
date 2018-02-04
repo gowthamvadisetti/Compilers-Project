@@ -1,4 +1,4 @@
 1,=,a,40
 2,+,a,a,5
-2,ifgoto,leq,a,50,2
-3,print,a
+3,ifgoto,leq,a,50,2
+4,print,a
