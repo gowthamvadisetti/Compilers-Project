@@ -1,0 +1,8 @@
+1,=,a,2
+2,=,c,8
+3,*,d,a,c
+4,print,d
+5,ret
+6,call,foo
+7,label,foo
+8,ret

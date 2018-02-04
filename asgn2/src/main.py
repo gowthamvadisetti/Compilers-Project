@@ -66,9 +66,10 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="scan":
 			ir[curr].typ="scan"
 			ir[curr].in1=words[2]
-		variables[ir[curr].in1]=True
-		variables[ir[curr].in2]=True
-		variables[ir[curr].out]=True
+		if ((ir[curr].typ != "label") and (ir[curr].typ != "call")):
+			variables[ir[curr].in1]=True
+			variables[ir[curr].in2]=True
+			variables[ir[curr].out]=True
 		curr+=1
 	leaders=sorted(leaders)
 	fp.close()
