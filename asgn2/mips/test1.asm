@@ -6,7 +6,7 @@ c: .word 0
 main:
 li $t0,2
 move $t0,$t0
-li $t1,1
+li $t1,7
 move $t1,$t1
 sllv $t2,$t0,$t1
 li $v0,1
