@@ -3,6 +3,6 @@
 3,=,d,1
 4,*,d,d,a
 5,+,b,b,1
-6,ifgoto,b,5,4
+6,ifgoto,leq,b,5,4
 7,print,a
 8,ret

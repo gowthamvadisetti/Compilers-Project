@@ -103,7 +103,33 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			elif ir[i].op=="=":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
-				mips+="move "+reg2+","+reg1+"\n"				
+				mips+="move "+reg2+","+reg1+"\n"
+		elif ir[i].type=="logical":									#logical operaters
+				if ir[i].op=="|":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="or "+reg3+","+reg1+","+reg2+"\n"
+			elif ir[i].op=="^":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="xor "+reg3+","+reg1+","+reg2+"\n"
+			elif ir[i].op==">>":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="sra "+reg3+","+reg1+","+reg2+"\n"
+			elif ir[i].op=="<<":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="sll "+reg3+","+reg1+","+reg2+"\n"
+			elif ir[i].op=="&":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="and "+reg3+","+reg1+","+reg2+"\n"		
 		elif ir[i].typ=="print":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			mips+="li $v0,1\n"
