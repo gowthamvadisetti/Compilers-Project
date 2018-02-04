@@ -1,7 +1,7 @@
 .data
 a: .word 0
-bb: .word 0
 c: .word 0
+bb: .word 0
 .text
 main:
 li $t0,2
@@ -12,3 +12,6 @@ or $t2,$t0,$t1
 li $v0,1
 move $a0,$t2
 syscall
+sw $t2,c
+sw $t1,bb
+sw $t0,a

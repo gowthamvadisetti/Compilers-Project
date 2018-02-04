@@ -25,7 +25,10 @@ def parse_input(file_location,ir,leaders):
 				words[i]=int(words[i])
 			except:
 				pass
-		ir[curr].lineno=int(words[0])
+		try:
+			ir[curr].lineno=int(words[0])
+		except:
+			pass
 		ir[curr].op=words[1]
 		if words[1]=="=":
 			ir[curr].typ="assign"
