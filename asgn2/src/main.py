@@ -1,6 +1,7 @@
 #To Supply data structures to code generator
 import sys
 import codegen
+variables={}
 class Instruction3AC:
 	typ=None#if goto,goto,assignemnt,arithmetic
 	in1=None
@@ -11,7 +12,8 @@ class Instruction3AC:
 	lineno=None
 
 def parse_input(file_location,ir,leaders):
-	#to read ir code to Instruction3AC format
+	#to read ir code to Instruction3AC format\
+	global variables
 	fp=open(file_location,'r')
 	curr=0
 	for line in fp:
@@ -56,6 +58,9 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="scan":
 			ir[curr].typ="scan"
 			ir[curr].out=words[2]
+		variables[ir[curr].in1]=True
+		variables[ir[curr].in2]=True
+		variables[ir[curr].out]=True
 		curr+=1
 	leaders=sorted(leaders)
 	fp.close()
@@ -99,6 +104,12 @@ print(leaders)
 '''better to separate blocks here itself or later?
 what happens to symbol table for each block after it ends?
 '''
+mips=""
+mips+=".data\n"
+for i in variables.keys():
+	if i is not None and type(i) is not int:
+		mips+=i+": .word 0\n"
+mips+=".text\nmain:\n"
 symbol_attach=[{} for i in range(len(ir))]
 for i in range(len(leaders)):
 	block_start=leaders[i]-1
@@ -108,6 +119,8 @@ for i in range(len(leaders)):
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
 	print symbol_attach
-	mips=codegen.generate_code(ir,block_start,block_end,symbol_attach)
+	mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach)
+with open("mips/test1.asm","w") as fp:
+	fp.write(mips)
 print mips
 print(symbol_attach)
