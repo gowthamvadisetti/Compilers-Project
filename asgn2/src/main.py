@@ -104,7 +104,7 @@ leaders=[1]
 file_location=sys.argv[1]
 parse_input(file_location,ir,leaders)
 for i in ir:
-	print i.in1,i.in2,i.out,i.typ,i.op
+	print (i.in1,i.in2,i.out,i.typ,i.op)
 print(leaders)
 '''better to separate blocks here itself or later?
 what happens to symbol table for each block after it ends?
@@ -123,9 +123,9 @@ for i in range(len(leaders)):
 	else:
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
-	print symbol_attach
+	print (symbol_attach)
 	mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach)
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
-print mips
+print (mips)
 print(symbol_attach)
