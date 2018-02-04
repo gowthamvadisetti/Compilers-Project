@@ -3,7 +3,11 @@
 
 i = 6
 
+<<<<<<< HEAD
 while(true) do
+=======
+while(1) do
+>>>>>>> ba9ecf6fa0171fb55c0bedfa647e2183eaa02400
 	
 	if (i < 8 || i 6.67 || i == 7) 
 		break

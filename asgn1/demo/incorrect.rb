@@ -9,8 +9,8 @@ while(true) do
 		break
 	end
 
-	36a = 0
-	`$#@name = 0
+	36a %= 0
+#	`$#@name = 0
 
 	if i >= 0
 		print "yes\n"
