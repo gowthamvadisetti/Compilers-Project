@@ -11,6 +11,14 @@ def getEmptyRegister():
 		if not reg_desc.has_key(i):
 			return i
 	return  None
+def end_block():
+	global reg_desc
+	global mips
+	print reg_desc
+	for i in reg_desc.keys():
+		mips+="sw "+i+","+reg_desc[i]+"\n"
+		addr_desc[reg_desc[i]]=["memory",None]
+		del reg_desc[i]
 
 def getreg(instruction,variable,symbol_attach,line,is_input):
 	global addr_desc
@@ -22,15 +30,16 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 		reg=addr_desc[variable][1]
 	elif getEmptyRegister() is not None:
 		reg=getEmptyRegister()
-		reg_desc[reg]=variable
-		addr_desc[variable]=["register",reg]
+		if type(variable) is not int:
+			reg_desc[reg]=variable
+			addr_desc[variable]=["register",reg]
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
 			else:
 				mips+="li "+reg+","+str(variable)+"\n"
 	else:
-		print "is it"
+		# print "is it"
 		maxnextuse=line
 		reqvar=None
 		for i in reg_desc.keys():
@@ -45,8 +54,9 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 				break
 		#move req var to memory
 		addr_desc[reqvar]=["memory",None]
-		reg_desc[reg]=variable
-		addr_desc[variable]=["register",reg]
+		if type(variable) is not int:
+			reg_desc[reg]=variable
+			addr_desc[variable]=["register",reg]
 		mips+="sw "+reg+","+reqvar+"\n"
 		if is_input:
 			if type(variable) is not int:
@@ -140,4 +150,5 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			mips+="li $v0,5\n"
 			mips+="syscall\n"
 			mips+="move "+reg1+",$v0"+"\n"
+	end_block()
 	return mips
