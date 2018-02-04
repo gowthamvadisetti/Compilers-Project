@@ -155,7 +155,11 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			mips+=ir[i].in1+":\n"
 		elif ir[i].typ == "call":
 			mips+="jal "+ir[i].in1 + "\n"
+			if ir[i].in2 != None:
+				mips+="sw $v0,"+ir[i].in2+"\n"
 		elif ir[i].typ == "ret":
+			if ir[i].in1 != None:
+				mips+="lw $v0,"+ir[i].in1+"\n"
 			mips+="jr $ra\n"
 
 		elif ir[i].typ=="ifgoto":

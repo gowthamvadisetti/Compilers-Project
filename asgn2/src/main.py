@@ -55,8 +55,12 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="call":
 			ir[curr].typ="call"
 			ir[curr].in1=words[2]
+			if (len(words)>3):
+				ir[curr].in2=words[3]
 		elif words[1]=="ret":
 			ir[curr].typ="ret"
+			if (len(words) > 2):
+				ir[curr].in1=words[2]
 		elif words[1]=="label":
 			ir[curr].typ="label"
 			ir[curr].in1=words[2]
