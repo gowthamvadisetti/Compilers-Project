@@ -80,13 +80,13 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 	for i in range(block_end,block_start-1,-1):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
-				symbol_attach[i][ir[i].in1]=symbol_table[ir[i].in1]
+				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].in1]=["live",i]
 			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
-				symbol_attach[i][ir[i].in2]=symbol_table[ir[i].in2]
+				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].in2]=["live",i]
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
-				symbol_attach[i][ir[i].out]=symbol_table[ir[i].out]
+				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].out]=["dead",None]
 
 ir=[]
@@ -107,6 +107,7 @@ for i in range(len(leaders)):
 	else:
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
+	print symbol_attach
 	mips=codegen.generate_code(ir,block_start,block_end,symbol_attach)
 print mips
 print(symbol_attach)
