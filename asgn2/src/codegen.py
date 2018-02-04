@@ -151,5 +151,15 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			mips+="syscall\n"
 			mips+="move "+reg1+",$v0"+"\n"
 
+		elif ir[i].typ == "label":
+			mips+=":"+ir[i].in1+"\n"
+		elif ir[i].typ == "call":
+			mips+="jal "+ir[curr].in1 + "\n"
+		elif ir[i].typ == "ret":
+			mips+="jr $ra\n"
+
+		elif ir[i].typ=="ifgoto":
+			pass
+
 	end_block()
 	return mips
