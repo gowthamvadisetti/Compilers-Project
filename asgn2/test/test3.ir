@@ -1,6 +1,7 @@
-1,=,a,2
+1,scan,a
 2,+,c,a,2
 3,+,d,c,a
 4,+,e,d,c
 5,+,f,e,c
 6,print,f
+7,print,d

@@ -57,7 +57,7 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].in1=words[2]
 		elif words[1]=="scan":
 			ir[curr].typ="scan"
-			ir[curr].out=words[2]
+			ir[curr].in1=words[2]
 		variables[ir[curr].in1]=True
 		variables[ir[curr].in2]=True
 		variables[ir[curr].out]=True

@@ -3,6 +3,7 @@ addr_desc={}
 reg_desc={}
 mips=""#mips code
 registers=["$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7","$t8","$t9","$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7"]
+# registers=registers[:4]
 def getEmptyRegister():
 	global reg_desc
 	global registers
@@ -81,7 +82,24 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="sub "+reg3+","+reg1+","+reg2+"\n"
-
+			elif ir[i].op=="*":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="mult "+reg1+","+reg2+"\n"
+				mips+="mflo "+reg3
+			elif ir[i].op=="/":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="div "+reg1+","+reg2+"\n"
+				mips+="mflo "+reg3
+			elif ir[i].op=="%":
+				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+				mips+="div "+reg1+","+reg2+"\n"
+				mips+="mfhi "+reg3
 			elif ir[i].op=="=":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
@@ -91,4 +109,9 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			mips+="li $v0,1\n"
 			mips+="move $a0,"+reg1+"\n"
 			mips+="syscall\n"
+		elif ir[i].typ=="scan":
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			mips+="li $v0,5\n"
+			mips+="syscall\n"
+			mips+="move "+reg1+",$v0"+"\n"
 	return mips
