@@ -25,7 +25,10 @@ def parse_input(file_location,ir,leaders):
 				words[i]=int(words[i])
 			except:
 				pass
-		ir[curr].lineno=int(words[0])
+		try:
+			ir[curr].lineno=int(words[0])
+		except:
+			pass
 		ir[curr].op=words[1]
 		if words[1]=="=":
 			ir[curr].typ="assign"
@@ -63,9 +66,10 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="scan":
 			ir[curr].typ="scan"
 			ir[curr].in1=words[2]
-		variables[ir[curr].in1]=True
-		variables[ir[curr].in2]=True
-		variables[ir[curr].out]=True
+		if ((ir[curr].typ != "label") and (ir[curr].typ != "call")):
+			variables[ir[curr].in1]=True
+			variables[ir[curr].in2]=True
+			variables[ir[curr].out]=True
 		curr+=1
 	leaders=sorted(leaders)
 	fp.close()
