@@ -1,6 +1,5 @@
 .data
 a: .word 0
-<<<<<<< HEAD
 e: .word 0
 d: .word 0
 f: .word 0
@@ -27,20 +26,3 @@ sw $t2,d
 sw $t1,c
 sw $t0,a
 sw $t4,f
-=======
-bb: .word 0
-c: .word 0
-.text
-main:
-li $t0,2
-move $t0,$t0
-li $t1,7
-move $t1,$t1
-or $t2,$t0,$t1
-li $v0,1
-move $a0,$t2
-syscall
-sw $t2,c
-sw $t1,bb
-sw $t0,a
->>>>>>> 624a1cdbf94ebbf4f85045db6121099387e313d4
