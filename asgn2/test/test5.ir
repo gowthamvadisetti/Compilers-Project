@@ -3,8 +3,8 @@
 3,=,c,30
 4,=,d,50
 5,+,a,a,5
-6,ifgoto,ble,a,40,5
+6,ifgoto,a,40,5
 7,-,b,b,3
-8,ifgoto,bge,b,10,7
+8,ifgoto,b,10,7
 9,print,a
 10,ret
