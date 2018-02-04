@@ -14,7 +14,7 @@ def getEmptyRegister():
 def end_block():
 	global reg_desc
 	global mips
-	print (reg_desc)
+	# print (reg_desc)
 	for i in reg_desc.keys():
 		mips+="sw "+i+","+reg_desc[i]+"\n"
 		addr_desc[reg_desc[i]]=["memory",None]
@@ -36,8 +36,10 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
+				
 			else:
 				mips+="li "+reg+","+str(variable)+"\n"
+				
 	else:
 		# print "is it"
 		maxnextuse=line
@@ -83,6 +85,8 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global is_exit
 	is_exit = True
 	for i in range(block_start,block_end+1):
+		if ir[i].typ != "label":
+			mips+="line"+str(ir[i].lineno)+": \n"
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if ir[i].op=="+":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -132,6 +136,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="srlv "+reg3+","+reg1+","+reg2+"\n"
+					
 				elif ir[i].op=="<<":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
@@ -172,7 +177,14 @@ def generate_code(ir,block_start,block_end,symbol_attach):
         		is_exit = False
 
 		elif ir[i].typ=="ifgoto":
-			pass
-
-	end_block()
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+			# reg3=getreg(ir[i],"temp",symbol_attach,i,False)
+			# mips+="sub "+reg3+","+reg1+","+reg2+"\n"
+			# 
+			if ir[i].op=="leq":
+				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+			elif ir[i].op=="geq":
+				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+	# end_block()
 	return mips
