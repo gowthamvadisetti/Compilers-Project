@@ -6,6 +6,6 @@
 6,=,bb,aa
 7,=,aa,dd
 8,+,cc,cc,1
-9,ifgoto,leq,cc,10,5
-10,print,aa
+9,ifgoto,leq,cc,8,5
+10,print,dd
 11,ret

@@ -1,5 +1,7 @@
 1,=,aa,-1
-2,scan,bb
-3,*,cc,aa,bb
-4,print,cc
-5,ret
+2,puts,"enter number /n"
+3,scan,bb
+4,*,cc,aa,bb
+5,print,cc
+6,puts,"prints negative of the number"
+7,ret

@@ -1,9 +1,12 @@
-a=10
-b=1
-call fact
-label fact
-b=b*a
-a=a-1
-if a leq 1 jump  9
-call fact
-prin b
+1,puts,"enter any number\n"
+2,scan,aa
+3,=,bb,1
+4,call,fact
+5,label,fact
+6,*,bb,bb,aa
+7,-,aa,aa,1
+8,ifgoto,leq,aa,1,10
+9,call,fact
+10,puts,"factorial of input is "
+11,print,bb
+12,ret

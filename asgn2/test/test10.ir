@@ -1,4 +1,5 @@
 1,=,a,2
 2,=,bb,7
-3,|,c,a,bb
-4,print,c
+3,|,cc,a,bb
+4,puts,"output of 2 or 7 \n"
+5,print,cc
