@@ -152,6 +152,10 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			mips+="li $v0,1\n"
 			mips+="move $a0,"+reg1+"\n"
 			mips+="syscall\n"
+		elif ir[i].typ=="puts":
+			mips+="la $a0,"+"str"+str(ir[i].lineno)+"\n"
+			mips+="li $v0,4\n"
+			mips+="syscall\n"
 		elif ir[i].typ=="scan":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			mips+="li $v0,5\n"

@@ -2,6 +2,7 @@
 import sys
 import codegen
 variables={}
+string_vars={}
 class Instruction3AC:
 	typ=None#if goto,goto,assignemnt,arithmetic
 	in1=None
@@ -14,6 +15,7 @@ class Instruction3AC:
 def parse_input(file_location,ir,leaders):
 	#to read ir code to Instruction3AC format\
 	global variables
+	global string_vars
 	fp=open(file_location,'r')
 	curr=0
 	for line in fp:
@@ -67,13 +69,18 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="print":
 			ir[curr].typ="print"
 			ir[curr].in1=words[2]
+		elif words[1]=="puts":
+			ir[curr].typ="puts"
+			ir[curr].in1=words[2]
 		elif words[1]=="scan":
 			ir[curr].typ="scan"
 			ir[curr].in1=words[2]
-		if ((ir[curr].typ != "label") and (ir[curr].typ != "call")):
+		if ((ir[curr].typ != "label") and (ir[curr].typ != "puts") and (ir[curr].typ != "call")):
 			variables[ir[curr].in1]=True
 			variables[ir[curr].in2]=True
 			variables[ir[curr].out]=True
+		if(ir[curr].typ == "puts"):
+			string_vars[ir[curr].lineno]=ir[curr].in1
 		curr+=1
 	leaders=sorted(leaders)
 	fp.close()
@@ -122,7 +129,11 @@ mips+=".data\n"
 for i in variables.keys():
 	if i is not None and type(i) is not int:
 		mips+=i+": .word 0\n"
+for i in string_vars.keys():
+	mips+="str"+str(i)+": .asciiz "+string_vars[i]+"\n"
 mips+=".text\nmain:\n"
+# print(mips)
+# quit()
 symbol_attach=[{} for i in range(len(ir))]
 for i in range(len(leaders)):
 	block_start=leaders[i]-1

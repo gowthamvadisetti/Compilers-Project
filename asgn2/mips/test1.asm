@@ -1,17 +1,13 @@
 .data
-bb: .word 0
+str1: .asciiz "Hello World\n"
+str2: .asciiz "Hi again"
 .text
 main:
 line1: 
-li $t0,1
-move $t0,$t0
+la $a0,str1
+li $v0,4
+syscall
 line2: 
-li $t1,1
-add $t0,$t0,$t1
-line3: 
-li $t1,2
-ble $t0,$t1,line2
-line4: 
-li $v0,1
-move $a0,$t0
+la $a0,str2
+li $v0,4
 syscall
