@@ -1,0 +1,3 @@
+*.asm
+*.pyc
+.DS_Store
