@@ -123,7 +123,17 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg1 = getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips += "lw "+reg2+","+"0("+reg1+")\n"
+				elif ir[i].typ == "assign_to_array":
+					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,True)
+					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+					reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+					mips+="add "+reg3+","+reg3+","+reg3+"\n"
+					mips+="add "+reg3+","+reg3+","+reg3+"\n"
+					mips+="add "+reg1+","+reg1+","+reg3+"\n"
+					mips+="sw "+reg2+",0("+reg1+")\n"
 
+				elif ir[i].typ == "assign_to_array":
+					pass
 				else:
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
