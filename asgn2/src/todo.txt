@@ -1,12 +1,12 @@
-1)Pointers-@jj
-2)arrays-Later @vgp
+DONE-1)Pointers-@jj
+DONE-(verification needed)2)arrays-Later @vgp
 ***3)storage b/w blocks-@vgp
-Done-4)Readme-@amar
-Done-5)Makefile-@vgp
-6)Instruction manual for IR-@amar---??
+DONE-4)Readme-@amar
+DONE-5)Makefile-@vgp
+May not be needed6)Instruction manual for IR-@amar---??
 DONE-7)puts for strings-@vgp
-Done-8)add puts to test cases with multiple prints-@amar 
-Done-9)Too many test cases reduce them-@amar
+DONE-8)add puts to test cases with multiple prints-@amar 
+DONE-9)Too many test cases reduce them-@amar
 10)More operators??-Later @amar
 11)Constants are not addressed in register descriptor 
 so being overwritten when register is needed next
