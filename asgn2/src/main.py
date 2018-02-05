@@ -1,6 +1,7 @@
 #To Supply data structures to code generator
 import sys
 import codegen
+import re
 variables={}
 string_vars={}
 class Instruction3AC:
@@ -54,7 +55,19 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].typ="assign"
 				ir[curr].in1=words[3]
 				ir[curr].out=words[2]			
-			
+		elif words[1]=="array":
+			ir[curr].typ="array"
+			match=re.search('(.*?)\[(.*?)\]$',words[2])
+			if match:
+				ir[curr].in1=match.group(2)
+				try:
+					ir[curr].in1=int(ir[curr].in1)
+				except:
+					pass
+				ir[curr].out=match.group(1)
+			else:
+				print("Array declaration error")
+
 		elif words[1] in ['+','-','*','/','%']:
 			ir[curr].typ="arithmetic"
 			ir[curr].in1=words[3]

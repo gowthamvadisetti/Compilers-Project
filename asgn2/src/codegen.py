@@ -160,6 +160,13 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="nor "+reg3+","+reg1+","+reg1+"\n"
+		elif ir[i].typ=="array":
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			print(type(ir[i].in1))
+			mips+="sll $a0,"+reg1+",2\n"
+			mips+="li $v0,9\n"
+			mips+="syscall\n"
+			mips+="sw $v0,"+ir[i].out+"\n"
 		elif ir[i].typ=="print":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			mips+="li $v0,1\n"
