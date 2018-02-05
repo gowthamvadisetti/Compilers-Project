@@ -1,0 +1,10 @@
+1)Pointers
+2)arrays
+3)storage b/w blocks
+4)Readme
+5)Makefile
+6)Instruction manual for IR
+DONE-7)puts for strings
+8)add puts to test cases with multiple prints
+9)Too many test cases resuce them
+10)More operators??
