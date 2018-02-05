@@ -81,9 +81,10 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global is_exit
 	is_exit = True
 	for i in range(block_start,block_end+1):
+		print(ir[i].typ)
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
-		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref":
+		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
 			if ir[i].op=="+":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
@@ -124,6 +125,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips += "lw "+reg2+","+"0("+reg1+")\n"
 				elif ir[i].typ == "assign_to_array":
+					print("assign to")
 					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -131,9 +133,16 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg1+","+reg1+","+reg3+"\n"
 					mips+="sw "+reg2+",0("+reg1+")\n"
-
-				elif ir[i].typ == "assign_to_array":
-					pass
+					mips+="lw "+reg1+","+ir[i].out+"\n"
+				elif ir[i].typ == "assign_from_array":
+					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+					reg2=getreg(ir[i],ir[i].in1,symbol_attach,i,True)#array pointer
+					reg3=getreg(ir[i],ir[i].in2,symbol_attach,i,True)#array index
+					mips+="add "+reg3+","+reg3+","+reg3+"\n"
+					mips+="add "+reg3+","+reg3+","+reg3+"\n"
+					mips+="add "+reg2+","+reg2+","+reg3+"\n"
+					mips+="lw "+reg1+",0("+reg2+")\n"
+					mips+="lw "+reg2+","+ir[i].in1+"\n"
 				else:
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
