@@ -44,6 +44,11 @@ def parse_input(file_location,ir,leaders):
 					ir[curr].in1=words[3][1:]
 					ir[curr].out=words[2]
 
+				else:
+					ir[curr].typ="assign"
+					ir[curr].in1=words[3]
+					ir[curr].out=words[2]
+
 
 			except:
 				ir[curr].typ="assign"

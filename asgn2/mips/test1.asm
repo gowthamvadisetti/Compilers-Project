@@ -1,29 +1,38 @@
 .data
-a: .word 0
-e: .word 0
-d: .word 0
-f: .word 0
-c: .word 0
+aa: .word 0
+bb: .word 0
+cc: .word 0
+dd: .word 0
 .text
 main:
 line1: 
-li $t0,2
+li $t0,1
 move $t0,$t0
 line2: 
-li $t1,8
+li $t1,0
 move $t1,$t1
 line3: 
-mult $t0,$t1
-mflo $t2
-sw $t2,d
+li $t2,0
+move $t2,$t2
 line4: 
-la $t3,d
+li $t3,0
+move $t3,$t3
 line5: 
-lw $t4,0($t3)
+add $t3,$t0,$t1
 line6: 
-li $v0,1
-move $a0,$t4
-syscall
+move $t1,$t0
 line7: 
+move $t0,$t3
+line8: 
+li $t4,1
+add $t2,$t2,$t4
+line9: 
+li $t4,10
+ble $t2,$t4,line5
+line10: 
+li $v0,1
+move $a0,$t0
+syscall
+line11: 
 li $v0,10
 syscall
