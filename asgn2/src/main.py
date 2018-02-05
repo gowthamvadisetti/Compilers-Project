@@ -35,6 +35,9 @@ def parse_input(file_location,ir,leaders):
 		ir[curr].op=words[1]
 		if words[1]=="=":
 			try:
+
+				match1=re.search('(.*?)\[(.*?)\]$',str(words[2]))
+				match2=re.search('(.*?)\[(.*?)\]$',str(words[3]))
 				if words[3][0] == "&":
 					ir[curr].typ = "ref"
 					ir[curr].in1=words[3][1:]
@@ -44,7 +47,25 @@ def parse_input(file_location,ir,leaders):
 					ir[curr].typ = "deref"
 					ir[curr].in1=words[3][1:]
 					ir[curr].out=words[2]
-
+				elif match1:
+					print("matched")
+					ir[curr].typ="assign_to_array"
+					ir[curr].out=match1.group(1)
+					ir[curr].in1=match1.group(2)
+					try:
+						ir[curr].in1=int(ir[curr].in1)
+					except:
+						pass
+					ir[curr].in2=words[3]
+				elif match2:
+					ir[curr].typ="assign_from_array"
+					ir[curr].in1=match2.group(1)
+					ir[curr].in2=match2.group(2)
+					try:
+						ir[curr].in2=int(ir[curr].in2)
+					except:
+						pass
+					ir[curr].out=words[2]
 				else:
 					ir[curr].typ="assign"
 					ir[curr].in1=words[3]
@@ -52,9 +73,31 @@ def parse_input(file_location,ir,leaders):
 
 
 			except:
-				ir[curr].typ="assign"
-				ir[curr].in1=words[3]
-				ir[curr].out=words[2]			
+				match1=re.search('(.*?)\[(.*?)\]$',str(words[2]))
+				match2=re.search('(.*?)\[(.*?)\]$',str(words[3]))
+				if match1:
+					print("matched")
+					ir[curr].typ="assign_to_array"
+					ir[curr].out=match1.group(1)
+					ir[curr].in1=match1.group(2)
+					try:
+						ir[curr].in1=int(ir[curr].in1)
+					except:
+						pass
+					ir[curr].in2=words[3]
+				elif match2:
+					ir[curr].typ="assign_from_array"
+					ir[curr].in1=match2.group(1)
+					ir[curr].in2=match2.group(2)
+					try:
+						ir[curr].in2=int(ir[curr].in2)
+					except:
+						pass
+					ir[curr].out=words[2]
+				else:
+					ir[curr].typ="assign"
+					ir[curr].in1=words[3]
+					ir[curr].out=words[2]			
 		elif words[1]=="array":
 			ir[curr].typ="array"
 			match=re.search('(.*?)\[(.*?)\]$',words[2])
