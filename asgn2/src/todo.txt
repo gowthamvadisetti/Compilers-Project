@@ -1,10 +1,10 @@
-1)Pointers
-2)arrays
-3)storage b/w blocks
-4)Readme
-5)Makefile
-6)Instruction manual for IR
-DONE-7)puts for strings
-8)add puts to test cases with multiple prints
-9)Too many test cases resuce them
-10)More operators??
+1)Pointers-@jj
+2)arrays-Later @vgp
+***3)storage b/w blocks-@vgp
+4)Readme-@amar
+5)Makefile-@amar
+6)Instruction manual for IR-@amar
+DONE-7)puts for strings-@vgp
+8)add puts to test cases with multiple prints-@amar
+9)Too many test cases reduce them-@amar
+10)More operators??-Later @amar

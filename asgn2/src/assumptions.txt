@@ -1,8 +1,13 @@
 ASSUMPTIONS MADE ALONG THE WAY:
-call has no return
+
+ELIMINATED-call has no return
+
 line numbers and actual line numbers in ir are same
-no a=a+b types for now
+
+SEEMS TO BE WORKING FINE:no a=a+b types for now
+
 register contains single variable
 variable is in single location
 i.e, 1 variable 1 register
+
 ELIMINATED-if integer in an operation then it is second input(a=b+1 not a=1+b)
