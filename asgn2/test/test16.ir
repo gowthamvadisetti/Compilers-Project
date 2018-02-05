@@ -1,5 +1,0 @@
-1,=,aa,-1
-2,scan,bb
-3,*,cc,aa,bb
-4,print,cc
-5,ret

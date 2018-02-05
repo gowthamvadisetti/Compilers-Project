@@ -1,8 +1,7 @@
-1,=,a,2
-2,call,foo
-3,print,a
-4,ret
-5,label,foo
-6,=,e,21
-7,print,e
-8,ret
+1,=,aa,-1
+2,puts,"enter number /n"
+3,scan,bb
+4,*,cc,aa,bb
+5,print,cc
+6,puts,"prints negative of the number"
+7,ret

@@ -1,4 +1,9 @@
 1,=,a,2
-2,=,bb,7
-3,|,c,a,bb
-4,print,c
+2,print,a
+3,call,foo,g
+4,print,g
+5,ret
+6,label,foo
+7,=,e,11
+8,print,e
+9,ret,e

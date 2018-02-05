@@ -1,7 +1,12 @@
-1,scan,a
-2,+,c,a,2
-3,+,d,c,a
-4,+,e,d,c
-5,+,f,e,c
-6,print,f
-7,print,d
+1,puts,"enter num1\n"
+2,scan,aa
+3,puts,"enter num2\n"
+4,scan,bb
+5,puts,"mult is "
+6,*,cc,aa,bb
+7,print,cc
+8,puts," \n"
+9,puts,"division is "
+10,/,cc,aa,bb
+11,print,cc
+12,ret
