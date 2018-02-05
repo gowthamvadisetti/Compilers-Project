@@ -190,11 +190,13 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			if ir[i].in2 != None:
 				mips+="sw $v0,"+ir[i].in2+"\n"
 		elif ir[i].typ == "ret":
+			#print is_exit
 			if ir[i].in1 != None:
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				mips+="move $v0,"+reg1+"\n"
 			if is_exit == False:
 				mips+="jr $ra\n"
+				is_exit = True
 			else:
 				mips+="li $v0,10\n"
         		mips+="syscall\n"
