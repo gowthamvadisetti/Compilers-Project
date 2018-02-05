@@ -33,9 +33,23 @@ def parse_input(file_location,ir,leaders):
 			pass
 		ir[curr].op=words[1]
 		if words[1]=="=":
-			ir[curr].typ="assign"
-			ir[curr].in1=words[3]
-			ir[curr].out=words[2]
+			try:
+				if words[3][0] == "&":
+					ir[curr].typ = "ref"
+					ir[curr].in1=words[3][1:]
+					ir[curr].out=words[2]
+
+				elif words[3][0] == "*":
+					ir[curr].typ = "deref"
+					ir[curr].in1=words[3][1:]
+					ir[curr].out=words[2]
+
+
+			except:
+				ir[curr].typ="assign"
+				ir[curr].in1=words[3]
+				ir[curr].out=words[2]			
+			
 		elif words[1] in ['+','-','*','/','%']:
 			ir[curr].typ="arithmetic"
 			ir[curr].in1=words[3]

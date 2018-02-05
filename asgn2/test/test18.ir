@@ -1,4 +1,7 @@
 1,=,a,2
-2,=,cat,a
-3,print,cat
-4,ret
+2,=,c,8
+3,*,d,a,c
+4,=,e,&d
+5,=,f,*e
+6,print,f
+7,ret

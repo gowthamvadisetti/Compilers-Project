@@ -83,7 +83,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	for i in range(block_start,block_end+1):
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
-		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
+		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref":
 			if ir[i].op=="+":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
@@ -112,10 +112,23 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="div "+reg1+","+reg2+"\n"
 				mips+="mfhi "+reg3+"\n"
-			elif ir[i].op=="=":
-				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-				reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
-				mips+="move "+reg2+","+reg1+"\n"
+			elif ir[i].op == "=":
+				
+				if ir[i].typ == "ref":
+					
+					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
+					mips += "la "+reg2+","+ir[i].in1[0]+"\n"
+
+				elif ir[i].typ == "deref":
+					reg1 = getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
+					mips += "lw "+reg2+","+"0("+reg1+")\n"
+
+				else:
+					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+					reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+					mips+="move "+reg2+","+reg1+"\n"
+
 		elif ir[i].typ=="logical":									#logical operaters
 				if ir[i].op=="|":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
