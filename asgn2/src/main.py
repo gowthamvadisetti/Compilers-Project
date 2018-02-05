@@ -9,7 +9,7 @@ class Instruction3AC:
 	in2=None
 	out=None
 	target=None
-	op=None	#=,+,-,*,/,%,ifgoto,call,ret,label,print,scan
+	op=None	#=,+,-,*,/,%,~,ifgoto,call,ret,label,print,scan
 	lineno=None
 
 def parse_input(file_location,ir,leaders):

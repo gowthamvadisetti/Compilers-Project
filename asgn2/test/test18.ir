@@ -1,0 +1,4 @@
+1,=,a,2
+2,=,cat,a
+3,print,cat
+4,ret

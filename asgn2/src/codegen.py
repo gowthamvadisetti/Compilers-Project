@@ -14,7 +14,7 @@ def getEmptyRegister():
 def end_block():
 	global reg_desc
 	global mips
-	print (reg_desc)
+	# print (reg_desc)
 	for i in reg_desc.keys():
 		mips+="sw "+i+","+reg_desc[i]+"\n"
 		addr_desc[reg_desc[i]]=["memory",None]
@@ -36,8 +36,10 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
+				
 			else:
 				mips+="li "+reg+","+str(variable)+"\n"
+				
 	else:
 		# print "is it"
 		maxnextuse=line
@@ -69,13 +71,9 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	'''define getreg fn to assign registers or memory 
 	for variables(as in slides) using symbol tables,address 
 	descriptors,register descriptors
-
 	reg_desc {register => variable}
-
 	addr_desc {variable => register or memory,R2 or addr}
-
 	how many registers in mips(16 or 32)?
-
 	'''
 	global addr_desc
 	global reg_desc
@@ -83,6 +81,8 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global is_exit
 	is_exit = True
 	for i in range(block_start,block_end+1):
+		if ir[i].typ != "label":
+			mips+="line"+str(ir[i].lineno)+": \n"
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if ir[i].op=="+":
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -132,6 +132,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="srlv "+reg3+","+reg1+","+reg2+"\n"
+					
 				elif ir[i].op=="<<":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
@@ -150,6 +151,10 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			mips+="li $v0,1\n"
 			mips+="move $a0,"+reg1+"\n"
+			mips+="syscall\n"
+		elif ir[i].typ=="puts":
+			mips+="la $a0,"+"str"+str(ir[i].lineno)+"\n"
+			mips+="li $v0,4\n"
 			mips+="syscall\n"
 		elif ir[i].typ=="scan":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -174,10 +179,16 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				mips+="li $v0,10\n"
         		mips+="syscall\n"
         		is_exit = False
-        	
 
 		elif ir[i].typ=="ifgoto":
-			pass
-
-	end_block()
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+			# reg3=getreg(ir[i],"temp",symbol_attach,i,False)
+			# mips+="sub "+reg3+","+reg1+","+reg2+"\n"
+			# 
+			if ir[i].op=="leq":
+				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+			elif ir[i].op=="geq":
+				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+	# end_block()
 	return mips
