@@ -1,0 +1,9 @@
+1,scan,aa
+2,+,cc,aa,2
+3,&,dd,cc,aa
+4,^,ee,dd,cc
+5,%,ff,ee,cc
+6,print,ff
+7,puts," \n"
+8,print,ee
+9,ret

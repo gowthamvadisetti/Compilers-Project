@@ -1,11 +1,8 @@
-1,=,aa,1
-2,=,bb,0
-3,=,cc,0
-4,=,dd,0
-5,+,dd,aa,bb
-6,=,bb,aa
-7,=,aa,dd
-8,+,cc,cc,1
-9,ifgoto,leq,cc,8,5
-10,print,dd
-11,ret
+1,scan,a
+2,=,d,0
+3,+,d,d,a
+4,-,a,a,1
+5,ifgoto,geq,a,0,3
+6,puts,"prints summation of input "
+7,print,d
+8,ret

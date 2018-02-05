@@ -1,0 +1,8 @@
+1,=,a,2
+2,call,foo
+3,print,a
+4,ret
+5,label,foo
+6,=,e,21
+7,print,e
+8,ret

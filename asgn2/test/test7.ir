@@ -1,8 +1,5 @@
-1,scan,a
-2,=,d,0
-3,+,d,d,a
-4,-,a,a,1
-5,ifgoto,geq,a,0,3
-6,puts,"prints summation of input "
-7,print,d
-8,ret
+1,=,a,2
+2,=,bb,7
+3,|,cc,a,bb
+4,puts,"output of 2 or 7 \n"
+5,print,cc
