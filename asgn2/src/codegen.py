@@ -15,8 +15,8 @@ def end_block(symbol_attach,line):
 	global reg_desc
 	global mips
 	for i in reg_desc.keys():
-		# print(line)
-		# print(symbol_attach[line])
+		print(line)
+		print(symbol_attach)
 		if not(reg_desc[i] in symbol_attach[line] and symbol_attach[line][reg_desc[i]][0]=="live"):
 			mips+="sw "+i+","+reg_desc[i]+"\n"
 			addr_desc[reg_desc[i]]=["memory",None]
@@ -75,7 +75,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global is_exit
 	is_exit = True
 	for i in range(block_start,block_end+1):
-		print(i)
+		# print(i)
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
@@ -122,20 +122,28 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+					if not type(ir[i].in1) is int:
+						mips+="sw "+reg3+","+str(ir[i].in1)+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg1+","+reg1+","+reg3+"\n"
 					mips+="sw "+reg2+",0("+reg1+")\n"
 					mips+="lw "+reg1+","+ir[i].out+"\n"
+					if not type(ir[i].in1) is int:
+						mips+="lw "+reg3+","+str(ir[i].in1)+"\n"
 				elif ir[i].typ == "assign_from_array":
 					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					reg2=getreg(ir[i],ir[i].in1,symbol_attach,i,True)#array pointer
 					reg3=getreg(ir[i],ir[i].in2,symbol_attach,i,True)#array index
+					if not type(ir[i].in2) is int:
+						mips+="sw "+reg3+","+str(ir[i].in2)+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg2+","+reg2+","+reg3+"\n"
 					mips+="lw "+reg1+",0("+reg2+")\n"
 					mips+="lw "+reg2+","+ir[i].in1+"\n"
+					if not type(ir[i].in2) is int:
+						mips+="lw "+reg3+","+str(ir[i].in2)+"\n"
 				else:
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
@@ -174,7 +182,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					mips+="nor "+reg3+","+reg1+","+reg1+"\n"
 		elif ir[i].typ=="array":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-			print(type(ir[i].in1))
+			# print(type(ir[i].in1))
 			mips+="sll $a0,"+reg1+",2\n"
 			mips+="li $v0,9\n"
 			mips+="syscall\n"
@@ -223,5 +231,5 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
 			elif ir[i].op=="geq":
 				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
-	end_block(symbol_attach,ir[i].lineno-1)
+	# end_block(symbol_attach,ir[i].lineno-1)
 	return mips

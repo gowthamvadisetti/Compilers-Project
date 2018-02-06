@@ -148,16 +148,20 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 	assign proper values to each variable
 	for each line a map {var name -> [live or dead,next use in line]}'''
 	symbol_table={}
-	print(block_start)
-	print(block_end)
+	# print(block_start)
+	# print(block_end)
 	for i in range(block_start,block_end+1):
+		# print(i)
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
+			# symbol_attach[i]=symbol_table.copy()
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
 				symbol_table[ir[i].in1]=["dead",None]
 			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
 				symbol_table[ir[i].in2]=["dead",None]
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_table[ir[i].out]=["live",None]
+			# print(symbol_table)
+			# print(i)
 	for i in range(block_end,block_start-1,-1):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
@@ -174,8 +178,8 @@ ir=[]
 leaders=[1]
 file_location=sys.argv[1]
 parse_input(file_location,ir,leaders)
-for i in ir:
-	print (i.in1,i.in2,i.out,i.typ,i.op)
+# for i in ir:
+# 	print (i.in1,i.in2,i.out,i.typ,i.op)
 print(leaders)
 '''better to separate blocks here itself or later?
 what happens to symbol table for each block after it ends?
@@ -206,4 +210,4 @@ for i in range(len(leaders)):
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
 print (mips)
-# print(symbol_attach)
+print(symbol_attach)
