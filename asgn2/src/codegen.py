@@ -3,7 +3,7 @@ addr_desc={}
 reg_desc={}
 mips=""#mips code
 registers=["$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7","$t8","$t9","$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7"]
-# registers=registers[:4]
+registers=registers[:4]
 def getEmptyRegister():
 	global reg_desc
 	global registers

@@ -6,6 +6,6 @@
 6,scan,cc
 7,=,a[bb],cc
 8,ifgoto,leq,bb,4,4
-9,=,dd,a[4]
-10,print,dd
+9,=,dd,a[bb]
+10,print,bb
 11,ret
