@@ -10,7 +10,7 @@ class Instruction3AC:
 	in2=None
 	out=None
 	target=None
-	op=None	#=,+,-,*,/,%,~,ifgoto,call,ret,label,print,scan
+	op=None	#=,+,-,*,/,%,~,~|,ifgoto,call,ret,label,print,scan
 	lineno=None
 
 def parse_input(file_location,ir,leaders):
@@ -101,7 +101,7 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].in1=words[3]
 			ir[curr].in2=words[4]
 			ir[curr].out=words[2]
-		elif words[1] in ['|','^','>>','<<','&','~']:
+		elif words[1] in ['|','^','>>','<<','&','~','~|']:
 			ir[curr].typ="logical"
 			if words[1] == '~':
 				ir[curr].in1=words[3]

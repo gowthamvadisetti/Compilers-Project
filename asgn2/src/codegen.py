@@ -183,10 +183,15 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="and "+reg3+","+reg1+","+reg2+"\n"
-				elif ir[i].op=="~":
-					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
-					mips+="nor "+reg3+","+reg1+","+reg1+"\n"
+				elif ir[i].op == "~":
+					reg1 = getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+					reg3 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
+					mips +="nor "+reg3+","+reg1+","+reg1+"\n"
+				elif ir[i].op == "~|":
+					reg1 = getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+					reg2 = getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+					reg3 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
+					mips += "nor "+reg3+","+reg1+","+reg2+"\n"
 		elif ir[i].typ=="array":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			# print(type(ir[i].in1))
