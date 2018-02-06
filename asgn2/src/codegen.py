@@ -11,13 +11,16 @@ def getEmptyRegister():
 		if not (i in reg_desc):
 			return i
 	return  None
-def end_block():
+def end_block(symbol_attach,line):
 	global reg_desc
 	global mips
 	for i in reg_desc.keys():
-		mips+="sw "+i+","+reg_desc[i]+"\n"
-		addr_desc[reg_desc[i]]=["memory",None]
-		del reg_desc[i]
+		# print(line)
+		# print(symbol_attach[line])
+		if not(reg_desc[i] in symbol_attach[line] and symbol_attach[line][reg_desc[i]][0]=="live"):
+			mips+="sw "+i+","+reg_desc[i]+"\n"
+			addr_desc[reg_desc[i]]=["memory",None]
+			del reg_desc[i]
 
 def getreg(instruction,variable,symbol_attach,line,is_input):
 	global addr_desc
@@ -72,6 +75,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global is_exit
 	is_exit = True
 	for i in range(block_start,block_end+1):
+		print(i)
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
@@ -219,5 +223,5 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
 			elif ir[i].op=="geq":
 				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
-	# end_block()
+	end_block(symbol_attach,ir[i].lineno-1)
 	return mips
