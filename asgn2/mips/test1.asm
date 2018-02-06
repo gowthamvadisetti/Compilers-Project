@@ -19,7 +19,9 @@ line3:
 la $a0,str3
 li $v0,4
 syscall
+sw $t0,bb
 line4: 
+lw $t0,bb
 li $t1,1
 add $t0,$t0,$t1
 line5: 
@@ -43,17 +45,23 @@ lw $t0,bb
 line8: 
 li $t3,4
 ble $t0,$t3,line4
+sw $t2,a
+sw $t1,cc
+sw $t0,bb
 line9: 
-li $t4,4
-add $t4,$t4,$t4
-add $t4,$t4,$t4
-add $t2,$t2,$t4
-lw $t3,0($t2)
-lw $t2,a
+lw $t1,a
+li $t2,4
+add $t2,$t2,$t2
+add $t2,$t2,$t2
+add $t1,$t1,$t2
+lw $t0,0($t1)
+lw $t1,a
 line10: 
 li $v0,1
-move $a0,$t3
+move $a0,$t0
 syscall
 line11: 
 li $v0,10
 syscall
+sw $t1,a
+sw $t0,dd
