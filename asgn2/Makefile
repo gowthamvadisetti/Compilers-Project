@@ -10,4 +10,4 @@ clean:
 	rm -rf src/__*
 
 spim:
-	qtspim mips/test1.asm
+	spim -file mips/test1.asm

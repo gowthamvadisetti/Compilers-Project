@@ -39,19 +39,14 @@ def parse_input(file_location,ir,leaders):
 				match1=re.search('(.*?)\[(.*?)\]$',str(words[2]))
 				match2=re.search('(.*?)\[(.*?)\]$',str(words[3]))
 				if match1:
-					print("matched1")
 					ir[curr].typ="assign_to_array"
-					print("matched2")
 					ir[curr].out=match1.group(1)
-					print("matched3")
 					ir[curr].in1=match1.group(2)
-					print("matched4")
 					try:
 						ir[curr].in1=int(ir[curr].in1)
 					except:
 						pass
 					ir[curr].in2=words[3]
-					print("matched5")
 				elif match2:
 					ir[curr].typ="assign_from_array"
 					ir[curr].in1=match2.group(1)
@@ -76,9 +71,7 @@ def parse_input(file_location,ir,leaders):
 					ir[curr].out=words[2]
 
 
-			except Exception as e:
-				print(e)
-				print(ir[curr].lineno)
+			except:
 				ir[curr].typ="assign"
 				ir[curr].in1=words[3]
 				ir[curr].out=words[2]			
@@ -205,7 +198,7 @@ for i in range(len(leaders)):
 	else:
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
-	print (symbol_attach)
+	# print (symbol_attach)
 	if i==len(leaders)-1:
 		mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach)
 	else:
@@ -213,4 +206,4 @@ for i in range(len(leaders)):
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
 print (mips)
-print(symbol_attach)
+# print(symbol_attach)

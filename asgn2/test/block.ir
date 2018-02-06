@@ -1,0 +1,7 @@
+1,=,a,40
+2,+,a,a,5
+3,print,a
+4,ifgoto,leq,a,50,2
+5,puts,"output should be fifty five \n"
+6,print,a
+7,ret
