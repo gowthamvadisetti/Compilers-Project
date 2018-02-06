@@ -10,7 +10,7 @@ class Instruction3AC:
 	in2=None
 	out=None
 	target=None
-	op=None	#=,+,-,*,/,%,~,ifgoto,call,ret,label,print,scan
+	op=None	#=,+,-,*,/,%,~,~|,ifgoto,call,ret,label,print,scan
 	lineno=None
 
 def parse_input(file_location,ir,leaders):
@@ -56,15 +56,23 @@ def parse_input(file_location,ir,leaders):
 					except:
 						pass
 					ir[curr].out=words[2]
-				elif words[3][0] == "&":
+				elif words[3][0] == "&":       # a = &b
 					ir[curr].typ = "ref"
 					ir[curr].in1=words[3][1:]
 					ir[curr].out=words[2]
 
-				elif words[3][0] == "*":
+				elif words[3][0] == "*":      # a = *b
 					ir[curr].typ = "deref"
-					ir[curr].in1=words[3][1:]
-					ir[curr].out=words[2]
+					ir[curr].in1 = words[3][1:]
+					ir[curr].out = words[2]
+
+
+				elif words[2][0] == "*":
+					ir[curr].typ = "assign_refval"
+					ir[curr].in1 = words[3]
+					ir[curr].out = words[2][1:]
+
+
 				else:
 					ir[curr].typ="assign"
 					ir[curr].in1=words[3]
@@ -93,7 +101,7 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].in1=words[3]
 			ir[curr].in2=words[4]
 			ir[curr].out=words[2]
-		elif words[1] in ['|','^','>>','<<','&','~']:
+		elif words[1] in ['|','^','>>','<<','&','~','~|']:
 			ir[curr].typ="logical"
 			if words[1] == '~':
 				ir[curr].in1=words[3]
