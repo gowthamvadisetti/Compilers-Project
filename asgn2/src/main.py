@@ -35,7 +35,6 @@ def parse_input(file_location,ir,leaders):
 		ir[curr].op=words[1]
 		if words[1]=="=":
 			try:
-
 				match1=re.search('(.*?)\[(.*?)\]$',str(words[2]))
 				match2=re.search('(.*?)\[(.*?)\]$',str(words[3]))
 				if match1:
@@ -56,21 +55,22 @@ def parse_input(file_location,ir,leaders):
 					except:
 						pass
 					ir[curr].out=words[2]
+
+				elif words[2][0] == "*":       #*a = b 
+					ir[curr].typ = "assign_refval"
+					ir[curr].in1 = words[3]
+					ir[curr].out = words[2][1:]
+					
 				elif words[3][0] == "&":       # a = &b
 					ir[curr].typ = "ref"
 					ir[curr].in1=words[3][1:]
 					ir[curr].out=words[2]
 
+
 				elif words[3][0] == "*":      # a = *b
 					ir[curr].typ = "deref"
 					ir[curr].in1 = words[3][1:]
 					ir[curr].out = words[2]
-
-
-				elif words[2][0] == "*":
-					ir[curr].typ = "assign_refval"
-					ir[curr].in1 = words[3]
-					ir[curr].out = words[2][1:]
 
 
 				else:
@@ -80,9 +80,12 @@ def parse_input(file_location,ir,leaders):
 
 
 			except:
+
 				ir[curr].typ="assign"
 				ir[curr].in1=words[3]
-				ir[curr].out=words[2]			
+				ir[curr].out=words[2]	
+
+						
 		elif words[1]=="array":
 			ir[curr].typ="array"
 			match=re.search('(.*?)\[(.*?)\]$',words[2])
