@@ -238,5 +238,5 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
 			elif ir[i].op=="geq":
 				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
-	# end_block(symbol_attach,ir[i].lineno-1)
+	end_block(symbol_attach,ir[i].lineno-1)
 	return mips
