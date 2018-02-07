@@ -194,7 +194,6 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					mips += "nor "+reg3+","+reg1+","+reg2+"\n"
 		elif ir[i].typ=="array":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-			# print(type(ir[i].in1))
 			mips+="sll $a0,"+reg1+",2\n"
 			mips+="li $v0,9\n"
 			mips+="syscall\n"

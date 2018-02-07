@@ -12,7 +12,12 @@ make
 bin/codegen test/test1.ir
 ```
 
-After generating, run the command to clean binaries
+After generating MIPS code run using the following command
+```
+make spim
+```
+
+Then run the following command to clean binaries
 ```
 make clean
 ```

@@ -7,6 +7,4 @@ May not be needed6)Instruction manual for IR-@amar---??
 DONE-7)puts for strings-@vgp
 DONE-8)add puts to test cases with multiple prints-@amar 
 DONE-9)Too many test cases reduce them-@amar
-10)More operators??-Later @amar
-11)Constants are not addressed in register descriptor 
-so being overwritten when register is needed next
+DONE10)More operators??-Later @amar

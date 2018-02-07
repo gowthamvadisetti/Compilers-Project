@@ -154,13 +154,7 @@ def parse_input(file_location,ir,leaders):
 	return
 
 def create_symbol_table(ir,block_start,block_end,symbol_attach):
-	'''need to separate blocks and deal with them individually
-	first assign default values and then do back scanning to 
-	assign proper values to each variable
-	for each line a map {var name -> [live or dead,next use in line]}'''
 	symbol_table={}
-	# print(block_start)
-	# print(block_end)
 	for i in range(block_start,block_end+1):
 		# print(i)
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
@@ -192,9 +186,6 @@ parse_input(file_location,ir,leaders)
 # for i in ir:
 # 	print (i.in1,i.in2,i.out,i.typ,i.op)
 print(leaders)
-'''better to separate blocks here itself or later?
-what happens to symbol table for each block after it ends?
-'''
 mips=""
 mips+=".data\n"
 for i in variables.keys():
@@ -203,8 +194,6 @@ for i in variables.keys():
 for i in string_vars.keys():
 	mips+="str"+str(i)+": .asciiz "+string_vars[i]+"\n"
 mips+=".text\nmain:\n"
-# print(mips)
-# quit()
 symbol_attach=[{} for i in range(len(ir))]
 for i in range(len(leaders)):
 	block_start=leaders[i]-1
