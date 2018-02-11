@@ -1,9 +1,11 @@
 #The actual code generator
 addr_desc={}
 reg_desc={}
-mips=""#mips code
+mips=""
+#18 mips registers for our use
 registers=["$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7","$t8","$t9","$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7"]
-registers=registers[:4]
+# registers=registers[:4]
+
 def getEmptyRegister():
 	global reg_desc
 	global registers
@@ -11,6 +13,7 @@ def getEmptyRegister():
 		if not (i in reg_desc):
 			return i
 	return  None
+
 def end_block(symbol_attach,line):
 	global reg_desc
 	global mips
@@ -75,7 +78,6 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global is_exit
 	is_exit = True
 	for i in range(block_start,block_end+1):
-		# print(i)
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
@@ -108,23 +110,17 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				mips+="div "+reg1+","+reg2+"\n"
 				mips+="mfhi "+reg3+"\n"
 			elif ir[i].op == "=":
-				
 				if ir[i].typ == "ref":
-					
 					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips += "la "+reg2+","+ir[i].in1[0]+"\n"
-
 				elif ir[i].typ == "deref":
 					reg1 = getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips += "lw "+reg2+","+"0("+reg1+")\n"
-
 				elif ir[i].typ == "assign_refval":
 					reg1 = getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips += "sw "+reg1+","+"0("+reg2+")\n"
-
-
 				elif ir[i].typ == "assign_to_array":
 					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
@@ -155,7 +151,6 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="move "+reg2+","+reg1+"\n"
-
 		elif ir[i].typ=="logical":									#logical operaters
 				if ir[i].op=="|":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -221,7 +216,6 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			if ir[i].in2 != None:
 				mips+="sw $v0,"+ir[i].in2+"\n"
 		elif ir[i].typ == "ret":
-			#print is_exit
 			if ir[i].in1 != None:
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				mips+="move $v0,"+reg1+"\n"
@@ -232,15 +226,13 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				mips+="li $v0,10\n"
         		mips+="syscall\n"
         		is_exit = False
-
 		elif ir[i].typ=="ifgoto":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-			# reg3=getreg(ir[i],"temp",symbol_attach,i,False)
-			# mips+="sub "+reg3+","+reg1+","+reg2+"\n"
 			if ir[i].op=="leq":
 				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
 			elif ir[i].op=="geq":
 				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+	
 	end_block(symbol_attach,ir[i].lineno-1)
 	return mips

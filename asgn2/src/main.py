@@ -14,7 +14,7 @@ class Instruction3AC:
 	lineno=None
 
 def parse_input(file_location,ir,leaders):
-	#to read ir code to Instruction3AC format\
+	#to read ir code to Instruction3AC format
 	global variables
 	global string_vars
 	fp=open(file_location,'r')
@@ -156,17 +156,13 @@ def parse_input(file_location,ir,leaders):
 def create_symbol_table(ir,block_start,block_end,symbol_attach):
 	symbol_table={}
 	for i in range(block_start,block_end+1):
-		# print(i)
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
-			# symbol_attach[i]=symbol_table.copy()
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
 				symbol_table[ir[i].in1]=["dead",None]
 			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
 				symbol_table[ir[i].in2]=["dead",None]
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_table[ir[i].out]=["live",None]
-			# print(symbol_table)
-			# print(i)
 	for i in range(block_end,block_start-1,-1):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
@@ -202,7 +198,6 @@ for i in range(len(leaders)):
 	else:
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
-	# print (symbol_attach)
 	if i==len(leaders)-1:
 		mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach)
 	else:
@@ -210,4 +205,4 @@ for i in range(len(leaders)):
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
 print (mips)
-print(symbol_attach)
+# print(symbol_attach)

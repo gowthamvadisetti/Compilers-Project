@@ -1,10 +1,7 @@
-DONE-1)Pointers-@jj
-DONE-(verification needed)2)arrays-Later @vgp
-***3)storage b/w blocks-@vgp
-DONE-4)Readme-@amar
-DONE-5)Makefile-@vgp
-May not be needed6)Instruction manual for IR-@amar---??
-DONE-7)puts for strings-@vgp
-DONE-8)add puts to test cases with multiple prints-@amar 
-DONE-9)Too many test cases reduce them-@amar
-DONE10)More operators??-Later @amar
+1)Clean up code-- @vgp
+2)Verify symbol tables-- @vgp
+3)add logical operators wherever needed -- @jj
+4)Test with 4 registers --@amar
+5)more test cases -- @amar
+6)add instruction reference for 3AC -- @amar
+7)

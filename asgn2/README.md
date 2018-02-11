@@ -1,9 +1,9 @@
-#Assignment 2 -Code generator
+#Assignment 2 - Code generator
 
-In this Assignment we are converting 3 op code into mips language(mips).
+Code generator to convert Three Adress Code(3AC) to MIPS
 ---------
 
-src folder contains the main code.Input files are in test/ folder. 
+src folder contains the main code.test cases are in test/ folder. 
 
 Use the following commands to generate mips code.
 ```
