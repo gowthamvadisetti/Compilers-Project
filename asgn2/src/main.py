@@ -121,6 +121,11 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].target=int(words[5])
 			leaders.append(int(words[5]))
 			leaders.append(ir[curr].lineno+1)
+		elif words[1]=="goto":
+			ir[curr].typ="goto"
+			ir[curr].target=int(words[2])
+			leaders.append(int(words[2]))
+			leaders.append(ir[curr].lineno+1)
 		elif words[1]=="call":
 			ir[curr].typ="call"
 			ir[curr].in1=words[2]
