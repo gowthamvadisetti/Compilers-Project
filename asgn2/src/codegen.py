@@ -80,12 +80,13 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
-			if ir[i].op=="+":
+			if (ir[i].op=="+" or ir[i].op == "+="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="add "+reg3+","+reg1+","+reg2+"\n"
-			elif ir[i].op=="-":
+			
+			elif (ir[i].op=="-" or ir[i].op == "-="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
