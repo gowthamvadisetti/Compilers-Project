@@ -3,3 +3,4 @@
 3,=,bb,&a
 4,=,*bb,cc
 5,print,a
+6,ret
