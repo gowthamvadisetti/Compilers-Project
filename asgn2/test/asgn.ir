@@ -1,3 +1,5 @@
 1,=,aa,2
 2,=,bb,aa
-3,ret
+3,print,bb
+4,puts,"\n"
+5,ret
