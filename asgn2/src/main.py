@@ -160,6 +160,7 @@ def parse_input(file_location,ir,leaders):
 def create_symbol_table(ir,block_start,block_end,symbol_attach):
 	symbol_table={}
 	for i in range(block_start,block_end+1):
+
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
 				symbol_table[ir[i].in1]=["dead",None]
@@ -167,6 +168,16 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 				symbol_table[ir[i].in2]=["dead",None]
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_table[ir[i].out]=["live",None]
+
+		elif ir[i].typ == "logical":
+			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
+				symbol_table[ir[i].in1]=["dead",None]
+			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
+				symbol_table[ir[i].in2]=["dead",None]
+			if type(ir[i].out) is not int and (ir[i].out) is not None:
+				symbol_table[ir[i].out]=["live",None]
+
+
 	for i in range(block_end,block_start-1,-1):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
@@ -178,6 +189,15 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].out]=["dead",None]
+
+		elif ir[i].typ == "logical":
+			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
+				symbol_table[ir[i].in1]=["dead",None]
+			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
+				symbol_table[ir[i].in2]=["dead",None]
+			if type(ir[i].out) is not int and (ir[i].out) is not None:
+				symbol_table[ir[i].out]=["live",None]
+
 
 ir=[]
 leaders=[1]
