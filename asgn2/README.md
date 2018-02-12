@@ -21,3 +21,6 @@ Then run the following command to clean binaries
 ```
 make clean
 ```
+
+## IR/3AC supported instructions:
+* 
