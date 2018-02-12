@@ -23,4 +23,16 @@ make clean
 ```
 
 ## IR/3AC supported instructions:
-* 
+* Assignment
+* Arithmentic operators:   plus,minus,multiply,divide,modulo
+* Logical operators:   or,and,shift left,shift right,not,nor
+* goto
+* ifgoto with operations <=,>=,<,>,==,!=
+* call
+* return
+* label
+* print for variables
+* puts for fixed strings
+* scan
+* arrays-declaration,variable assignment to array,array assignment to variable
+* pointers-reference and dereference(works properly with arrays)
