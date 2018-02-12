@@ -1,8 +1,8 @@
-1,scan,a
-2,=,d,0
-3,+,d,d,a
-4,-,a,a,1
-5,ifgoto,>=,a,0,3
+1,scan,aa
+2,=,dd,0
+3,+,dd,dd,aa
+4,-,aa,aa,1
+5,ifgoto,>,aa,0,3
 6,puts,"prints summation of input "
-7,print,d
+7,print,dd
 8,ret
