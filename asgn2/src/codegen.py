@@ -112,7 +112,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			elif ir[i].op == "=":
 				if ir[i].typ == "ref":
 					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
-					mips += "la "+reg2+","+ir[i].in1[0]+"\n"
+					mips += "la "+reg2+","+ir[i].in1+"\n"
 				elif ir[i].typ == "deref":
 					reg1 = getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
