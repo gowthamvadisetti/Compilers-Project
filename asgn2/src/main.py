@@ -87,7 +87,7 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].out=match.group(1)
 			else:
 				print("Array declaration error")
-		elif words[1] in ['+','-','*','/','%',"++","--"]:
+		elif words[1] in ['+','-','*','/','%',"++","--","+=","-=","*=","/="]:
 			ir[curr].typ="arithmetic"
 			if words[1] == "++":
 				ir[curr].in1 = words[2]
@@ -98,6 +98,12 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].in1 = words[2]
 				ir[curr].in2 = 1
 				ir[curr].out = words[2]
+
+			elif (words[1] == "+=" or words[1] == "-=" or words[1] == "*=" or words[1] == "/="):
+				ir[curr].in1 = words[2]
+				ir[curr].in2 = words[3]
+				ir[curr].out = words[2]
+
 			else:
 				ir[curr].in1=words[3]
 				ir[curr].in2=words[4]
@@ -160,26 +166,16 @@ def parse_input(file_location,ir,leaders):
 def create_symbol_table(ir,block_start,block_end,symbol_attach):
 	symbol_table={}
 	for i in range(block_start,block_end+1):
-
-		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
+		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "logical" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
 				symbol_table[ir[i].in1]=["dead",None]
 			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
 				symbol_table[ir[i].in2]=["dead",None]
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_table[ir[i].out]=["live",None]
-
-		elif ir[i].typ == "logical":
-			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
-				symbol_table[ir[i].in1]=["dead",None]
-			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
-				symbol_table[ir[i].in2]=["dead",None]
-			if type(ir[i].out) is not int and (ir[i].out) is not None:
-				symbol_table[ir[i].out]=["live",None]
-
 
 	for i in range(block_end,block_start-1,-1):
-		if ir[i].typ=="assign" or ir[i].typ=="arithmetic":
+		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "logical" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
 				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].in1]=["live",i]
@@ -189,15 +185,6 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].out]=["dead",None]
-
-		elif ir[i].typ == "logical":
-			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
-				symbol_table[ir[i].in1]=["dead",None]
-			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
-				symbol_table[ir[i].in2]=["dead",None]
-			if type(ir[i].out) is not int and (ir[i].out) is not None:
-				symbol_table[ir[i].out]=["live",None]
-
 
 ir=[]
 leaders=[1]
