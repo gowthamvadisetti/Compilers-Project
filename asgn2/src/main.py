@@ -168,7 +168,7 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_table[ir[i].out]=["live",None]
 
-		if ir[i].typ == "logical":
+		elif ir[i].typ == "logical":
 			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
 				symbol_table[ir[i].in1]=["dead",None]
 			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
@@ -188,6 +188,15 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].out]=["dead",None]
+
+		elif ir[i].typ == "logical":
+			if type(ir[i].in1) is not int and (ir[i].in1) is not None:
+				symbol_table[ir[i].in1]=["dead",None]
+			if type(ir[i].in2) is not int and (ir[i].in2) is not None:
+				symbol_table[ir[i].in2]=["dead",None]
+			if type(ir[i].out) is not int and (ir[i].out) is not None:
+				symbol_table[ir[i].out]=["live",None]
+
 
 ir=[]
 leaders=[1]
