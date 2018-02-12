@@ -153,6 +153,7 @@ def parse_input(file_location,ir,leaders):
 			string_vars[ir[curr].lineno]=ir[curr].in1
 		curr+=1
 	leaders=sorted(leaders)
+	print(leaders)
 	fp.close()
 	return
 
@@ -185,6 +186,7 @@ parse_input(file_location,ir,leaders)
 # for i in ir:
 # 	print (i.in1,i.in2,i.out,i.typ,i.op)
 print(leaders)
+leaders=sorted(leaders)
 mips=""
 mips+=".data\n"
 for i in variables.keys():

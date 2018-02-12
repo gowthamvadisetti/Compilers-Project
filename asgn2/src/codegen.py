@@ -242,5 +242,6 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				mips+="bne "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
 		elif ir[i].typ=="goto":
 			mips+="j line"+str(ir[i].target)+"\n"
-	end_block(symbol_attach,ir[i].lineno-1)
+		if i==block_end:
+			end_block(symbol_attach,ir[i].lineno-1)
 	return mips
