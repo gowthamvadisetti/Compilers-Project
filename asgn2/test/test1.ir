@@ -1,6 +1,6 @@
 1,=,a,40
 2,+,a,a,5
-3,ifgoto,leq,a,50,2
+3,ifgoto,<=,a,50,2
 4,puts,"output should be fifty five \n"
 5,print,a
 6,ret

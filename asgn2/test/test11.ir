@@ -4,7 +4,7 @@
 4,label,fact
 5,*,out,out,inp
 6,-,inp,inp,1
-7,ifgoto,leq,inp,1,9
+7,ifgoto,<=,inp,1,9
 8,call,fact
 9,print,out
 10,ret

@@ -229,10 +229,18 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 		elif ir[i].typ=="ifgoto":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-			if ir[i].op=="leq":
+			if ir[i].op=="<=":
 				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
-			elif ir[i].op=="geq":
+			elif ir[i].op==">=":
 				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+			elif ir[i].op=="<":
+				mips+="blt "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+			elif ir[i].op==">":
+				mips+="bgt "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+			elif ir[i].op=="==":
+				mips+="beq "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+			elif ir[i].op=="!=":
+				mips+="bne "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
 		elif ir[i].typ=="goto":
 			mips+="j line"+str(ir[i].target)+"\n"
 	end_block(symbol_attach,ir[i].lineno-1)

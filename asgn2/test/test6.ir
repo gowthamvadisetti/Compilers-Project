@@ -2,7 +2,7 @@
 2,=,d,0
 3,+,d,d,a
 4,-,a,a,1
-5,ifgoto,geq,a,0,3
+5,ifgoto,>=,a,0,3
 6,puts,"prints summation of input "
 7,print,d
 8,ret

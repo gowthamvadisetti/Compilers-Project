@@ -4,4 +4,4 @@
 4)Test with 4 registers --@amar
 5)more test cases -- @amar
 6)add instruction reference for 3AC -- @amar
-7)ifgoto add ops and change to symbols <,>,<=,>=,==,!= --@amar
+DONE7)ifgoto add ops and change to symbols <,>,<=,>=,==,!= --@vgp

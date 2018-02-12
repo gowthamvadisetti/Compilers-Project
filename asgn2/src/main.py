@@ -55,37 +55,26 @@ def parse_input(file_location,ir,leaders):
 					except:
 						pass
 					ir[curr].out=words[2]
-
 				elif words[2][0] == "*":       #*a = b 
 					ir[curr].typ = "assign_refval"
 					ir[curr].in1 = words[3]
 					ir[curr].out = words[2][1:]
-					
 				elif words[3][0] == "&":       # a = &b
 					ir[curr].typ = "ref"
 					ir[curr].in1=words[3][1:]
 					ir[curr].out=words[2]
-
-
 				elif words[3][0] == "*":      # a = *b
 					ir[curr].typ = "deref"
 					ir[curr].in1 = words[3][1:]
 					ir[curr].out = words[2]
-
-
 				else:
 					ir[curr].typ="assign"
 					ir[curr].in1=words[3]
 					ir[curr].out=words[2]
-
-
 			except:
-
 				ir[curr].typ="assign"
 				ir[curr].in1=words[3]
 				ir[curr].out=words[2]	
-
-						
 		elif words[1]=="array":
 			ir[curr].typ="array"
 			match=re.search('(.*?)\[(.*?)\]$',words[2])
@@ -98,7 +87,6 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].out=match.group(1)
 			else:
 				print("Array declaration error")
-
 		elif words[1] in ['+','-','*','/','%']:
 			ir[curr].typ="arithmetic"
 			ir[curr].in1=words[3]
