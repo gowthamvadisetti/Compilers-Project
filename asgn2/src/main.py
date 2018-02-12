@@ -87,14 +87,14 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].out=match.group(1)
 			else:
 				print("Array declaration error")
-		elif words[1] in ['+','-','*','/','%',"+=","-="]:
+		elif words[1] in ['+','-','*','/','%',"++","--"]:
 			ir[curr].typ="arithmetic"
-			if words[1] == "+=":
+			if words[1] == "++":
 				ir[curr].in1 = words[2]
 				ir[curr].in2 = 1
 				ir[curr].out = words[2]
 
-			elif words[1] == "-=":
+			elif words[1] == "--":
 				ir[curr].in1 = words[2]
 				ir[curr].in2 = 1
 				ir[curr].out = words[2]
