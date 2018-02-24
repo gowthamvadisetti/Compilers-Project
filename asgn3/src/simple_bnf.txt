@@ -1,0 +1,179 @@
+Include operations+functions
+
+
+PROGRAM		: COMPSTMT
+
+COMPSTMT	: STMT (TERM EXPR)* [TERM]
+
+STMT		: STMT if EXPR
+		| STMT while EXPR
+		| EXPR
+
+EXPR		: MLHS `=` MRHS
+		| return CALL_ARGS
+		| EXPR and EXPR
+		| EXPR or EXPR
+		| not EXPR
+		| COMMAND
+		| `!` COMMAND
+		| ARG
+
+CALL		: FUNCTION
+                | COMMAND
+
+FUNCTION        : OPERATION [`(` [CALL_ARGS] `)`]
+		| PRIMARY `.` OPERATION `(` [CALL_ARGS] `)`
+		| PRIMARY `::` OPERATION `(` [CALL_ARGS] `)`
+		| PRIMARY `.` OPERATION
+		| PRIMARY `::` OPERATION
+
+ARG		: LHS `=` ARG
+		| LHS OP_ASGN ARG
+		| ARG `..` ARG
+		| ARG `...` ARG
+		| ARG `+` ARG
+		| ARG `-` ARG
+		| ARG `*` ARG
+		| ARG `/` ARG
+		| ARG `%` ARG
+		| ARG `**` ARG
+		| `+` ARG
+		| `-` ARG
+		| ARG `|` ARG
+		| ARG `^` ARG
+		| ARG `&` ARG
+		| ARG `<=>` ARG
+		| ARG `>` ARG
+		| ARG `>=` ARG
+		| ARG `<` ARG
+		| ARG `<=` ARG
+		| ARG `==` ARG
+		| ARG `===` ARG
+		| ARG `!=` ARG
+		| ARG `=~` ARG
+		| ARG `!~` ARG
+		| `!` ARG
+		| `~` ARG
+		| ARG `<<` ARG
+		| ARG `>>` ARG
+		| ARG `&&` ARG
+		| ARG `||` ARG
+		| PRIMARY
+
+PRIMARY		: `(` COMPSTMT `)`
+		| LITERAL
+		| VARIABLE
+		| PRIMARY `::` IDENTIFIER
+		| `::` IDENTIFIER
+		| PRIMARY `[` [ARGS] `]`
+		| `[` [ARGS [`,`]] `]`
+		| return [`(` [CALL_ARGS] `)`]
+		| FUNCTION `{` [`|` [BLOCK_VAR] `|`] COMPSTMT `}`
+		| if EXPR THEN
+		  COMPSTMT
+		  (elsif EXPR THEN COMPSTMT)*
+		  [else COMPSTMT]
+		  end
+		| while EXPR DO COMPSTMT end
+		| case COMPSTMT
+		  (when WHEN_ARGS THEN COMPSTMT)+
+		  [else COMPSTMT]
+		  end
+		| for BLOCK_VAR in EXPR DO
+		  COMPSTMT
+		  end
+		| def FNAME ARGDECL
+		  COMPSTMT
+		  end
+		| def SINGLETON (`.`|`::`) FNAME ARGDECL
+		  COMPSTMT
+		  end
+
+WHEN_ARGS	: ARGS [`,` `*` ARG]
+		| `*` ARG
+
+THEN		: TERM
+		| then
+		| TERM then
+
+DO		: TERM
+		| do
+		| TERM do
+
+BLOCK_VAR	: LHS
+		| MLHS
+
+MLHS		: MLHS_ITEM `,` [MLHS_ITEM (`,` MLHS_ITEM)*] [`*` [LHS]]
+                | `*` LHS
+
+MLHS_ITEM	: LHS
+		| `(` MLHS `)`
+
+LHS		: VARIABLE
+		| PRIMARY `[` [ARGS] `]`
+		| PRIMARY `.` IDENTIFIER
+
+MRHS		: ARGS [`,` `*` ARG]
+		| `*` ARG
+
+CALL_ARGS	: ARGS
+		| ARGS [`,` ASSOCS] [`,` `*` ARG] [`,` `&` ARG]
+		| ASSOCS [`,` `*` ARG] [`,` `&` ARG]
+		| `*` ARG [`,` `&` ARG]
+		| `&` ARG
+		| COMMAND
+
+ARGS 		: ARG (`,` ARG)*
+
+ARGDECL		: `(` ARGLIST `)`
+		| ARGLIST TERM
+
+ARGLIST		: IDENTIFIER(`,`IDENTIFIER)*[`,``*`[IDENTIFIER]][`,``&`IDENTIFIER]
+		| `*`IDENTIFIER[`,``&`IDENTIFIER]
+		| [`&`IDENTIFIER]
+
+SINGLETON	: VARIABLE
+		| `(` EXPR `)`
+
+VARIABLE	: VARNAME
+		| nil
+		| self
+
+LITERAL		: numeric
+		| SYMBOL
+		| STRING
+
+TERM		: `;`
+		| `\n`
+
+The followings are recognized by lexical analizer.
+
+
+OP_ASGN		: `+=` | `-=` | `*=` | `/=` | `%=` | `**=`
+		| `&=` | `|=` | `^=` | `<<=` | `>>=`
+		| `&&=` | `||=`
+
+SYMBOL		: `:`FNAME
+		| `:`VARNAME
+
+FNAME		: IDENTIFIER | `..` | `|` | `^` | `&`
+		| `<=>` | `==` | `===` | `=~`
+                | `>` | `>=` | `<` | `<=`
+		| `+` | `-` | `*` | `/` | `%` | `**`
+		| `<<` | `>>` | `~`
+
+OPERATION       : IDENTIFIER
+
+VARNAME		: GLOBAL
+		| `@`IDENTIFIER
+		| IDENTIFIER
+
+GLOBAL		: `$`IDENTIFIER
+		| `$`any_char
+		| `$``-`any_char
+
+STRING		: `"` any_char* `"`
+		| ``` any_char* ```
+		| ``` any_char* ```
+
+IDENTIFIER is the sqeunce of characters in the pattern of /[a-zA-Z_][a-zA-Z0-9_]*/.
