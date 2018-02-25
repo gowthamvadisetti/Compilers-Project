@@ -1,13 +1,17 @@
-Include operations+functions
+Includes
+Most operations
+function declarations
+fucnction calls
+arrays
+loops+case
+string
 
 
 PROGRAM		: COMPSTMT
 
 COMPSTMT	: STMT (TERM EXPR)* [TERM]
 
-STMT		: STMT if EXPR
-		| STMT while EXPR
-		| EXPR
+STMT		: EXPR
 
 EXPR		: MLHS `=` MRHS
 		| return CALL_ARGS

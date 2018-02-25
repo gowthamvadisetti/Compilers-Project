@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'BEGIN class ensure nil self when END def false not super while alias defined for or then yield and do if redo true begin else in rescue undef break elsif module retry unless case end next return until CONSTANT_RESOLUTION ELEMENT_REFERENCE ELEMENT_SET POWER UNARY_MINUS UNARY_PLUS SYMBOL_NOT COMPLEMENT MULTIPLY DIVIDE MODULO PLUS MINUS LEFT_SHIFT RIGHT_SHIFT BIT_AND BIT_OR BIT_XOR GREATER GREATER_EQUALS LESS LESS_EQUALS COMPARISON DOUBLE_EQUALS TRIPLE_EQUALS NOT_EQUALS EQUAL_TILDE BANG_TILDE LOGICAL_AND LOGICAL_OR INCL_RANGE EXCL_RANGE EQUALS MODULO_EQUALS DIVIDE_EQUALS MINUS_EQUALS PLUS_EQUALS OR_EQUALS AND_EQUALS RIGHT_SHIFT_EQUALS LEFT_SHIFT_EQUALS MULTIPLY_EQUALS LOGICAL_AND_EQUALS LOGICAL_OR_EQUALS POWER_EQUALS WORD_NOT WORD_AND WORD_OR MAP PLUS_AT MINUS_AT IDENTIFIER FLOAT NUMBER GLOBAL STRING STRING2 HEREDOC REGEXP DOUBLE_QUOTE DOLLAR COLON QUESTION_MARK OPEN_BRACKET CLOSE_BRACKET OPEN_FLOWER CLOSE_FLOWER OPEN_SQUARE CLOSE_SQUARE COMMA DOT SEMI_COLON AT_THE_RATEexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : factorfactor : NUMBER'
+_lr_signature = 'BEGIN class ensure nil self when END def false not super while alias defined for or then yield and do if redo true begin else in rescue undef break elsif module retry unless case end next return until CONSTANT_RESOLUTION ELEMENT_REFERENCE ELEMENT_SET POWER UNARY_MINUS UNARY_PLUS SYMBOL_NOT COMPLEMENT MULTIPLY DIVIDE MODULO PLUS MINUS LEFT_SHIFT RIGHT_SHIFT BIT_AND BIT_OR BIT_XOR GREATER GREATER_EQUALS LESS LESS_EQUALS COMPARISON DOUBLE_EQUALS TRIPLE_EQUALS NOT_EQUALS EQUAL_TILDE BANG_TILDE LOGICAL_AND LOGICAL_OR INCL_RANGE EXCL_RANGE EQUALS MODULO_EQUALS DIVIDE_EQUALS MINUS_EQUALS PLUS_EQUALS OR_EQUALS AND_EQUALS RIGHT_SHIFT_EQUALS LEFT_SHIFT_EQUALS MULTIPLY_EQUALS LOGICAL_AND_EQUALS LOGICAL_OR_EQUALS POWER_EQUALS WORD_NOT WORD_AND WORD_OR MAP PLUS_AT MINUS_AT IDENTIFIER FLOAT NUMBER GLOBAL STRING STRING2 HEREDOC REGEXP DOUBLE_QUOTE DOLLAR COLON QUESTION_MARK OPEN_BRACKET CLOSE_BRACKET OPEN_FLOWER CLOSE_FLOWER OPEN_SQUARE CLOSE_SQUARE COMMA DOT SEMI_COLON AT_THE_RATEstmt : stmt if expr\n        | stmt while expr\n        | exprexpr : expr PLUS termexpr : expr MINUS termexpr : termterm : factorfactor : NUMBER'
     
-_lr_action_items = {'$end':([1,2,3,4,7,8,],[-3,-5,-4,0,-1,-2,]),'PLUS':([1,2,3,4,7,8,],[-3,-5,-4,5,-1,-2,]),'NUMBER':([0,5,6,],[2,2,2,]),'MINUS':([1,2,3,4,7,8,],[-3,-5,-4,6,-1,-2,]),}
+_lr_action_items = {'NUMBER':([0,6,7,8,9,],[3,3,3,3,3,]),'while':([1,2,3,4,5,10,11,12,13,],[-6,-3,-8,8,-7,-4,-5,-2,-1,]),'PLUS':([1,2,3,5,10,11,12,13,],[-6,6,-8,-7,-4,-5,6,6,]),'$end':([1,2,3,4,5,10,11,12,13,],[-6,-3,-8,0,-7,-4,-5,-2,-1,]),'MINUS':([1,2,3,5,10,11,12,13,],[-6,7,-8,-7,-4,-5,7,7,]),'if':([1,2,3,4,5,10,11,12,13,],[-6,-3,-8,9,-7,-4,-5,-2,-1,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'term':([0,5,6,],[1,7,8,]),'expression':([0,],[4,]),'factor':([0,5,6,],[3,3,3,]),}
+_lr_goto_items = {'expr':([0,8,9,],[2,12,13,]),'term':([0,6,7,8,9,],[1,10,11,1,1,]),'stmt':([0,],[4,]),'factor':([0,6,7,8,9,],[5,5,5,5,5,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -25,10 +25,13 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> expression","S'",1,None,None,None),
-  ('expression -> expression PLUS term','expression',3,'p_expression_plus','parser.py',11),
-  ('expression -> expression MINUS term','expression',3,'p_expression_minus','parser.py',15),
-  ('expression -> term','expression',1,'p_expression_term','parser.py',19),
-  ('term -> factor','term',1,'p_term_factor','parser.py',23),
-  ('factor -> NUMBER','factor',1,'p_factor_num','parser.py',27),
+  ("S' -> stmt","S'",1,None,None,None),
+  ('stmt -> stmt if expr','stmt',3,'p_stmt','parser.py',11),
+  ('stmt -> stmt while expr','stmt',3,'p_stmt','parser.py',12),
+  ('stmt -> expr','stmt',1,'p_stmt','parser.py',13),
+  ('expr -> expr PLUS term','expr',3,'p_expr_plus','parser.py',16),
+  ('expr -> expr MINUS term','expr',3,'p_expr_minus','parser.py',20),
+  ('expr -> term','expr',1,'p_expr_term','parser.py',24),
+  ('term -> factor','term',1,'p_term_factor','parser.py',28),
+  ('factor -> NUMBER','factor',1,'p_factor_num','parser.py',32),
 ]
