@@ -14,7 +14,7 @@ keywords=['BEGIN','class','ensure','nil','self','when','END',
 			'end','next','return','until']
 
 operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET',
-			'POWER','UNARY_MINUS','UNARY_PLUS','SYMBOL_NOT',
+			'POWER','SYMBOL_NOT',
 			'COMPLEMENT','MULTIPLY','DIVIDE','MODULO','PLUS',
 			'MINUS','LEFT_SHIFT','RIGHT_SHIFT','BIT_AND','BIT_OR',
 			'BIT_XOR','GREATER','GREATER_EQUALS','LESS','LESS_EQUALS',
@@ -40,8 +40,6 @@ t_CONSTANT_RESOLUTION=r'::'
 t_ELEMENT_REFERENCE=r'\[\]'
 t_ELEMENT_SET=r'\[\]='
 t_POWER=r'\*\*'
-t_UNARY_MINUS=r'-'
-t_UNARY_PLUS=r'\+'
 t_SYMBOL_NOT=r'!'
 t_COMPLEMENT=r'~'
 t_MULTIPLY=r'\*'
