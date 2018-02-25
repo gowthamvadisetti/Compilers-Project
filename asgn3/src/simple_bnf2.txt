@@ -1,0 +1,114 @@
+Includes
+SOME operations
+arrays
+loops
+string
+
+
+PROGRAM		: COMPSTMT
+
+COMPSTMT	: STMT (TERM EXPR)* [TERM]
+
+STMT		: EXPR
+
+EXPR		: MLHS `=` MRHS
+		| ARG
+
+ARG		: LHS `=` ARG
+		| ARG `..` ARG
+		| ARG `...` ARG
+		| ARG `+` ARG
+		| ARG `-` ARG
+		| ARG `*` ARG
+		| ARG `/` ARG
+		| ARG `%` ARG
+		| `+` ARG
+		| `-` ARG
+		| ARG `>` ARG
+		| ARG `>=` ARG
+		| ARG `<` ARG
+		| ARG `<=` ARG
+		| ARG `==` ARG
+		| PRIMARY
+
+PRIMARY		: `(` COMPSTMT `)`
+		| LITERAL
+		| VARIABLE
+		| PRIMARY `[` [ARGS] `]`
+		| `[` [ARGS [`,`]] `]`
+		| if EXPR THEN
+		  COMPSTMT
+		  (elsif EXPR THEN COMPSTMT)*
+		  [else COMPSTMT]
+		  end
+		| while EXPR DO COMPSTMT end
+		| for BLOCK_VAR in EXPR DO
+		  COMPSTMT
+		  end
+
+THEN		: TERM
+		| then
+		| TERM then
+
+DO		: TERM
+		| do
+		| TERM do
+
+BLOCK_VAR	: LHS
+		| MLHS
+
+MLHS		: MLHS_ITEM `,` [MLHS_ITEM (`,` MLHS_ITEM)*] [`*` [LHS]]
+                | `*` LHS
+
+MLHS_ITEM	: LHS
+		| `(` MLHS `)`
+
+LHS		: VARIABLE
+		| PRIMARY `[` [ARGS] `]`
+		| PRIMARY `.` IDENTIFIER
+
+MRHS		: ARGS [`,` `*` ARG]
+		| `*` ARG
+
+CALL_ARGS	: ARGS
+
+ARGS 		: ARG (`,` ARG)*
+
+SINGLETON	: VARIABLE
+		| `(` EXPR `)`
+
+VARIABLE	: VARNAME
+		| nil
+		| self
+
+LITERAL		: numeric
+		| SYMBOL
+		| STRING
+
+TERM		: `;`
+		| `\n`
+
+
+
+
+SYMBOL		: `:`FNAME
+		| `:`VARNAME
+
+FNAME		: IDENTIFIER | `..`  `==` | `>` | `>=` | `<` | `<=`
+		| `+` | `-` | `*` | `/` | `%` 
+
+OPERATION       : IDENTIFIER
+
+VARNAME		: GLOBAL
+		| `@`IDENTIFIER
+		| IDENTIFIER
+
+GLOBAL		: `$`IDENTIFIER
+		| `$`any_char
+		| `$``-`any_char
+
+STRING		: `"` any_char* `"`
+		| ``` any_char* ```
+		| ``` any_char* ```
+
+IDENTIFIER is the sqeunce of characters in the pattern of /[a-zA-Z_][a-zA-Z0-9_]*/.

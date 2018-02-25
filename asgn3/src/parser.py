@@ -13,6 +13,7 @@ def createTree(root,tuple_part):
             else:
                 endnode=Node(i,parent=curr)
     return
+
 file_location=sys.argv[1]
 
 def p_stmt(p):
@@ -37,8 +38,8 @@ def p_term_factor(p):
 
 
 # Error rule for syntax errors
-# def p_error(p):
-#     print("Syntax error in input!")
+def p_error(p):
+    print("Syntax error in input!")
 
 # Build the parser
 parser = yacc.yacc()
