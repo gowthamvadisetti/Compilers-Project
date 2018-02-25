@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'BEGIN class ensure nil self when END def false not super while alias defined for or then yield and do if redo true begin else in rescue undef break elsif module retry unless case end next return until CONSTANT_RESOLUTION ELEMENT_REFERENCE ELEMENT_SET POWER SYMBOL_NOT COMPLEMENT MULTIPLY DIVIDE MODULO PLUS MINUS LEFT_SHIFT RIGHT_SHIFT BIT_AND BIT_OR BIT_XOR GREATER GREATER_EQUALS LESS LESS_EQUALS COMPARISON DOUBLE_EQUALS TRIPLE_EQUALS NOT_EQUALS EQUAL_TILDE BANG_TILDE LOGICAL_AND LOGICAL_OR INCL_RANGE EXCL_RANGE EQUALS MODULO_EQUALS DIVIDE_EQUALS MINUS_EQUALS PLUS_EQUALS OR_EQUALS AND_EQUALS RIGHT_SHIFT_EQUALS LEFT_SHIFT_EQUALS MULTIPLY_EQUALS LOGICAL_AND_EQUALS LOGICAL_OR_EQUALS POWER_EQUALS WORD_NOT WORD_AND WORD_OR MAP PLUS_AT MINUS_AT IDENTIFIER FLOAT NUMBER GLOBAL STRING STRING2 HEREDOC REGEXP DOUBLE_QUOTE DOLLAR COLON QUESTION_MARK OPEN_BRACKET CLOSE_BRACKET OPEN_FLOWER CLOSE_FLOWER OPEN_SQUARE CLOSE_SQUARE COMMA DOT SEMI_COLON AT_THE_RATEstmt : exprexpr : expr PLUS termexpr : expr MINUS termexpr : termterm : NUMBER'
+_lr_signature = 'BEGIN class ensure nil self when END def false not super while alias defined for or then yield and do if redo true begin else in rescue undef break elsif module retry unless case end next return until CONSTANT_RESOLUTION ELEMENT_REFERENCE ELEMENT_SET POWER SYMBOL_NOT COMPLEMENT MULTIPLY DIVIDE MODULO PLUS MINUS LEFT_SHIFT RIGHT_SHIFT BIT_AND BIT_OR BIT_XOR GREATER GREATER_EQUALS LESS LESS_EQUALS COMPARISON DOUBLE_EQUALS TRIPLE_EQUALS NOT_EQUALS EQUAL_TILDE BANG_TILDE LOGICAL_AND LOGICAL_OR INCL_RANGE EXCL_RANGE EQUALS MODULO_EQUALS DIVIDE_EQUALS MINUS_EQUALS PLUS_EQUALS OR_EQUALS AND_EQUALS RIGHT_SHIFT_EQUALS LEFT_SHIFT_EQUALS MULTIPLY_EQUALS LOGICAL_AND_EQUALS LOGICAL_OR_EQUALS POWER_EQUALS WORD_NOT WORD_AND WORD_OR MAP PLUS_AT MINUS_AT IDENTIFIER FLOAT NUMBER GLOBAL STRING STRING2 HEREDOC REGEXP DOUBLE_QUOTE DOLLAR COLON QUESTION_MARK OPEN_BRACKET CLOSE_BRACKET OPEN_FLOWER CLOSE_FLOWER OPEN_SQUARE CLOSE_SQUARE COMMA DOT SEMI_COLON AT_THE_RATEstmt : exprexpr : expr PLUS term\n            | expr MINUS term\n            | term\n    term : term MULTIPLY factor\n            | term DIVIDE factor\n            | term MODULO factor\n            | factor\n    factor : NUMBER'
     
-_lr_action_items = {'MINUS':([1,2,3,7,8,],[-4,-5,5,-3,-2,]),'PLUS':([1,2,3,7,8,],[-4,-5,6,-3,-2,]),'$end':([1,2,3,4,7,8,],[-4,-5,-1,0,-3,-2,]),'NUMBER':([0,5,6,],[2,2,2,]),}
+_lr_action_items = {'PLUS':([1,2,4,5,11,12,13,14,15,],[-4,9,-9,-8,-5,-7,-6,-2,-3,]),'MINUS':([1,2,4,5,11,12,13,14,15,],[-4,10,-9,-8,-5,-7,-6,-2,-3,]),'DIVIDE':([1,4,5,11,12,13,14,15,],[8,-9,-8,-5,-7,-6,8,8,]),'MULTIPLY':([1,4,5,11,12,13,14,15,],[6,-9,-8,-5,-7,-6,6,6,]),'NUMBER':([0,6,7,8,9,10,],[4,4,4,4,4,4,]),'$end':([1,2,3,4,5,11,12,13,14,15,],[-4,-1,0,-9,-8,-5,-7,-6,-2,-3,]),'MODULO':([1,4,5,11,12,13,14,15,],[7,-9,-8,-5,-7,-6,7,7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'term':([0,5,6,],[1,7,8,]),'expr':([0,],[3,]),'stmt':([0,],[4,]),}
+_lr_goto_items = {'term':([0,9,10,],[1,14,15,]),'expr':([0,],[2,]),'factor':([0,6,7,8,9,10,],[5,11,12,13,5,5,]),'stmt':([0,],[3,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,9 +26,13 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> stmt","S'",1,None,None,None),
-  ('stmt -> expr','stmt',1,'p_stmt','parser.py',19),
-  ('expr -> expr PLUS term','expr',3,'p_expr_plus','parser.py',22),
-  ('expr -> expr MINUS term','expr',3,'p_expr_minus','parser.py',26),
-  ('expr -> term','expr',1,'p_expr_term','parser.py',30),
-  ('term -> NUMBER','term',1,'p_term_factor','parser.py',34),
+  ('stmt -> expr','stmt',1,'p_stmt','parser.py',20),
+  ('expr -> expr PLUS term','expr',3,'p_expr_plus','parser.py',23),
+  ('expr -> expr MINUS term','expr',3,'p_expr_plus','parser.py',24),
+  ('expr -> term','expr',1,'p_expr_plus','parser.py',25),
+  ('term -> term MULTIPLY factor','term',3,'p_term_factor','parser.py',37),
+  ('term -> term DIVIDE factor','term',3,'p_term_factor','parser.py',38),
+  ('term -> term MODULO factor','term',3,'p_term_factor','parser.py',39),
+  ('term -> factor','term',1,'p_term_factor','parser.py',40),
+  ('factor -> NUMBER','factor',1,'p_factor','parser.py',49),
 ]

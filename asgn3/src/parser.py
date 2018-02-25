@@ -20,22 +20,29 @@ def p_stmt(p):
     'stmt : expr'
     p[0]=(p[1])
 def p_expr_plus(p):
-    'expr : expr PLUS term'
-    p[0] = tuple(p[1:])
-
-def p_expr_minus(p):
-    'expr : expr MINUS term'
-    p[0] = tuple(p[1:])
-
-def p_expr_term(p):
-    'expr : term'
-    p[0]=(p[1])
+    '''expr : expr PLUS term
+            | expr MINUS term
+            | term
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
 
 def p_term_factor(p):
-    'term : NUMBER'
-    print(p[1:])
-    p[0] = (p[1])
+    '''term : term MULTIPLY factor
+            | term DIVIDE factor
+            | term MODULO factor
+            | factor
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
 
+def p_factor(p):
+    'factor : NUMBER'
+    p[0] = (p[1])
 
 # Error rule for syntax errors
 def p_error(p):
