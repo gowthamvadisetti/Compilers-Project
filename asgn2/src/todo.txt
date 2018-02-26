@@ -1,7 +1,0 @@
-1)Clean up code-- @vgp
-2)Verify symbol tables-- @vgp
-3)add logical operators wherever needed -- @jj
-4)Test with 4 registers --@amar
-5)more test cases -- @amar
-6)add instruction reference for 3AC -- @amar
-DONE7)ifgoto add ops and change to symbols <,>,<=,>=,==,!= --@vgp
