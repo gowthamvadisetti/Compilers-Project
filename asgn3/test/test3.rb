@@ -1,14 +1,1 @@
-#class definition
-class MyClass
-    @one = 1
-    def do_something
-      @one = 2
-    end
-    def output
-      puts @one
-    end
-  end
-  instance = MyClass.new
-  instance.output
-  instance.do_something
-  instance.output
+if 1==2 then if 2==3 then i=2 else j=3 end end

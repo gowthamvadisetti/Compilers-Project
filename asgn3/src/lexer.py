@@ -29,7 +29,7 @@ operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET',
 tokens=keywords+operators+['IDENTIFIER','FLOAT','NUMBER','GLOBAL','STRING','STRING2',
 							'HEREDOC','REGEXP','DOUBLE_QUOTE','DOLLAR','COLON','QUESTION_MARK',
 							'OPEN_BRACKET','CLOSE_BRACKET','OPEN_FLOWER','CLOSE_FLOWER','OPEN_SQUARE',
-							'CLOSE_SQUARE','COMMA','DOT','SEMI_COLON','AT_THE_RATE']
+							'CLOSE_SQUARE','COMMA','DOT','SEMI_COLON','AT_THE_RATE']+['NEWLINE']
 
 reserved={}
 
@@ -132,9 +132,10 @@ t_AT_THE_RATE=r'\@'
 t_ignore = " \t"
 t_ignore_COMMENT = r'\#.*'
 
-def t_newline(t):
+def t_NEWLINE(t):
 	r'\n+'
 	t.lexer.lineno += t.value.count("\n")
+	return t
 
 def t_error(t):
 	print("ILLEGAL CHARACTER '%s'" % t.value[0])

@@ -7,35 +7,32 @@ string
 
 PROGRAM		: COMPSTMT
 
-COMPSTMT	: STMT (TERM EXPR)* [TERM]
+COMPSTMT	: STMT (NEWLINE EXPR)* [NEWLINE]
 
 STMT		: EXPR
 
-EXPR		: MLHS `=` MRHS
-		| ARG
+EXPR		: ARG
 
-ARG		: LHS `=` ARG
-		| ARG `..` ARG
-		| ARG `...` ARG
-		| ARG `+` ARG
-		| ARG `-` ARG
-		| ARG `*` ARG
-		| ARG `/` ARG
-		| ARG `%` ARG
-		| `+` ARG
-		| `-` ARG
-		| ARG `>` ARG
-		| ARG `>=` ARG
-		| ARG `<` ARG
-		| ARG `<=` ARG
-		| ARG `==` ARG
+ARG	8N	: LHS `=` ARG
+	7N	| ARG `..` ARG
+	7N	| ARG `...` ARG
+	4L	| ARG `+` ARG
+	4L	| ARG `-` ARG
+	3L	| ARG `*` ARG
+	3L	| ARG `/` ARG
+	3L	| ARG `%` ARG
+	1R	| `+` ARG
+	2R	| `-` ARG 
+	5L	| ARG `>` ARG
+	5L	| ARG `>=` ARG
+	5L	| ARG `<` ARG
+	5L	| ARG `<=` ARG
+	6N	| ARG `==` ARG
 		| PRIMARY
 
-PRIMARY		: `(` COMPSTMT `)`
+*PRIMARY		: `(` COMPSTMT `)`
 		| LITERAL
 		| VARIABLE
-		| PRIMARY `[` [ARGS] `]`
-		| `[` [ARGS [`,`]] `]`
 		| if EXPR THEN
 		  COMPSTMT
 		  (elsif EXPR THEN COMPSTMT)*
@@ -46,68 +43,49 @@ PRIMARY		: `(` COMPSTMT `)`
 		  COMPSTMT
 		  end
 
-THEN		: TERM
+*THEN		: NEWLINE
 		| then
-		| TERM then
+		| NEWLINE then
 
-DO		: TERM
+*DO		: NEWLINE
 		| do
-		| TERM do
+		| NEWLINE do
 
-BLOCK_VAR	: LHS
-		| MLHS
+*BLOCK_VAR	: LHS
 
-MLHS		: MLHS_ITEM `,` [MLHS_ITEM (`,` MLHS_ITEM)*] [`*` [LHS]]
-                | `*` LHS
 
-MLHS_ITEM	: LHS
-		| `(` MLHS `)`
 
 LHS		: VARIABLE
-		| PRIMARY `[` [ARGS] `]`
 		| PRIMARY `.` IDENTIFIER
 
-MRHS		: ARGS [`,` `*` ARG]
-		| `*` ARG
 
-CALL_ARGS	: ARGS
 
-ARGS 		: ARG (`,` ARG)*
 
-SINGLETON	: VARIABLE
-		| `(` EXPR `)`
-
-VARIABLE	: VARNAME
+*VARIABLE	: VARNAME
 		| nil
 		| self
 
-LITERAL		: numeric
+*LITERAL		: numeric
 		| SYMBOL
 		| STRING
 
-TERM		: `;`
+*NEWLINE		: `;`
 		| `\n`
 
 
 
 
-SYMBOL		: `:`FNAME
+*SYMBOL		: `:`FNAME
 		| `:`VARNAME
 
-FNAME		: IDENTIFIER | `..`  `==` | `>` | `>=` | `<` | `<=`
+*FNAME		: IDENTIFIER | `..`  `==` | `>` | `>=` | `<` | `<=`
 		| `+` | `-` | `*` | `/` | `%` 
 
-OPERATION       : IDENTIFIER
 
-VARNAME		: GLOBAL
-		| `@`IDENTIFIER
+*VARNAME		:`@`IDENTIFIER
 		| IDENTIFIER
 
-GLOBAL		: `$`IDENTIFIER
-		| `$`any_char
-		| `$``-`any_char
-
-STRING		: `"` any_char* `"`
+*STRING		: `"` any_char* `"`
 		| ``` any_char* ```
 		| ``` any_char* ```
 
