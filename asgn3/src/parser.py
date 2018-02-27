@@ -18,6 +18,7 @@ file_location=sys.argv[1]
 
 def p_compstmt(p):
     '''compstmt : stmt 
+                | stmt newline
                 | stmt newline expr
                 | stmt newline expr newline
     '''
@@ -223,7 +224,7 @@ def p_varname(p):
 
 def p_lhs(p):
     '''lhs : variable
-               | primary DOT IDENTIFIER 
+           | primary DOT IDENTIFIER 
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])

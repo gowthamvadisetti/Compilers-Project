@@ -1,1 +1,7 @@
-if 1==2 then if 2==3 then i=2 else j=3 end end
+if 1==2
+if 2==3
+i=2
+else j=3
+i=10
+end
+end
