@@ -1,8 +1,7 @@
 Includes
 SOME operations
-arrays
 loops
-string
+strings
 
 
 PROGRAM		: COMPSTMT

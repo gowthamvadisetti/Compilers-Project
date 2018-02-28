@@ -17,7 +17,8 @@ def createTree(root,tuple_part):
 file_location=sys.argv[1]
 
 def p_compstmt(p):
-    '''compstmt : stmt 
+    '''compstmt : stmt
+                | newline stmt 
                 | stmt newline
                 | stmt newline expr
                 | stmt newline expr newline
