@@ -9,9 +9,9 @@ string
 
 PROGRAM		: COMPSTMT
 
-COMPSTMT	: STMT (TERM EXPR)* [TERM]
+*COMPSTMT	: STMT (TERM EXPR)* [TERM]
 
-STMT		: EXPR
+*STMT		: EXPR
 
 EXPR		: MLHS `=` MRHS
 		| return CALL_ARGS
@@ -96,11 +96,11 @@ PRIMARY		: `(` COMPSTMT `)`
 WHEN_ARGS	: ARGS [`,` `*` ARG]
 		| `*` ARG
 
-THEN		: TERM
+*THEN		: TERM
 		| then
 		| TERM then
 
-DO		: TERM
+*DO		: TERM
 		| do
 		| TERM do
 
@@ -136,47 +136,50 @@ ARGLIST		: IDENTIFIER(`,`IDENTIFIER)*[`,``*`[IDENTIFIER]][`,``&`IDENTIFIER]
 		| `*`IDENTIFIER[`,``&`IDENTIFIER]
 		| [`&`IDENTIFIER]
 
-SINGLETON	: VARIABLE
+*SINGLETON	: VARIABLE
 		| `(` EXPR `)`
 
-VARIABLE	: VARNAME
+*VARIABLE	: VARNAME
 		| nil
 		| self
 
-LITERAL		: numeric
+*LITERAL		: numeric
 		| SYMBOL
 		| STRING
 
-TERM		: `;`
+*TERM		: `;`
 		| `\n`
 
 The followings are recognized by lexical analizer.
 
 
-OP_ASGN		: `+=` | `-=` | `*=` | `/=` | `%=` | `**=`
+*OP_ASGN		: `+=` | `-=` | `*=` | `/=` | `%=` | `**=`
 		| `&=` | `|=` | `^=` | `<<=` | `>>=`
 		| `&&=` | `||=`
 
-SYMBOL		: `:`FNAME
+*SYMBOL		: `:`FNAME
 		| `:`VARNAME
 
-FNAME		: IDENTIFIER | `..` | `|` | `^` | `&`
+*FNAME		: IDENTIFIER | `..` | `|` | `^` | `&`
 		| `<=>` | `==` | `===` | `=~`
                 | `>` | `>=` | `<` | `<=`
 		| `+` | `-` | `*` | `/` | `%` | `**`
 		| `<<` | `>>` | `~`
+                | `+@` | `-@` | `[]` | `[]=`
 
-OPERATION       : IDENTIFIER
+*OPERATION       : IDENTIFIER
+                | IDENTIFIER`!`
+                | IDENTIFIER`?`
 
-VARNAME		: GLOBAL
+*VARNAME		: GLOBAL
 		| `@`IDENTIFIER
 		| IDENTIFIER
 
-GLOBAL		: `$`IDENTIFIER
+*GLOBAL		: `$`IDENTIFIER
 		| `$`any_char
 		| `$``-`any_char
 
-STRING		: `"` any_char* `"`
+*STRING		: `"` any_char* `"`
 		| ``` any_char* ```
 		| ``` any_char* ```
 

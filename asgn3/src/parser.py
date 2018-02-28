@@ -147,6 +147,14 @@ def p_literal(p):
         p[0] = tuple(p[1:])
     else:
         p[0] = (p[1])
+def p_singleton(p):
+    '''singleton : variable
+               | OPEN_BRACKET expr CLOSE_BRACKET
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
 
 def p_variable(p):
     '''variable : varname
@@ -186,6 +194,25 @@ def p_blockvar(p):
     else:
         p[0] = (p[1])
 
+def p_opasgn(p):
+    '''opasgn : MODULO_EQUALS
+              | DIVIDE_EQUALS
+              | MINUS_EQUALS
+              | PLUS_EQUALS
+              | OR_EQUALS
+              | AND_EQUALS
+              | XOR_EQUALS
+              | RIGHT_SHIFT_EQUALS
+              | LEFT_SHIFT_EQUALS
+              | MULTIPLY_EQUALS
+              | LOGICAL_AND_EQUALS
+              | LOGICAL_OR_EQUALS
+              | POWER_EQUALS
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
 def p_symbol(p):
     '''symbol : COLON fname
               | COLON varname
@@ -198,7 +225,13 @@ def p_symbol(p):
 def p_fname(p):
     '''fname : IDENTIFIER
              | INCL_RANGE
+             | BIT_OR
+             | BIT_XOR
+             | BIT_AND
+             | COMPARISON
              | DOUBLE_EQUALS
+             | TRIPLE_EQUALS
+             | EQUAL_TILDE
              | GREATER
              | GREATER_EQUALS
              | LESS
@@ -208,6 +241,24 @@ def p_fname(p):
              | MULTIPLY
              | DIVIDE
              | MODULO
+             | POWER
+             | LEFT_SHIFT
+             | RIGHT_SHIFT
+             | COMPLEMENT
+             | PLUS_AT
+             | MINUS_AT
+             | ELEMENT_REFERENCE
+             | ELEMENT_SET
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_operation(p):
+    '''operation  : IDENTIFIER
+                | IDENTIFIER SYMBOL_NOT
+                | IDENTIFIER QUESTION_MARK
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])
@@ -215,7 +266,8 @@ def p_fname(p):
         p[0] = (p[1])
 
 def p_varname(p):
-    '''varname : AT_THE_RATE IDENTIFIER
+    '''varname : GLOBAL 
+              | AT_THE_RATE IDENTIFIER
               | IDENTIFIER
     '''
     if len(p)>2:
