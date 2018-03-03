@@ -1,6 +1,6 @@
 PROGRAM		: COMPSTMT
 
-COMPSTMT	: STMT (TERM EXPR)* [TERM]
+*COMPSTMT	: STMT (TERM EXPR)* [TERM]
 
 STMT		: CALL do [`|' [BLOCK_VAR] `|'] COMPSTMT end
                 | undef FNAME
@@ -9,9 +9,9 @@ STMT		: CALL do [`|' [BLOCK_VAR] `|'] COMPSTMT end
 		| STMT while EXPR
 		| STMT unless EXPR
 		| STMT until EXPR
-                | `BEGIN' `{' COMPSTMT `}'
-                | `END' `{' COMPSTMT `}'
-                | LHS `=' COMMAND [do [`|' [BLOCK_VAR] `|'] COMPSTMT end]
+        | `BEGIN' `{' COMPSTMT `}'
+        | `END' `{' COMPSTMT `}'
+        | LHS `=' COMMAND [do [`|' [BLOCK_VAR] `|'] COMPSTMT end]
 		| EXPR
 
 EXPR		: MLHS `=' MRHS
@@ -21,18 +21,21 @@ EXPR		: MLHS `=' MRHS
 		| EXPR or EXPR
 		| not EXPR
 		| COMMAND
-		| `!' COMMAND
+		| `!' COMMAND: OPERATION CALL_ARGS
+		| PRIMARY `.' OPERATION CALL_ARGS
+		| PRIMARY `::' OPERATION CALL_ARGS
+		| super CALL_ARGS
 		| ARG
 
-CALL		: FUNCTION
+*CALL		: FUNCTION
                 | COMMAND
 
-COMMAND		: OPERATION CALL_ARGS
+*COMMAND		: OPERATION CALL_ARGS
 		| PRIMARY `.' OPERATION CALL_ARGS
 		| PRIMARY `::' OPERATION CALL_ARGS
 		| super CALL_ARGS
 
-FUNCTION        : OPERATION [`(' [CALL_ARGS] `)']
+*FUNCTION        : OPERATION [`(' [CALL_ARGS] `)']
 		| PRIMARY `.' OPERATION `(' [CALL_ARGS] `)'
 		| PRIMARY `::' OPERATION `(' [CALL_ARGS] `)'
 		| PRIMARY `.' OPERATION
@@ -124,110 +127,110 @@ PRIMARY		: `(' COMPSTMT `)'
 		  COMPSTMT
 		  end
 
-WHEN_ARGS	: ARGS [`,' `*' ARG]
+*WHEN_ARGS	: ARGS [`,' `*' ARG]
 		| `*' ARG
 
-THEN		: TERM
+*THEN		: TERM
 		| then
 		| TERM then
 
-DO		: TERM
+*DO		: TERM
 		| do
 		| TERM do
 
-BLOCK_VAR	: LHS
+*BLOCK_VAR	: LHS
 		| MLHS
 
-MLHS		: MLHS_ITEM `,' [MLHS_ITEM (`,' MLHS_ITEM)*] [`*' [LHS]]
+*MLHS		: MLHS_ITEM `,' [MLHS_ITEM (`,' MLHS_ITEM)*] [`*' [LHS]]
                 | `*' LHS
 
-MLHS_ITEM	: LHS
+*MLHS_ITEM	: LHS
 		| '(' MLHS ')'
 
-LHS		: VARIABLE
+*LHS		: VARIABLE
 		| PRIMARY `[' [ARGS] `]'
 		| PRIMARY `.' IDENTIFIER
 
-MRHS		: ARGS [`,' `*' ARG]
+*MRHS		: ARGS [`,' `*' ARG]
 		| `*' ARG
 
-CALL_ARGS	: ARGS
+*CALL_ARGS	: ARGS
 		| ARGS [`,' ASSOCS] [`,' `*' ARG] [`,' `&' ARG]
 		| ASSOCS [`,' `*' ARG] [`,' `&' ARG]
 		| `*' ARG [`,' `&' ARG]
 		| `&' ARG
 		| COMMAND
 
-ARGS 		: ARG (`,' ARG)*
+*ARGS 		: ARG (`,' ARG)*
 
-ARGDECL		: `(' ARGLIST `)'
+*ARGDECL		: `(' ARGLIST `)'
 		| ARGLIST TERM
 
-ARGLIST		: IDENTIFIER(`,'IDENTIFIER)*[`,'`*'[IDENTIFIER]][`,'`&'IDENTIFIER]
+*ARGLIST		: IDENTIFIER(`,'IDENTIFIER)*[`,'`*'[IDENTIFIER]][`,'`&'IDENTIFIER]
 		| `*'IDENTIFIER[`,'`&'IDENTIFIER]
 		| [`&'IDENTIFIER]
 
-SINGLETON	: VARIABLE
+*SINGLETON	: VARIABLE
 		| `(' EXPR `)'
 
-ASSOCS		: ASSOC (`,' ASSOC)*
+*ASSOCS		: ASSOC (`,' ASSOC)*
 
-ASSOC		: ARG `=>' ARG
+*ASSOC		: ARG `=>' ARG
 
-VARIABLE	: VARNAME
+*VARIABLE	: VARNAME
 		| nil
 		| self
 
-LITERAL		: numeric
+*LITERAL		: numeric
 		| SYMBOL
 		| STRING
 		| STRING2
 		| HERE_DOC
 		| REGEXP
 
-TERM		: `;'
+*TERM		: `;'
 		| `\n'
 
 The followings are recognized by lexical analizer.
 
 
-OP_ASGN		: `+=' | `-=' | `*=' | `/=' | `%=' | `**='
+*OP_ASGN		: `+=' | `-=' | `*=' | `/=' | `%=' | `**='
 		| `&=' | `|=' | `^=' | `<<=' | `>>='
 		| `&&=' | `||='
 
-SYMBOL		: `:'FNAME
+*SYMBOL		: `:'FNAME
 		| `:'VARNAME
 
-FNAME		: IDENTIFIER | `..' | `|' | `^' | `&'
+*FNAME		: IDENTIFIER | `..' | `|' | `^' | `&'
 		| `<=>' | `==' | `===' | `=~'
                 | `>' | `>=' | `<' | `<='
 		| `+' | `-' | `*' | `/' | `%' | `**'
 		| `<<' | `>>' | `~'
                 | `+@' | `-@' | `[]' | `[]='
 
-OPERATION       : IDENTIFIER
+*OPERATION       : IDENTIFIER
                 | IDENTIFIER'!'
                 | IDENTIFIER'?'
 
-VARNAME		: GLOBAL
+*VARNAME		: GLOBAL
 		| `@'IDENTIFIER
 		| IDENTIFIER
 
-GLOBAL		: `$'IDENTIFIER
+*GLOBAL		: `$'IDENTIFIER
 		| `$'any_char
 		| `$''-'any_char
 
-STRING		: `"' any_char* `"'
+*STRING		: `"' any_char* `"'
 		| `'' any_char* `''
 		| ``' any_char* ``'
 
-STRING2		: `%'(`Q'|`q'|`x')char any_char* char
+*STRING2		: `%'(`Q'|`q'|`x')char any_char* char
 
-HERE_DOC        : `<<'(IDENTIFIER|STRING)
+*HERE_DOC        : `<<'(IDENTIFIER|STRING)
                   any_char*
                   IDENTIFIER
 
-REGEXP		: `/' any_char* `/'[`i'|`o'|`p']
+*REGEXP		: `/' any_char* `/'[`i'|`o'|`p']
 		| `%'`r' char any_char* char
 
 IDENTIFIER is the sqeunce of characters in the pattern of /[a-zA-Z_][a-zA-Z0-9_]*/.

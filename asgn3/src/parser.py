@@ -59,6 +59,18 @@ def p_call(p):
     else:
         p[0] = (p[1])
 
+def p_command(p):
+    '''command : operation callargs
+               | primary DOT operation callargs
+               | primary CONSTANT_RESOLUTION operation callargs
+               | super callargs
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+
 def p_function(p):
     '''function : operation OPEN_BRACKET callargs CLOSE_BRACKET
                 | operation OPEN_BRACKET CLOSE_BRACKET
@@ -212,6 +224,9 @@ def p_literal(p):
     '''literal : NUMBER
                | symbol
                | STRING
+               | STRING2
+               | HERE_DOC
+               | REGEXP
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])
