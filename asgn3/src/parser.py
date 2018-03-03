@@ -147,9 +147,157 @@ def p_literal(p):
         p[0] = tuple(p[1:])
     else:
         p[0] = (p[1])
+
+def p_blockvar(p):
+    '''blockvar : lhs
+                | mlhs
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_mlhs(p):
+    '''mlhs : lhs
+                | OPEN_BRACKET mlhs CLOSE_BRACKET
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_mlhsitem(p):
+    '''mlhsitem : lhs
+                | OPEN_BRACKET mlhs CLOSE_BRACKET
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_lhs(p):
+    '''lhs : variable
+           | primary OPEN_SQUARE args CLOSE_SQUARE
+           | primary OPEN_SQUARE CLOSE_SQUARE
+           | primary DOT IDENTIFIER 
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_mrhs(p):
+    '''mrhs : args
+            | args COMMA MULTIPLY arg
+            | MULTIPLY arg
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_callargs(p):
+    '''callargs : args
+                | args COMMA assocs COMMA MULTIPLY arg COMMA BIT_AND arg
+                | args COMMA MULTIPLY arg COMMA BIT_AND arg
+                | args COMMA assocs COMMA BIT_AND arg
+                | args COMMA assocs COMMA MULTIPLY arg
+                | args COMMA assocs
+                | args COMMA MULTIPLY arg
+                | args COMMA BIT_AND arg
+                | assocs COMMA MULTIPLY arg COMMA BIT_AND arg
+                | assocs COMMA MULTIPLY arg
+                | assocs COMMA BIT_AND arg
+                | assocs
+                | MULTPIPLY arg COMMA BIT_AND arg
+                | BIT_AND arg
+                | command
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_args(p):
+    '''args : arg multargs
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_multargs(p):
+    '''multargs : COMMA arg multargs
+                | empty
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_argdecl(p):
+    '''argdecl : OPEN_BRACKET arglist CLOSE_BRACKET
+               | arglist newline
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_arglist(p):
+    '''arglist : IDENTIFIER multarglist COMMA MULTIPLY IDENTIFIER COMMA BIT_AND IDENTIFIER
+               | IDENTIFIER multarglist COMMA MULTIPLY COMMA BIT_AND IDENTIFIER
+               | IDENTIFIER multarglist COMMA BIT_AND IDENTIFIER
+               | IDENTIFIER multarglist COMMA MULTIPLY IDENTIFIER
+               | IDENTIFIER multarglist COMMA MULTIPLY
+               | IDENTIFIER multarglist
+               | MULTIPLY IDENTIFIER COMMA BIT_AND IDENTIFIER
+               | MULTIPLY IDENTIFIER
+               | BIT_AND IDENTIFIER
+               | empty
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_multarglist(p):
+    '''multarglist : COMMA IDENTIFIER multarglist
+                 | empty
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
 def p_singleton(p):
     '''singleton : variable
                | OPEN_BRACKET expr CLOSE_BRACKET
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_assocs(p):
+    '''assocs : assoc multassocs
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_multassocs(p):
+    '''multassocs : comma assoc multassocs
+                  | empty
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_assoc(p):
+    '''assoc : arg MAP arg
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])
@@ -180,14 +328,6 @@ def p_pdo(p):
     '''pdo : newline
            | do
            | newline do
-    '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
-
-def p_blockvar(p):
-    '''blockvar : lhs
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])
@@ -269,15 +409,6 @@ def p_varname(p):
     '''varname : GLOBAL 
               | AT_THE_RATE IDENTIFIER
               | IDENTIFIER
-    '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
-
-def p_lhs(p):
-    '''lhs : variable
-           | primary DOT IDENTIFIER 
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])

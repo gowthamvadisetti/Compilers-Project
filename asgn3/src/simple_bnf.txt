@@ -104,40 +104,44 @@ WHEN_ARGS	: ARGS [`,` `*` ARG]
 		| do
 		| TERM do
 
-BLOCK_VAR	: LHS
+*BLOCK_VAR	: LHS
 		| MLHS
 
 MLHS		: MLHS_ITEM `,` [MLHS_ITEM (`,` MLHS_ITEM)*] [`*` [LHS]]
                 | `*` LHS
 
-MLHS_ITEM	: LHS
+*MLHS_ITEM	: LHS
 		| `(` MLHS `)`
 
-LHS		: VARIABLE
+*LHS		: VARIABLE
 		| PRIMARY `[` [ARGS] `]`
 		| PRIMARY `.` IDENTIFIER
 
-MRHS		: ARGS [`,` `*` ARG]
+*MRHS		: ARGS [`,` `*` ARG]
 		| `*` ARG
 
-CALL_ARGS	: ARGS
+*CALL_ARGS	: ARGS
 		| ARGS [`,` ASSOCS] [`,` `*` ARG] [`,` `&` ARG]
 		| ASSOCS [`,` `*` ARG] [`,` `&` ARG]
 		| `*` ARG [`,` `&` ARG]
 		| `&` ARG
-		| COMMAND
+		not done| COMMAND
 
-ARGS 		: ARG (`,` ARG)*
+*ARGS 		: ARG (`,` ARG)*
 
-ARGDECL		: `(` ARGLIST `)`
+*ARGDECL		: `(` ARGLIST `)`
 		| ARGLIST TERM
 
-ARGLIST		: IDENTIFIER(`,`IDENTIFIER)*[`,``*`[IDENTIFIER]][`,``&`IDENTIFIER]
+*ARGLIST		: IDENTIFIER(`,`IDENTIFIER)*[`,``*`[IDENTIFIER]][`,``&`IDENTIFIER]
 		| `*`IDENTIFIER[`,``&`IDENTIFIER]
 		| [`&`IDENTIFIER]
 
 *SINGLETON	: VARIABLE
 		| `(` EXPR `)`
+
+*ASSOCS		: ASSOC (`,' ASSOC)*
+
+*ASSOC		: ARG `=>' ARG
 
 *VARIABLE	: VARNAME
 		| nil
