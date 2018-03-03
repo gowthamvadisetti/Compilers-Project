@@ -30,15 +30,58 @@ def p_compstmt(p):
 
 def p_stmt(p):
     'stmt : expr'
-    p[0]=(p[1])
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
 
 def p_expr(p):
-    'expr : arg'
-    p[0]=(p[1])
+    '''expr : mlhs EQUALS mrhs
+            | return callargs
+            | expr and expr
+            | expr or expr
+            | not expr
+            | command
+            | SYMBOL_NOT command
+            | arg
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_call(p):
+    '''call : function
+            | command
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_function(p):
+    '''function : operation OPEN_BRACKET callargs CLOSE_BRACKET
+                | operation OPEN_BRACKET CLOSE_BRACKET
+                | operation
+                | PRIMARY DOT OPERATION OPEN_BRACKET callargs CLOSE_BRACKET
+                | PRIMARY DOT OPERATION OPEN_BRACKET CLOSE_BRACKET
+                | PRIMARY CONSTANT_RESOLUTION OPERATION OPEN_BRACKET callargs CLOSE_BRACKET
+                | PRIMARY CONSTANT_RESOLUTION OPERATION OPEN_BRACKET CLOSE_BRACKET
+                | PRIMARY DOT OPERATION
+                | primary CONSTANT_RESOLUTION OPERATION
+                | super OPEN_BRACKET callargs CLOSE_BRACKET
+                | super OPEN_BRACKET CLOSE_BRACKET
+                | super
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
 
 def p_arg_equals(p):
     '''arg : lhs EQUALS arg
-            | arg
+           | lhs opasgn arg
+           | arg
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])
@@ -119,10 +162,37 @@ def p_primary(p):
     '''primary : OPEN_BRACKET compstmt CLOSE_BRACKET
         | literal
         | variable
+        | primary CONSTANT_RESOLUTION IDENTIFIER
+        | CONSTANT_RESOLUTION IDENTIFIER
+        | primary OPEN_SQUARE args CLOSE_SQUARE
+        | primary OPEN_SQUARE CLOSE_SQUARE
+        | OPEN_SQUARE args COMMA CLOSE_SQUARE
+        | OPEN_SQUARE args CLOSE_SQUARE
+        | OPEN_SQUARE CLOSE_SQUARE
+        | return OPEN_BRACKET callargs CLOSE_BRACKET
+        | return OPEN_BRACKET CLOSE_BRACKET
+        | return
+        | function OPEN_FLOWER BIT_OR blockvar BIT_OR compstmt CLOSE_FLOWER
+        | function OPEN_FLOWER BIT_OR BIT_OR compstmt CLOSE_FLOWER
+        | function OPEN_FLOWER compstmt CLOSE_FLOWER
         | if expr pthen compstmt multelsif else compstmt end
         | if expr pthen compstmt end
         | while expr pdo compstmt end
-        | for blockvar in expr pdo compstmt end 
+        | case compstmt multcase else compstmt end
+        | case compstmt multcase end
+        | for blockvar in expr pdo compstmt end
+        | def fname argdecl comstmt end
+        | def singleton DOT fname argdecl compstmt end
+        | def singleton CONSTANT_RESOLUTION fname argdecl compstmt end
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_multcase(p):
+    '''multcase : when whenargs pthen compstmt multcase
+                | when whenargs pthen compstmt
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])
@@ -157,9 +227,32 @@ def p_blockvar(p):
     else:
         p[0] = (p[1])
 
+def p_whenargs(p):
+    '''whenargs : args COMMA MULTIPLY arg
+                | args
+                | MULTIPLY arg
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
 def p_mlhs(p):
-    '''mlhs : lhs
-                | OPEN_BRACKET mlhs CLOSE_BRACKET
+    '''mlhs : mlhs_item COMMA mlhs_item multmlhs MULTIPLY lhs
+            | mlhs_item COMMA mlhs_item multmlhs MULTIPLY
+            | mlhs_item COMMA mlhs_item multmlhs
+            | mlhs_item COMMA MULTIPLY lhs
+            | mlhs_item COMMA MULTIPLY
+            | mlhs_item COMMA
+    '''
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
+def p_multmlhs(p):
+    '''multmlhs : COMMA MLHS_ITEM multmlhs
+                | empty
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])

@@ -7,13 +7,13 @@ loops+case
 string
 
 
-PROGRAM		: COMPSTMT
+*PROGRAM		: COMPSTMT
 
 *COMPSTMT	: STMT (TERM EXPR)* [TERM]
 
 *STMT		: EXPR
 
-EXPR		: MLHS `=` MRHS
+*EXPR		: MLHS `=` MRHS
 		| return CALL_ARGS
 		| EXPR and EXPR
 		| EXPR or EXPR
@@ -22,14 +22,16 @@ EXPR		: MLHS `=` MRHS
 		| `!` COMMAND
 		| ARG
 
-CALL		: FUNCTION
+*CALL		: FUNCTION
                 | COMMAND
 
-FUNCTION        : OPERATION [`(` [CALL_ARGS] `)`]
-		| PRIMARY `.` OPERATION `(` [CALL_ARGS] `)`
-		| PRIMARY `::` OPERATION `(` [CALL_ARGS] `)`
+*FUNCTION        : OPERATION [OPEN_BRACKET [CALL_ARGS] CLOSE_BRACKET]
+		| PRIMARY `.` OPERATION OPEN_BRACKET [CALL_ARGS] CLOSE_BRACKET
+		| PRIMARY `::` OPERATION OPEN_BRACKET [CALL_ARGS] CLOSE_BRACKET
 		| PRIMARY `.` OPERATION
 		| PRIMARY `::` OPERATION
+		| super OPEN_BRACKET [CALL_ARGS] CLOSE_BRACKET
+		| super
 
 ARG		: LHS `=` ARG
 		| LHS OP_ASGN ARG
@@ -37,7 +39,7 @@ ARG		: LHS `=` ARG
 		| ARG `...` ARG
 		| ARG `+` ARG
 		| ARG `-` ARG
-		| ARG `*` ARG
+		| ARG MULTIPLY ARG
 		| ARG `/` ARG
 		| ARG `%` ARG
 		| ARG `**` ARG
@@ -64,37 +66,37 @@ ARG		: LHS `=` ARG
 		| ARG `||` ARG
 		| PRIMARY
 
-PRIMARY		: `(` COMPSTMT `)`
-		| LITERAL
-		| VARIABLE
-		| PRIMARY `::` IDENTIFIER
-		| `::` IDENTIFIER
-		| PRIMARY `[` [ARGS] `]`
-		| `[` [ARGS [`,`]] `]`
-		| return [`(` [CALL_ARGS] `)`]
-		| FUNCTION `{` [`|` [BLOCK_VAR] `|`] COMPSTMT `}`
-		| if EXPR THEN
+*PRIMARY		*: OPEN_BRACKET COMPSTMT CLOSE_BRACKET
+		*| LITERAL
+		*| VARIABLE
+		*| PRIMARY `::` IDENTIFIER
+		*| `::` IDENTIFIER
+		*| PRIMARY `[` [ARGS] `]`
+		*| `[` [ARGS [COMMA]] `]`
+		*| return [OPEN_BRACKET [CALL_ARGS] CLOSE_BRACKET]
+		*| FUNCTION `{` [`|` [BLOCK_VAR] `|`] COMPSTMT `}`
+		*| if EXPR THEN
 		  COMPSTMT
 		  (elsif EXPR THEN COMPSTMT)*
 		  [else COMPSTMT]
 		  end
-		| while EXPR DO COMPSTMT end
+		*| while EXPR DO COMPSTMT end
 		| case COMPSTMT
 		  (when WHEN_ARGS THEN COMPSTMT)+
 		  [else COMPSTMT]
 		  end
-		| for BLOCK_VAR in EXPR DO
+		*| for BLOCK_VAR in EXPR DO
 		  COMPSTMT
 		  end
-		| def FNAME ARGDECL
+		*| def FNAME ARGDECL
 		  COMPSTMT
 		  end
-		| def SINGLETON (`.`|`::`) FNAME ARGDECL
+		*| def SINGLETON (`.`|`::`) FNAME ARGDECL
 		  COMPSTMT
 		  end
 
-WHEN_ARGS	: ARGS [`,` `*` ARG]
-		| `*` ARG
+*WHEN_ARGS	: ARGS [COMMA MULTIPLY ARG]
+		| MULTIPLY ARG
 
 *THEN		: TERM
 		| then
@@ -107,37 +109,37 @@ WHEN_ARGS	: ARGS [`,` `*` ARG]
 *BLOCK_VAR	: LHS
 		| MLHS
 
-MLHS		: MLHS_ITEM `,` [MLHS_ITEM (`,` MLHS_ITEM)*] [`*` [LHS]]
-                | `*` LHS
+*MLHS		: MLHS_ITEM COMMA [MLHS_ITEM (COMMA MLHS_ITEM)*] [MULTIPLY [LHS]]
+                | MULTIPLY LHS
 
 *MLHS_ITEM	: LHS
-		| `(` MLHS `)`
+		| OPEN_BRACKET MLHS CLOSE_BRACKET
 
 *LHS		: VARIABLE
 		| PRIMARY `[` [ARGS] `]`
 		| PRIMARY `.` IDENTIFIER
 
-*MRHS		: ARGS [`,` `*` ARG]
-		| `*` ARG
+*MRHS		: ARGS [COMMA MULTIPLY ARG]
+		| MULTIPLY ARG
 
 *CALL_ARGS	: ARGS
-		| ARGS [`,` ASSOCS] [`,` `*` ARG] [`,` `&` ARG]
-		| ASSOCS [`,` `*` ARG] [`,` `&` ARG]
-		| `*` ARG [`,` `&` ARG]
+		| ARGS [COMMA ASSOCS] [COMMA MULTIPLY ARG] [COMMA `&` ARG]
+		| ASSOCS [COMMA MULTIPLY ARG] [COMMA `&` ARG]
+		| MULTIPLY ARG [COMMA `&` ARG]
 		| `&` ARG
 		not done| COMMAND
 
-*ARGS 		: ARG (`,` ARG)*
+*ARGS 		: ARG (COMMA ARG)*
 
-*ARGDECL		: `(` ARGLIST `)`
+*ARGDECL		: OPEN_BRACKET ARGLIST CLOSE_BRACKET
 		| ARGLIST TERM
 
-*ARGLIST		: IDENTIFIER(`,`IDENTIFIER)*[`,``*`[IDENTIFIER]][`,``&`IDENTIFIER]
-		| `*`IDENTIFIER[`,``&`IDENTIFIER]
+*ARGLIST		: IDENTIFIER(COMMAIDENTIFIER)*[COMMAMULTIPLY[IDENTIFIER]][COMMA`&`IDENTIFIER]
+		| MULTIPLYIDENTIFIER[COMMA`&`IDENTIFIER]
 		| [`&`IDENTIFIER]
 
 *SINGLETON	: VARIABLE
-		| `(` EXPR `)`
+		| OPEN_BRACKET EXPR CLOSE_BRACKET
 
 *ASSOCS		: ASSOC (`,' ASSOC)*
 
@@ -167,7 +169,7 @@ The followings are recognized by lexical analizer.
 *FNAME		: IDENTIFIER | `..` | `|` | `^` | `&`
 		| `<=>` | `==` | `===` | `=~`
                 | `>` | `>=` | `<` | `<=`
-		| `+` | `-` | `*` | `/` | `%` | `**`
+		| `+` | `-` | MULTIPLY | `/` | `%` | `**`
 		| `<<` | `>>` | `~`
                 | `+@` | `-@` | `[]` | `[]=`
 
