@@ -221,13 +221,13 @@ The followings are recognized by lexical analizer.
 		| ``` any_char* ```
 		| ``` any_char* ```
 
-*STRING2		: `%`(`QBIT_ORqBIT_ORx`)char any_char* char
+**STRING2		: `%`(`QBIT_ORqBIT_ORx`)char any_char* char
 
-*HERE_DOC        : `<<`(IDENTIFIER|STRING)
+**HERE_DOC        : `<<`(IDENTIFIER|STRING)
                   any_char*
                   IDENTIFIER
 
-*REGEXP		: `/` any_char* `/`[`iBIT_ORoBIT_ORp`]
+**REGEXP		: `/` any_char* `/`[`iBIT_ORoBIT_ORp`]
 		| `%``r` char any_char* char
 
 IDENTIFIER is the sqeunce of characters in the pattern of /[a-zA-Z_][a-zA-Z0-9_]*/.

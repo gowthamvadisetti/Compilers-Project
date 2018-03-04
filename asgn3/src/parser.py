@@ -18,7 +18,6 @@ file_location=sys.argv[1]
 
 def p_compstmt(p):
     '''compstmt : stmt
-                | newline stmt 
                 | stmt newline
                 | stmt newline expr
                 | stmt newline expr newline
@@ -92,12 +91,12 @@ def p_function(p):
     '''function : operation OPEN_BRACKET callargs CLOSE_BRACKET
                 | operation OPEN_BRACKET CLOSE_BRACKET
                 | operation
-                | PRIMARY DOT OPERATION OPEN_BRACKET callargs CLOSE_BRACKET
-                | PRIMARY DOT OPERATION OPEN_BRACKET CLOSE_BRACKET
-                | PRIMARY CONSTANT_RESOLUTION OPERATION OPEN_BRACKET callargs CLOSE_BRACKET
-                | PRIMARY CONSTANT_RESOLUTION OPERATION OPEN_BRACKET CLOSE_BRACKET
-                | PRIMARY DOT OPERATION
-                | primary CONSTANT_RESOLUTION OPERATION
+                | primary DOT operation OPEN_BRACKET callargs CLOSE_BRACKET
+                | primary DOT operation OPEN_BRACKET CLOSE_BRACKET
+                | primary CONSTANT_RESOLUTION operation OPEN_BRACKET callargs CLOSE_BRACKET
+                | primary CONSTANT_RESOLUTION operation OPEN_BRACKET CLOSE_BRACKET
+                | primary DOT operation
+                | primary CONSTANT_RESOLUTION operation
                 | super OPEN_BRACKET callargs CLOSE_BRACKET
                 | super OPEN_BRACKET CLOSE_BRACKET
                 | super
@@ -223,10 +222,10 @@ def p_primary(p):
         | case compstmt multcase else compstmt end
         | case compstmt multcase end
         | for blockvar in expr pdo compstmt end
-        | class IDENTIFIER [LESS IDENTIFIER] compstmt end
+        | class IDENTIFIER LESS IDENTIFIER compstmt end
         | class IDENTIFIER compstmt end
         | module IDENTIFIER compstmt end
-        | def fname argdecl comstmt end
+        | def fname argdecl compstmt end
         | def singleton DOT fname argdecl compstmt end
         | def singleton CONSTANT_RESOLUTION fname argdecl compstmt end
     '''
@@ -258,7 +257,7 @@ def p_literal(p):
                | symbol
                | STRING
                | STRING2
-               | HERE_DOC
+               | HEREDOC
                | REGEXP
     '''
     if len(p)>2:
@@ -286,12 +285,12 @@ def p_whenargs(p):
         p[0] = (p[1])
 
 def p_mlhs(p):
-    '''mlhs : mlhs_item COMMA mlhs_item multmlhs MULTIPLY lhs
-            | mlhs_item COMMA mlhs_item multmlhs MULTIPLY
-            | mlhs_item COMMA mlhs_item multmlhs
-            | mlhs_item COMMA MULTIPLY lhs
-            | mlhs_item COMMA MULTIPLY
-            | mlhs_item COMMA
+    '''mlhs : mlhsitem COMMA mlhsitem multmlhs MULTIPLY lhs
+            | mlhsitem COMMA mlhsitem multmlhs MULTIPLY
+            | mlhsitem COMMA mlhsitem multmlhs
+            | mlhsitem COMMA MULTIPLY lhs
+            | mlhsitem COMMA MULTIPLY
+            | mlhsitem COMMA
     '''
     if len(p)>2:
         p[0] = tuple(p[1:])
@@ -299,7 +298,7 @@ def p_mlhs(p):
         p[0] = (p[1])
 
 def p_multmlhs(p):
-    '''multmlhs : COMMA MLHS_ITEM multmlhs
+    '''multmlhs : COMMA mlhsitem multmlhs
                 | empty
     '''
     if len(p)>2:
@@ -350,7 +349,7 @@ def p_callargs(p):
                 | assocs COMMA MULTIPLY arg
                 | assocs COMMA BIT_AND arg
                 | assocs
-                | MULTPIPLY arg COMMA BIT_AND arg
+                | MULTIPLY arg COMMA BIT_AND arg
                 | BIT_AND arg
                 | command
     '''
@@ -429,7 +428,7 @@ def p_assocs(p):
         p[0] = (p[1])
 
 def p_multassocs(p):
-    '''multassocs : comma assoc multassocs
+    '''multassocs : COMMA assoc multassocs
                   | empty
     '''
     if len(p)>2:
