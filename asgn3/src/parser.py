@@ -29,7 +29,23 @@ def p_compstmt(p):
         p[0] = (p[1])
 
 def p_stmt(p):
-    'stmt : expr'
+    '''stmt : call do BIT_OR blockvar BIT_OR compstmt end
+            | call do BIT_OR BIT_OR compstmt end
+            | call do compstmt end
+            | undef fname
+            | alias fname fname
+            | stmt if expr
+            | stmt while expr
+            | stmt unless expr
+            | stmt until expr
+            | BEGIN OPEN_FLOWER compstmt CLOSE_FLOWER
+            | END OPEN_FLOWER compstmt CLOSE_FLOWER
+            | lhs EQUALS command do BIT_OR blockvar BIT_OR compstmt end
+            | lhs EQUALS command do BIT_OR BIT_OR compstmt end
+            | lhs EQUALS command do compstmt end
+            | lhs EQUALS command
+            | expr
+    '''
     if len(p)>2:
         p[0] = tuple(p[1:])
     else:
@@ -38,6 +54,7 @@ def p_stmt(p):
 def p_expr(p):
     '''expr : mlhs EQUALS mrhs
             | return callargs
+            | yield callargs
             | expr and expr
             | expr or expr
             | not expr

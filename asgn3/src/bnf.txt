@@ -2,95 +2,92 @@ PROGRAM		: COMPSTMT
 
 *COMPSTMT	: STMT (TERM EXPR)* [TERM]
 
-STMT		: CALL do [`|' [BLOCK_VAR] `|'] COMPSTMT end
+*STMT		: CALL do [BIT_OR [BLOCK_VAR] BIT_OR] COMPSTMT end
                 | undef FNAME
 		| alias FNAME FNAME
 		| STMT if EXPR
 		| STMT while EXPR
 		| STMT unless EXPR
 		| STMT until EXPR
-        | `BEGIN' `{' COMPSTMT `}'
-        | `END' `{' COMPSTMT `}'
-        | LHS `=' COMMAND [do [`|' [BLOCK_VAR] `|'] COMPSTMT end]
+        | `BEGIN` OPEN_FLOWER COMPSTMT CLOSE_FLOWER
+        | `END` OPEN_FLOWER COMPSTMT CLOSE_FLOWER
+        | LHS `=` COMMAND [do [BIT_OR [BLOCK_VAR] BIT_OR] COMPSTMT end]
 		| EXPR
 
-EXPR		: MLHS `=' MRHS
+*EXPR		: MLHS `=` MRHS
 		| return CALL_ARGS
 		| yield CALL_ARGS
 		| EXPR and EXPR
 		| EXPR or EXPR
 		| not EXPR
 		| COMMAND
-		| `!' COMMAND: OPERATION CALL_ARGS
-		| PRIMARY `.' OPERATION CALL_ARGS
-		| PRIMARY `::' OPERATION CALL_ARGS
-		| super CALL_ARGS
+		| `!` COMMAND
 		| ARG
 
 *CALL		: FUNCTION
                 | COMMAND
 
 *COMMAND		: OPERATION CALL_ARGS
-		| PRIMARY `.' OPERATION CALL_ARGS
-		| PRIMARY `::' OPERATION CALL_ARGS
+		| PRIMARY `.` OPERATION CALL_ARGS
+		| PRIMARY `::` OPERATION CALL_ARGS
 		| super CALL_ARGS
 
-*FUNCTION        : OPERATION [`(' [CALL_ARGS] `)']
-		| PRIMARY `.' OPERATION `(' [CALL_ARGS] `)'
-		| PRIMARY `::' OPERATION `(' [CALL_ARGS] `)'
-		| PRIMARY `.' OPERATION
-		| PRIMARY `::' OPERATION
-		| super `(' [CALL_ARGS] `)'
+*FUNCTION        : OPERATION [`(` [CALL_ARGS] `)`]
+		| PRIMARY `.` OPERATION `(` [CALL_ARGS] `)`
+		| PRIMARY `::` OPERATION `(` [CALL_ARGS] `)`
+		| PRIMARY `.` OPERATION
+		| PRIMARY `::` OPERATION
+		| super `(` [CALL_ARGS] `)`
 		| super
 
-ARG		: LHS `=' ARG
+ARG		: LHS `=` ARG
 		| LHS OP_ASGN ARG
-		| ARG `..' ARG
-		| ARG `...' ARG
-		| ARG `+' ARG
-		| ARG `-' ARG
-		| ARG `*' ARG
-		| ARG `/' ARG
-		| ARG `%' ARG
-		| ARG `**' ARG
-		| `+' ARG
-		| `-' ARG
-		| ARG `|' ARG
-		| ARG `^' ARG
-		| ARG `&' ARG
-		| ARG `<=>' ARG
-		| ARG `>' ARG
-		| ARG `>=' ARG
-		| ARG `<' ARG
-		| ARG `<=' ARG
-		| ARG `==' ARG
-		| ARG `===' ARG
-		| ARG `!=' ARG
-		| ARG `=~' ARG
-		| ARG `!~' ARG
-		| `!' ARG
-		| `~' ARG
-		| ARG `<<' ARG
-		| ARG `>>' ARG
-		| ARG `&&' ARG
-		| ARG `||' ARG
+		| ARG `..` ARG
+		| ARG `...` ARG
+		| ARG `+` ARG
+		| ARG `-` ARG
+		| ARG `*` ARG
+		| ARG `/` ARG
+		| ARG `%` ARG
+		| ARG `**` ARG
+		| `+` ARG
+		| `-` ARG
+		| ARG BIT_OR ARG
+		| ARG `^` ARG
+		| ARG `&` ARG
+		| ARG `<=>` ARG
+		| ARG `>` ARG
+		| ARG `>=` ARG
+		| ARG `<` ARG
+		| ARG `<=` ARG
+		| ARG `==` ARG
+		| ARG `===` ARG
+		| ARG `!=` ARG
+		| ARG `=~` ARG
+		| ARG `!~` ARG
+		| `!` ARG
+		| `~` ARG
+		| ARG `<<` ARG
+		| ARG `>>` ARG
+		| ARG `&&` ARG
+		| ARG `||` ARG
 		| defined? ARG
 		| PRIMARY
 
-PRIMARY		: `(' COMPSTMT `)'
-		| LITERAL
-		| VARIABLE
-		| PRIMARY `::' IDENTIFIER
-		| `::' IDENTIFIER
-		| PRIMARY `[' [ARGS] `]'
-		| `[' [ARGS [`,']] `]'
-		| `{' [(ARGS|ASSOCS) [`,']] `}'
-		| return [`(' [CALL_ARGS] `)']
-		| yield [`(' [CALL_ARGS] `)']
-		| defined? `(' ARG `)'
+PRIMARY		*: `(` COMPSTMT `)`
+		*| LITERAL
+		*| VARIABLE
+		*| PRIMARY `::` IDENTIFIER
+		*| `::` IDENTIFIER
+		*| PRIMARY `[` [ARGS] `]`
+		*| `[` [ARGS [`,`]] `]`
+		| OPEN_FLOWER [(ARGS|ASSOCS) [`,`]] CLOSE_FLOWER
+		*| return [`(` [CALL_ARGS] `)`]
+		| yield [`(` [CALL_ARGS] `)`]
+		| defined? `(` ARG `)`
                 | FUNCTION
-		| FUNCTION `{' [`|' [BLOCK_VAR] `|'] COMPSTMT `}'
-		| if EXPR THEN
+		*| FUNCTION OPEN_FLOWER [BIT_OR [BLOCK_VAR] BIT_OR] COMPSTMT CLOSE_FLOWER
+		*| if EXPR THEN
 		  COMPSTMT
 		  (elsif EXPR THEN COMPSTMT)*
 		  [else COMPSTMT]
@@ -99,13 +96,13 @@ PRIMARY		: `(' COMPSTMT `)'
 		  COMPSTMT
 		  [else COMPSTMT]
 		  end
-		| while EXPR DO COMPSTMT end
+		*| while EXPR DO COMPSTMT end
 		| until EXPR DO COMPSTMT end
-		| case COMPSTMT
+		*| case COMPSTMT
 		  (when WHEN_ARGS THEN COMPSTMT)+
 		  [else COMPSTMT]
 		  end
-		| for BLOCK_VAR in EXPR DO
+		*| for BLOCK_VAR in EXPR DO
 		  COMPSTMT
 		  end
 		| begin
@@ -114,21 +111,21 @@ PRIMARY		: `(' COMPSTMT `)'
 		  [else COMPSTMT]
 		  [ensure COMPSTMT]
 		  end
-		| class IDENTIFIER [`<' IDENTIFIER]
+		| class IDENTIFIER [`<` IDENTIFIER]
 		  COMPSTMT
 		  end
 		| module IDENTIFIER
 		  COMPSTMT
 		  end
-		| def FNAME ARGDECL
+		*| def FNAME ARGDECL
 		  COMPSTMT
 		  end
-		| def SINGLETON (`.'|`::') FNAME ARGDECL
+		*| def SINGLETON (`.` | ` ::`) FNAME ARGDECL
 		  COMPSTMT
 		  end
 
-*WHEN_ARGS	: ARGS [`,' `*' ARG]
-		| `*' ARG
+*WHEN_ARGS	: ARGS [`,` `*` ARG]
+		| `*` ARG
 
 *THEN		: TERM
 		| then
@@ -141,41 +138,41 @@ PRIMARY		: `(' COMPSTMT `)'
 *BLOCK_VAR	: LHS
 		| MLHS
 
-*MLHS		: MLHS_ITEM `,' [MLHS_ITEM (`,' MLHS_ITEM)*] [`*' [LHS]]
-                | `*' LHS
+*MLHS		: MLHS_ITEM `,` [MLHS_ITEM (`,` MLHS_ITEM)*] [`*` [LHS]]
+                | `*` LHS
 
 *MLHS_ITEM	: LHS
-		| '(' MLHS ')'
+		| `(` MLHS `)`
 
 *LHS		: VARIABLE
-		| PRIMARY `[' [ARGS] `]'
-		| PRIMARY `.' IDENTIFIER
+		| PRIMARY `[` [ARGS] `]`
+		| PRIMARY `.` IDENTIFIER
 
-*MRHS		: ARGS [`,' `*' ARG]
-		| `*' ARG
+*MRHS		: ARGS [`,` `*` ARG]
+		| `*` ARG
 
 *CALL_ARGS	: ARGS
-		| ARGS [`,' ASSOCS] [`,' `*' ARG] [`,' `&' ARG]
-		| ASSOCS [`,' `*' ARG] [`,' `&' ARG]
-		| `*' ARG [`,' `&' ARG]
-		| `&' ARG
+		| ARGS [`,` ASSOCS] [`,` `*` ARG] [`,` `&` ARG]
+		| ASSOCS [`,` `*` ARG] [`,` `&` ARG]
+		| `*` ARG [`,` `&` ARG]
+		| `&` ARG
 		| COMMAND
 
-*ARGS 		: ARG (`,' ARG)*
+*ARGS 		: ARG (`,` ARG)*
 
-*ARGDECL		: `(' ARGLIST `)'
+*ARGDECL		: `(` ARGLIST `)`
 		| ARGLIST TERM
 
-*ARGLIST		: IDENTIFIER(`,'IDENTIFIER)*[`,'`*'[IDENTIFIER]][`,'`&'IDENTIFIER]
-		| `*'IDENTIFIER[`,'`&'IDENTIFIER]
-		| [`&'IDENTIFIER]
+*ARGLIST		: IDENTIFIER(`,`IDENTIFIER)*[`,``*`[IDENTIFIER]][`,``&`IDENTIFIER]
+		| `*`IDENTIFIER[`,``&`IDENTIFIER]
+		| [`&`IDENTIFIER]
 
 *SINGLETON	: VARIABLE
-		| `(' EXPR `)'
+		| `(` EXPR `)`
 
-*ASSOCS		: ASSOC (`,' ASSOC)*
+*ASSOCS		: ASSOC (`,` ASSOC)*
 
-*ASSOC		: ARG `=>' ARG
+*ASSOC		: ARG `=>` ARG
 
 *VARIABLE	: VARNAME
 		| nil
@@ -188,49 +185,49 @@ PRIMARY		: `(' COMPSTMT `)'
 		| HERE_DOC
 		| REGEXP
 
-*TERM		: `;'
-		| `\n'
+*TERM		: `;`
+		| `\n`
 
 The followings are recognized by lexical analizer.
 
 
-*OP_ASGN		: `+=' | `-=' | `*=' | `/=' | `%=' | `**='
-		| `&=' | `|=' | `^=' | `<<=' | `>>='
-		| `&&=' | `||='
+*OP_ASGN		: `+=` | `-=` | `*=` | `/=` | `%=` | `**=`
+		| `&=` | `|=` | `^=` | `<<=` | `>>=`
+		| `&&=` | `||=`
 
-*SYMBOL		: `:'FNAME
-		| `:'VARNAME
+*SYMBOL		: `:`FNAME
+		| `:`VARNAME
 
-*FNAME		: IDENTIFIER | `..' | `|' | `^' | `&'
-		| `<=>' | `==' | `===' | `=~'
-                | `>' | `>=' | `<' | `<='
-		| `+' | `-' | `*' | `/' | `%' | `**'
-		| `<<' | `>>' | `~'
-                | `+@' | `-@' | `[]' | `[]='
+*FNAME		: IDENTIFIER | `..` | BIT_OR | `^` | `&`
+		| `<=>` | `==` | `===` | `=~`
+                | `>` | `>=` | `<` | `<=`
+		| `+` | `-` | `*` | `/` | `%` | `**`
+		| `<<` | `>>` | `~`
+                | `+@` | `-@` | `[]` | `[]=`
 
 *OPERATION       : IDENTIFIER
-                | IDENTIFIER'!'
-                | IDENTIFIER'?'
+                | IDENTIFIER`!`
+                | IDENTIFIER`?`
 
 *VARNAME		: GLOBAL
-		| `@'IDENTIFIER
+		| `@`IDENTIFIER
 		| IDENTIFIER
 
-*GLOBAL		: `$'IDENTIFIER
-		| `$'any_char
-		| `$''-'any_char
+*GLOBAL		: `$`IDENTIFIER
+		| `$`any_char
+		| `$``-`any_char
 
-*STRING		: `"' any_char* `"'
-		| `'' any_char* `''
-		| ``' any_char* ``'
+*STRING		: `"` any_char* `"`
+		| ``` any_char* ```
+		| ``` any_char* ```
 
-*STRING2		: `%'(`Q'|`q'|`x')char any_char* char
+*STRING2		: `%`(`QBIT_ORqBIT_ORx`)char any_char* char
 
-*HERE_DOC        : `<<'(IDENTIFIER|STRING)
+*HERE_DOC        : `<<`(IDENTIFIER|STRING)
                   any_char*
                   IDENTIFIER
 
-*REGEXP		: `/' any_char* `/'[`i'|`o'|`p']
-		| `%'`r' char any_char* char
+*REGEXP		: `/` any_char* `/`[`iBIT_ORoBIT_ORp`]
+		| `%``r` char any_char* char
 
 IDENTIFIER is the sqeunce of characters in the pattern of /[a-zA-Z_][a-zA-Z0-9_]*/.
