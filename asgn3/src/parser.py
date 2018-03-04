@@ -198,18 +198,34 @@ def p_primary(p):
         | OPEN_SQUARE args COMMA CLOSE_SQUARE
         | OPEN_SQUARE args CLOSE_SQUARE
         | OPEN_SQUARE CLOSE_SQUARE
+        | OPEN_FLOWER args COMMA CLOSE_FLOWER
+        | OPEN_FLOWER args CLOSE_FLOWER
+        | OPEN_FLOWER CLOSE_FLOWER
+        | OPEN_FLOWER assocs COMMA CLOSE_FLOWER
+        | OPEN_FLOWER assocs CLOSE_FLOWER
         | return OPEN_BRACKET callargs CLOSE_BRACKET
         | return OPEN_BRACKET CLOSE_BRACKET
         | return
+        | yield OPEN_BRACKET callargs CLOSE_BRACKET
+        | yield OPEN_BRACKET CLOSE_BRACKET
+        | yield
+        | defined OPEN_BRACKET arg CLOSE_BRACKET
+        | function
         | function OPEN_FLOWER BIT_OR blockvar BIT_OR compstmt CLOSE_FLOWER
         | function OPEN_FLOWER BIT_OR BIT_OR compstmt CLOSE_FLOWER
         | function OPEN_FLOWER compstmt CLOSE_FLOWER
         | if expr pthen compstmt multelsif else compstmt end
         | if expr pthen compstmt end
+        | unless expr pthen compstmt else compstmt end
+        | unless expr pthen compstmt end
         | while expr pdo compstmt end
+        | until expr pdo compstmt end
         | case compstmt multcase else compstmt end
         | case compstmt multcase end
         | for blockvar in expr pdo compstmt end
+        | class IDENTIFIER [LESS IDENTIFIER] compstmt end
+        | class IDENTIFIER compstmt end
+        | module IDENTIFIER compstmt end
         | def fname argdecl comstmt end
         | def singleton DOT fname argdecl compstmt end
         | def singleton CONSTANT_RESOLUTION fname argdecl compstmt end

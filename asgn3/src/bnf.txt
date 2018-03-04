@@ -81,23 +81,23 @@ PRIMARY		*: `(` COMPSTMT `)`
 		*| `::` IDENTIFIER
 		*| PRIMARY `[` [ARGS] `]`
 		*| `[` [ARGS [`,`]] `]`
-		| OPEN_FLOWER [(ARGS|ASSOCS) [`,`]] CLOSE_FLOWER
+		*| OPEN_FLOWER [(ARGS|ASSOCS) [`,`]] CLOSE_FLOWER
 		*| return [`(` [CALL_ARGS] `)`]
-		| yield [`(` [CALL_ARGS] `)`]
-		| defined? `(` ARG `)`
-                | FUNCTION
+		*| yield [`(` [CALL_ARGS] `)`]
+		*| defined? `(` ARG `)`
+        *| FUNCTION
 		*| FUNCTION OPEN_FLOWER [BIT_OR [BLOCK_VAR] BIT_OR] COMPSTMT CLOSE_FLOWER
 		*| if EXPR THEN
 		  COMPSTMT
 		  (elsif EXPR THEN COMPSTMT)*
 		  [else COMPSTMT]
 		  end
-		| unless EXPR THEN
+		*| unless EXPR THEN
 		  COMPSTMT
 		  [else COMPSTMT]
 		  end
 		*| while EXPR DO COMPSTMT end
-		| until EXPR DO COMPSTMT end
+		*| until EXPR DO COMPSTMT end
 		*| case COMPSTMT
 		  (when WHEN_ARGS THEN COMPSTMT)+
 		  [else COMPSTMT]
@@ -111,10 +111,10 @@ PRIMARY		*: `(` COMPSTMT `)`
 		  [else COMPSTMT]
 		  [ensure COMPSTMT]
 		  end
-		| class IDENTIFIER [`<` IDENTIFIER]
+		*| class IDENTIFIER [`<` IDENTIFIER]
 		  COMPSTMT
 		  end
-		| module IDENTIFIER
+		*| module IDENTIFIER
 		  COMPSTMT
 		  end
 		*| def FNAME ARGDECL
