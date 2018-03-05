@@ -1,4 +1,4 @@
-# Compilers Assignment 1 - lexer
+# Compilers Assignment 3 - parser
 
 ##Prerequisites:##
 1. python2 on python3 should installed
