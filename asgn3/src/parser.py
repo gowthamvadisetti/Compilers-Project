@@ -18,7 +18,20 @@ def createTree(root,tuple_part):
             else:
                 endnode=Node(i,parent=curr)
     return
-
+def rightDerivation(tuple_part):
+    if type(tuple_part) is tuple:
+        node_name=tuple_part[0]
+        tuple_part=tuple_part[1:]
+    else:
+        node_name=""
+    curr=Node(node_name,parent=root)
+    if type(tuple_part) is tuple:
+        for i in tuple_part:
+            if type(i) is tuple:
+                createTree(curr,i)
+            else:
+                endnode=Node(i,parent=curr)
+    return
 def getRule(p,node_name):
     if len(p)>0:
         p[0] = tuple([node_name]+p[1:])
@@ -35,7 +48,6 @@ def p_compstmt(p):
                 | stmt newline expr
                 | stmt newline expr newline
     '''
-    print(p[:])
     getRule(p,'compstmt')
 
 def p_stmt(p):
