@@ -20,12 +20,14 @@ def createTree(root,tuple_part):
     return
 
 def getRule(p,node_name):
-    if len(p)>2:
+    if len(p)>0:
         p[0] = tuple([node_name]+p[1:])
     else:
         p[0] = (p[1])
 
 file_location=sys.argv[1]
+
+start='compstmt'
 
 def p_compstmt(p):
     '''compstmt : stmt
@@ -33,6 +35,7 @@ def p_compstmt(p):
                 | stmt newline expr
                 | stmt newline expr newline
     '''
+    print(p[:])
     getRule(p,'compstmt')
 
 def p_stmt(p):
