@@ -18,20 +18,27 @@ def createTree(root,tuple_part):
             else:
                 endnode=Node(i,parent=curr)
     return
-def rightDerivation(tuple_part):
+def rightDerivation(tuple_part,curr_derivation):
     if type(tuple_part) is tuple:
         node_name=tuple_part[0]
         tuple_part=tuple_part[1:]
     else:
         node_name=""
-    curr=Node(node_name,parent=root)
+    last_tuple=None
+    replace_derivation=[]
     if type(tuple_part) is tuple:
-        for i in tuple_part:
-            if type(i) is tuple:
-                createTree(curr,i)
+        for i in range(len(tuple_part)):
+            if type(tuple_part[i]) is tuple:
+                replace_derivation.append(tuple_part[i][0])
+                last_tuple=i
             else:
-                endnode=Node(i,parent=curr)
-    return
+                replace_derivation.append(tuple_part[i]+" ")
+    curr_derivation[last_tuple]=curr_derivation[last_tuple].replace(node_name,replace_derivation)
+    print(curr_derivation)
+    if last_tuple is None:
+        return
+    else:
+        rightDerivation(tuple_part[last_tuple],curr_derivation)
 def getRule(p,node_name):
     if len(p)>0:
         p[0] = tuple([node_name]+p[1:])
@@ -477,6 +484,8 @@ file_contents=fp.read()
 t=yacc.parse()
 root = Node("root")
 createTree(root,t)
+curr_derivation=["compstmt"]
+rightDerivation(t,curr_derivation)
 for pre, fill, node in RenderTree(root):
     print("%s%s" % (pre, node.name))
 print(t)
