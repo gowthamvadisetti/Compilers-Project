@@ -14,6 +14,12 @@ def createTree(root,tuple_part):
                 endnode=Node(i,parent=curr)
     return
 
+def getRule(p):
+    if len(p)>2:
+        p[0] = tuple(p[1:])
+    else:
+        p[0] = (p[1])
+
 file_location=sys.argv[1]
 
 def p_compstmt(p):
@@ -22,10 +28,7 @@ def p_compstmt(p):
                 | stmt newline expr
                 | stmt newline expr newline
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_stmt(p):
     '''stmt : call do BIT_OR blockvar BIT_OR compstmt end
@@ -45,10 +48,7 @@ def p_stmt(p):
             | lhs EQUALS command
             | expr
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_expr(p):
     '''expr : mlhs EQUALS mrhs
@@ -61,19 +61,13 @@ def p_expr(p):
             | SYMBOL_NOT command
             | arg
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_call(p):
     '''call : function
             | command
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_command(p):
     '''command : operation callargs
@@ -81,10 +75,7 @@ def p_command(p):
                | primary CONSTANT_RESOLUTION operation callargs
                | super callargs
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 
 def p_function(p):
@@ -101,39 +92,27 @@ def p_function(p):
                 | super OPEN_BRACKET CLOSE_BRACKET
                 | super
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_arg_equals(p):
     '''arg : lhs EQUALS arg
            | lhs opasgn arg
            | arg
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_arg_range(p):
     '''arg : term1 INCL_RANGE term1
             | term1 EXCL_RANGE term1
             | term1
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_term1(p):
     '''term1 : term2 DOUBLE_EQUALS term2
             | term2
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_term2(p):
     '''term2 : term2 LESS term3
@@ -142,20 +121,14 @@ def p_term2(p):
             | term2 GREATER_EQUALS term3
             | term3
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_term3(p):
     '''term3 : term3 PLUS term4
             | term3 MINUS term4
             | term4
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_term4(p):
     '''term4 : term4 MULTIPLY term5
@@ -163,28 +136,19 @@ def p_term4(p):
             | term4 MODULO term5
             | term5
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_term5(p):
     '''term5 : MINUS term5
             | term6
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_term6(p):
     '''term6 : PLUS term6
             | primary
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_primary(p):
     '''primary : OPEN_BRACKET compstmt CLOSE_BRACKET
@@ -229,28 +193,19 @@ def p_primary(p):
         | def singleton DOT fname argdecl compstmt end
         | def singleton CONSTANT_RESOLUTION fname argdecl compstmt end
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_multcase(p):
     '''multcase : when whenargs pthen compstmt multcase
                 | when whenargs pthen compstmt
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_multelsif(p):
     '''multelsif : elsif expr pthen compstmt multelsif
                  | empty
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_literal(p):
     '''literal : NUMBER
@@ -260,29 +215,20 @@ def p_literal(p):
                | HEREDOC
                | REGEXP
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_blockvar(p):
     '''blockvar : lhs
                 | mlhs
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_whenargs(p):
     '''whenargs : args COMMA MULTIPLY arg
                 | args
                 | MULTIPLY arg
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_mlhs(p):
     '''mlhs : mlhsitem COMMA mlhsitem multmlhs MULTIPLY lhs
@@ -292,28 +238,19 @@ def p_mlhs(p):
             | mlhsitem COMMA MULTIPLY
             | mlhsitem COMMA
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_multmlhs(p):
     '''multmlhs : COMMA mlhsitem multmlhs
                 | empty
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_mlhsitem(p):
     '''mlhsitem : lhs
                 | OPEN_BRACKET mlhs CLOSE_BRACKET
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_lhs(p):
     '''lhs : variable
@@ -321,20 +258,14 @@ def p_lhs(p):
            | primary OPEN_SQUARE CLOSE_SQUARE
            | primary DOT IDENTIFIER 
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_mrhs(p):
     '''mrhs : args
             | args COMMA MULTIPLY arg
             | MULTIPLY arg
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_callargs(p):
     '''callargs : args
@@ -353,36 +284,24 @@ def p_callargs(p):
                 | BIT_AND arg
                 | command
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_args(p):
     '''args : arg multargs
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_multargs(p):
     '''multargs : COMMA arg multargs
                 | empty
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_argdecl(p):
     '''argdecl : OPEN_BRACKET arglist CLOSE_BRACKET
                | arglist newline
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_arglist(p):
     '''arglist : IDENTIFIER multarglist COMMA MULTIPLY IDENTIFIER COMMA BIT_AND IDENTIFIER
@@ -396,83 +315,56 @@ def p_arglist(p):
                | BIT_AND IDENTIFIER
                | empty
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_multarglist(p):
     '''multarglist : COMMA IDENTIFIER multarglist
                  | empty
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_singleton(p):
     '''singleton : variable
                | OPEN_BRACKET expr CLOSE_BRACKET
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_assocs(p):
     '''assocs : assoc multassocs
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_multassocs(p):
     '''multassocs : COMMA assoc multassocs
                   | empty
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_assoc(p):
     '''assoc : arg MAP arg
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_variable(p):
     '''variable : varname
                 | nil
                 | self
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_pthen(p):
     '''pthen : newline
              | then
              | newline then
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_pdo(p):
     '''pdo : newline
            | do
            | newline do
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_opasgn(p):
     '''opasgn : MODULO_EQUALS
@@ -489,18 +381,12 @@ def p_opasgn(p):
               | LOGICAL_OR_EQUALS
               | POWER_EQUALS
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 def p_symbol(p):
     '''symbol : COLON fname
               | COLON varname
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_fname(p):
     '''fname : IDENTIFIER
@@ -530,39 +416,27 @@ def p_fname(p):
              | ELEMENT_REFERENCE
              | ELEMENT_SET
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_operation(p):
     '''operation  : IDENTIFIER
                 | IDENTIFIER SYMBOL_NOT
                 | IDENTIFIER QUESTION_MARK
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_varname(p):
     '''varname : GLOBAL 
               | AT_THE_RATE IDENTIFIER
               | IDENTIFIER
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 def p_newline(p):
     '''newline : SEMI_COLON
                | NEWLINE 
     '''
-    if len(p)>2:
-        p[0] = tuple(p[1:])
-    else:
-        p[0] = (p[1])
+    getRule(p)
 
 
 #For epsilon definitions
