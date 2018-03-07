@@ -7,6 +7,7 @@ tokens=lexer.tokens
 counter=0
 number_map={}
 children_map={}
+curr_derivation=[]
 def createTree(root,tuple_part):
     global children_map
     if type(tuple_part) is list:
@@ -42,31 +43,42 @@ def number_tuple(tuple_repr):
             tuple_repr[i]=counter
             counter+=1
 
-# def rightDerivation(tuple_part,curr_derivation,curr_tuple):
-#     if type(tuple_part) is tuple:
-#         node_name=tuple_part[0]
-#         tuple_part=tuple_part[1:]
-#     else:
-#         node_name=""
-#     last_tuple=[]
-#     replace_derivation=[]
-#     if type(tuple_part) is tuple:
-#         for i in range(len(tuple_part)):
-#             if type(tuple_part[i]) is tuple:
-#                 replace_derivation.append(tuple_part[i][0])
-#                 last_tuple.append(i)
-#             else:
-#                 replace_derivation.append(tuple_part[i])
-#     print(curr_derivation)
-#     print(curr_tuple)
-#     print(replace_derivation)
-#     curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
-#     print(curr_derivation)
-#     if last_tuple is []:
-#         return
-#     else:
-#         for j in range(len(last_tuple)-1,-1,-1):
-#             rightDerivation(tuple_part[last_tuple[j]],curr_derivation,last_tuple[j])
+# def rightDerivation(tuple_repr):
+#     global children_map
+#     global number_map
+
+def rightDerivation(tuple_part,curr_tuple):
+    global curr_derivation
+    global number_map
+    if type(tuple_part) is list:
+        node_name=tuple_part[0]
+        tuple_part=tuple_part[1:]
+    else:
+        node_name=""
+    last_tuple=[]
+    replace_derivation=[]
+    if type(tuple_part) is list:
+        for i in range(len(tuple_part)):
+            if type(tuple_part[i]) is list:
+                replace_derivation.append(tuple_part[i][0])
+                last_tuple.append(i)
+            else:
+                replace_derivation.append(tuple_part[i])
+    curr_tuple=curr_derivation.index(node_name)
+    # print(curr_tuple)
+    # print(curr_derivation)
+    # print(replace_derivation)
+    # print(curr_derivation[curr_tuple+1:])
+    curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
+    curr_out=""
+    for i in curr_derivation:
+        curr_out+=str(number_map[i])+" "
+    print(curr_out)
+    if last_tuple is []:
+        return
+    else:
+        for j in range(len(last_tuple)-1,-1,-1):
+            rightDerivation(tuple_part[last_tuple[j]],last_tuple[j])
 
 
 
@@ -515,18 +527,17 @@ parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-t=['a',['b','b1','b2','b3'],['c',['c1',1,2],'c2','c3']]
-
-print(t)
-curr_derivation=["a"]
-number_tuple(t)
-print(t)
-print(number_map)
-
+# t=['a',['b','b1','b2','b3'],['c',['c1',1,2],'c2','c3']]
 root = Node("root")
 # print(root.name)
 createTree(root,t)
 for pre, fill, node in RenderTree(root):
     print("%s%s" % (pre, node.name))
-print(children_map)
-# rightDerivation(t,curr_derivation,0)
+# print(children_map)
+print(t)
+curr_derivation=[0]
+number_tuple(t)
+# print(t)
+# print(number_map)
+print("compstmt")
+rightDerivation(t,0)
