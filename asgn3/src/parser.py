@@ -18,29 +18,37 @@ def createTree(root,tuple_part):
             else:
                 endnode=Node(i,parent=curr)
     return
-def rightDerivation(tuple_part,curr_derivation,curr_tuple):
-    if type(tuple_part) is tuple:
-        node_name=tuple_part[0]
-        tuple_part=tuple_part[1:]
-    else:
-        node_name=""
-    last_tuple=[]
-    replace_derivation=[]
-    if type(tuple_part) is tuple:
-        for i in range(len(tuple_part)):
-            if type(tuple_part[i]) is tuple:
-                replace_derivation.append(tuple_part[i][0])
-                last_tuple.append(i)
-            else:
-                replace_derivation.append(tuple_part[i])
-    curr_derivation[curr_tuple]=replace_derivation
-    print(curr_derivation)
-    if last_tuple is []:
-        return
-    else:
-        for j in range(len(last_tuple)-1,-1,-1):
-            rightDerivation(tuple_part[last_tuple[j]],curr_derivation[0],last_tuple[j])
+# def rightDerivation(tuple_part,curr_derivation,curr_tuple):
+#     if type(tuple_part) is tuple:
+#         node_name=tuple_part[0]
+#         tuple_part=tuple_part[1:]
+#     else:
+#         node_name=""
+#     last_tuple=[]
+#     replace_derivation=[]
+#     if type(tuple_part) is tuple:
+#         for i in range(len(tuple_part)):
+#             if type(tuple_part[i]) is tuple:
+#                 replace_derivation.append(tuple_part[i][0])
+#                 last_tuple.append(i)
+#             else:
+#                 replace_derivation.append(tuple_part[i])
+#     print(curr_derivation)
+#     print(curr_tuple)
+#     print(replace_derivation)
+#     curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
+#     print(curr_derivation)
+#     if last_tuple is []:
+#         return
+#     else:
+#         for j in range(len(last_tuple)-1,-1,-1):
+#             rightDerivation(tuple_part[last_tuple[j]],curr_derivation,last_tuple[j])
+
+
+
 def getRule(p,node_name):
+    # print(node_name)
+    # print(p[1:])
     if len(p)>0:
         p[0] = tuple([node_name]+p[1:])
     else:
@@ -483,10 +491,11 @@ parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
+t=('a',('b','b1','b2','b3'),('c',('c1',1,2),'c2','c3'))
 root = Node("root")
 createTree(root,t)
 for pre, fill, node in RenderTree(root):
     print("%s%s" % (pre, node.name))
 print(t)
-curr_derivation=["compstmt"]
+curr_derivation=["a"]
 rightDerivation(t,curr_derivation,0)
