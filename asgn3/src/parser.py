@@ -31,6 +31,7 @@ def createTree(root,tuple_part):
                 else:
                     children_map[curr.name]=[i]
     return
+
 def number_tuple(tuple_repr):
     global counter
     global number_map
@@ -38,18 +39,14 @@ def number_tuple(tuple_repr):
         if type(tuple_repr[i]) is list:
             number_tuple(tuple_repr[i])
         else:
-            # print(tuple_repr[i])
             number_map[counter]=tuple_repr[i]
             tuple_repr[i]=counter
             counter+=1
 
-# def rightDerivation(tuple_repr):
-#     global children_map
-#     global number_map
-
 def rightDerivation(tuple_part,curr_tuple):
     global curr_derivation
     global number_map
+    global children_map
     if type(tuple_part) is list:
         node_name=tuple_part[0]
         tuple_part=tuple_part[1:]
@@ -65,14 +62,15 @@ def rightDerivation(tuple_part,curr_tuple):
             else:
                 replace_derivation.append(tuple_part[i])
     curr_tuple=curr_derivation.index(node_name)
-    # print(curr_tuple)
-    # print(curr_derivation)
-    # print(replace_derivation)
-    # print(curr_derivation[curr_tuple+1:])
     curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
     curr_out=""
     for i in curr_derivation:
-        curr_out+=str(number_map[i])+" "
+        # print(i)
+        # print(children_map)
+        if i in children_map.keys():
+            curr_out+="<b>"+str(number_map[i])+"</b>"+" "
+        else:
+            curr_out+=str(number_map[i])+" "
     print(curr_out)
     if last_tuple is []:
         return
@@ -527,7 +525,6 @@ parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-# t=['a',['b','b1','b2','b3'],['c',['c1',1,2],'c2','c3']]
 root = Node("root")
 # print(root.name)
 createTree(root,t)
@@ -537,7 +534,10 @@ for pre, fill, node in RenderTree(root):
 print(t)
 curr_derivation=[0]
 number_tuple(t)
-# print(t)
+root = Node("root")
+# print(root.name)
+createTree(root,t)
+# print(children_map)
 # print(number_map)
 print("compstmt")
 rightDerivation(t,0)
