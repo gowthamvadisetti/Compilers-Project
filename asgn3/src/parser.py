@@ -6,19 +6,29 @@ import sys
 tokens=lexer.tokens
 counter=0
 number_map={}
+children_map={}
 def createTree(root,tuple_part):
-    if type(tuple_part) is tuple:
+    global children_map
+    if type(tuple_part) is list:
         node_name=tuple_part[0]
         tuple_part=tuple_part[1:]
     else:
         node_name=""
     curr=Node(node_name,parent=root)
-    if type(tuple_part) is tuple:
+    if root.name in children_map:
+        children_map[root.name].append(node_name)
+    else:
+        children_map[root.name]=[node_name]
+    if type(tuple_part) is list:
         for i in tuple_part:
-            if type(i) is tuple:
+            if type(i) is list:
                 createTree(curr,i)
             else:
                 endnode=Node(i,parent=curr)
+                if curr.name in children_map:
+                    children_map[curr.name].append(i)
+                else:
+                    children_map[curr.name]=[i]
     return
 def number_tuple(tuple_repr):
     global counter
@@ -27,7 +37,7 @@ def number_tuple(tuple_repr):
         if type(tuple_repr[i]) is list:
             number_tuple(tuple_repr[i])
         else:
-            print(tuple_repr[i])
+            # print(tuple_repr[i])
             number_map[counter]=tuple_repr[i]
             tuple_repr[i]=counter
             counter+=1
@@ -506,13 +516,17 @@ fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
 t=['a',['b','b1','b2','b3'],['c',['c1',1,2],'c2','c3']]
-# root = Node("root")
-# createTree(root,t)
-# for pre, fill, node in RenderTree(root):
-#     print("%s%s" % (pre, node.name))
+
 print(t)
 curr_derivation=["a"]
 number_tuple(t)
 print(t)
 print(number_map)
+
+root = Node("root")
+# print(root.name)
+createTree(root,t)
+for pre, fill, node in RenderTree(root):
+    print("%s%s" % (pre, node.name))
+print(children_map)
 # rightDerivation(t,curr_derivation,0)
