@@ -4,6 +4,8 @@ from anytree import Node, RenderTree
 import lexer
 import sys
 tokens=lexer.tokens
+counter=0
+number_map={}
 def createTree(root,tuple_part):
     if type(tuple_part) is tuple:
         node_name=tuple_part[0]
@@ -18,6 +20,18 @@ def createTree(root,tuple_part):
             else:
                 endnode=Node(i,parent=curr)
     return
+def number_tuple(tuple_repr):
+    global counter
+    global number_map
+    for i in range(len(tuple_repr)):
+        if type(tuple_repr[i]) is list:
+            number_tuple(tuple_repr[i])
+        else:
+            print(tuple_repr[i])
+            number_map[counter]=tuple_repr[i]
+            tuple_repr[i]=counter
+            counter+=1
+
 # def rightDerivation(tuple_part,curr_derivation,curr_tuple):
 #     if type(tuple_part) is tuple:
 #         node_name=tuple_part[0]
@@ -50,7 +64,7 @@ def getRule(p,node_name):
     # print(node_name)
     # print(p[1:])
     if len(p)>0:
-        p[0] = tuple([node_name]+p[1:])
+        p[0] = [node_name]+p[1:]
     else:
         p[0] = (p[1])
 
@@ -491,11 +505,14 @@ parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-t=('a',('b','b1','b2','b3'),('c',('c1',1,2),'c2','c3'))
-root = Node("root")
-createTree(root,t)
-for pre, fill, node in RenderTree(root):
-    print("%s%s" % (pre, node.name))
+t=['a',['b','b1','b2','b3'],['c',['c1',1,2],'c2','c3']]
+# root = Node("root")
+# createTree(root,t)
+# for pre, fill, node in RenderTree(root):
+#     print("%s%s" % (pre, node.name))
 print(t)
 curr_derivation=["a"]
-rightDerivation(t,curr_derivation,0)
+number_tuple(t)
+print(t)
+print(number_map)
+# rightDerivation(t,curr_derivation,0)
