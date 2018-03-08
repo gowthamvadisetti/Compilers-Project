@@ -8,6 +8,7 @@ counter=0
 number_map={}
 children_map={}
 curr_derivation=[]
+html=""
 def createTree(root,tuple_part):
     global children_map
     if type(tuple_part) is list:
@@ -42,11 +43,14 @@ def number_tuple(tuple_repr):
             number_map[counter]=tuple_repr[i]
             tuple_repr[i]=counter
             counter+=1
+# def print_html(curr_out):
+#     global html
 
 def rightDerivation(tuple_part,curr_tuple):
     global curr_derivation
     global number_map
     global children_map
+    global html
     if type(tuple_part) is list:
         node_name=tuple_part[0]
         tuple_part=tuple_part[1:]
@@ -71,7 +75,10 @@ def rightDerivation(tuple_part,curr_tuple):
             curr_out+="<b>"+str(number_map[i])+"</b>"+" "
         else:
             curr_out+=str(number_map[i])+" "
-    print(curr_out)
+    curr_out=curr_out.replace('\n','\\n')
+    html+=curr_out+"</br>"
+    # print(curr_out)
+
     if last_tuple is []:
         return
     else:
@@ -83,7 +90,7 @@ def rightDerivation(tuple_part,curr_tuple):
 def getRule(p,node_name):
     # print(node_name)
     # print(p[1:])
-    if len(p)>0:
+    if len(p) > 0:
         p[0] = [node_name]+p[1:]
     else:
         p[0] = (p[1])
@@ -538,6 +545,19 @@ root = Node("root")
 # print(root.name)
 createTree(root,t)
 # print(children_map)
-# print(number_map)
+print(number_map)
 print("compstmt")
+html+='''<!DOCTYPE html>
+<html>
+<head>
+<title>Right derivation</title>
+</head>
+<body>'''
 rightDerivation(t,0)
+html+='''
+</body>
+</html>
+'''
+fp=open('test1.html','w')
+fp.write(html)
+# print(html)
