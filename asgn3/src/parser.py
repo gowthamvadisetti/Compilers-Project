@@ -71,9 +71,13 @@ def rightDerivation(tuple_part,curr_tuple):
     curr_out=""
     for i in curr_derivation:
         if i in children_map.keys():
-            curr_out+="<b>"+str(number_map[i])+"</b>"+" "
+            if last_tuple and tuple_part[last_tuple[-1]][0] == i:
+                curr_out+="<b>"+str(number_map[i])+"</b>"+" "
+            else:
+                curr_out+="<b>"+str(number_map[i])+"</b>"+" "
         else:
             curr_out+=str(number_map[i])+" "
+    # print(last_tuple)
     curr_out=curr_out.replace('\n','\\n')
     html+=curr_out+"</br>"
     if last_tuple is []:
