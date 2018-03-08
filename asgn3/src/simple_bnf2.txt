@@ -12,22 +12,39 @@ PROGRAM		: COMPSTMT
 
 *EXPR		: ARG
 
-*ARG	8N	: LHS `=` ARG
-	7N	| ARG `..` ARG
-	7N	| ARG `...` ARG
-	4L	| ARG `+` ARG
-	4L	| ARG `-` ARG
-	3L	| ARG `*` ARG
-	3L	| ARG `/` ARG
-	3L	| ARG `%` ARG
-	1R	| `+` ARG
-	2R	| `-` ARG 
-	5L	| ARG `>` ARG
-	5L	| ARG `>=` ARG
-	5L	| ARG `<` ARG
-	5L	| ARG `<=` ARG
-	6N	| ARG `==` ARG
-		| PRIMARY
+*ARG		14N	: LHS `=` ARG
+		14N	| LHS OP_ASGN ARG
+		13N	| ARG `..` ARG
+		13N	| ARG `...` ARG
+		5L	| ARG `+` ARG
+		5L	| ARG `-` ARG
+		4L	| ARG `*` ARG
+		4L	| ARG `/` ARG
+		4L	| ARG `%` ARG
+		1R	| ARG `**` ARG
+		2R	| `+` ARG
+		3R	| `-` ARG
+		16L	| ARG BIT_OR ARG
+		8L	| ARG `^` ARG
+		7L	| ARG `&` ARG
+		10N	| ARG `<=>` ARG
+		9L	| ARG `>` ARG
+		9L	| ARG `>=` ARG
+		9L	| ARG `<` ARG
+		9L	| ARG `<=` ARG
+		10N	| ARG `==` ARG
+		10N	| ARG `===` ARG
+		10N	| ARG `!=` ARG
+		10N	| ARG `=~` ARG
+		10N	| ARG `!~` ARG
+		2R	| `!` ARG
+		2R	| `~` ARG
+		6L	| ARG `<<` ARG
+		6L	| ARG `>>` ARG
+		11L	| ARG `&&` ARG
+		12L	| ARG `||` ARG
+		15N	| defined? ARG
+		17N	| PRIMARY
 
 *PRIMARY		: `(` COMPSTMT `)`
 		| LITERAL
