@@ -1,6 +1,5 @@
 import ply.yacc as yacc
 from anytree import Node, RenderTree
-# Get the token map from the lexer.  This is required.
 import lexer
 import sys
 tokens=lexer.tokens
@@ -9,6 +8,8 @@ number_map={}
 children_map={}
 curr_derivation=[]
 html=""
+
+#For creating parse tree
 def createTree(root,tuple_part):
     global children_map
     if type(tuple_part) is list:
@@ -33,6 +34,7 @@ def createTree(root,tuple_part):
                     children_map[curr.name]=[i]
     return
 
+#Numbering Variables to distinguish them
 def number_tuple(tuple_repr):
     global counter
     global number_map
@@ -43,9 +45,8 @@ def number_tuple(tuple_repr):
             number_map[counter]=tuple_repr[i]
             tuple_repr[i]=counter
             counter+=1
-# def print_html(curr_out):
-#     global html
 
+#Get right derivation from list representation
 def rightDerivation(tuple_part,curr_tuple):
     global curr_derivation
     global number_map
@@ -69,24 +70,19 @@ def rightDerivation(tuple_part,curr_tuple):
     curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
     curr_out=""
     for i in curr_derivation:
-        # print(i)
-        # print(children_map)
         if i in children_map.keys():
             curr_out+="<b>"+str(number_map[i])+"</b>"+" "
         else:
             curr_out+=str(number_map[i])+" "
     curr_out=curr_out.replace('\n','\\n')
     html+=curr_out+"</br>"
-    # print(curr_out)
-
     if last_tuple is []:
         return
     else:
         for j in range(len(last_tuple)-1,-1,-1):
             rightDerivation(tuple_part[last_tuple[j]],last_tuple[j])
 
-
-
+#Get list representaion at each BNF rule 
 def getRule(p,node_name):
     # print(node_name)
     # print(p[1:])
@@ -532,32 +528,30 @@ parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-root = Node("root")
-# print(root.name)
-createTree(root,t)
-for pre, fill, node in RenderTree(root):
-    print("%s%s" % (pre, node.name))
-# print(children_map)
+# root = Node("root")
+# createTree(root,t)
+# for pre, fill, node in RenderTree(root):
+#     print("%s%s" % (pre, node.name))
 print(t)
 curr_derivation=[0]
 number_tuple(t)
-root = Node("root")
-# print(root.name)
+root = Node(0)
 createTree(root,t)
-# print(children_map)
-print(number_map)
-print("compstmt")
+for pre, fill, node in RenderTree(root):
+    print("%s%s" % (pre,number_map[node.name]))
+
 html+='''<!DOCTYPE html>
 <html>
 <head>
 <title>Right derivation</title>
 </head>
 <body>'''
+html+="<b>compstmt</b></br>"
 rightDerivation(t,0)
 html+='''
 </body>
 </html>
 '''
-fp=open('test1.html','w')
+fp=open(file_location.replace(".rb",".html"),'w')
 fp.write(html)
 # print(html)
