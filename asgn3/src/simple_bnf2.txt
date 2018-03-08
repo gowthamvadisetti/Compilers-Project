@@ -42,7 +42,7 @@ PROGRAM		: COMPSTMT
 		6L	| ARG `<<` ARG
 		6L	| ARG `>>` ARG
 		11L	| ARG `&&` ARG
-		12L | ARG `||` ARG
+		12L	| ARG `||` ARG
 		15N	| defined? ARG
 		17N	| PRIMARY
 
