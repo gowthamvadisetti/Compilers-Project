@@ -88,9 +88,9 @@ def rightDerivation(tuple_part,curr_tuple):
 
 #Get list representaion at each BNF rule 
 def getRule(p,node_name):
-    print(node_name)
+    # print(node_name)
     # print(p[1:])
-    if len(p) > 2:
+    if len(p) > 0:
         p[0] = [node_name]+p[1:]
     else:
         p[0] = (p[1])
@@ -100,17 +100,12 @@ file_location=sys.argv[1]
 start='compstmt'
 
 def p_compstmt(p):
-    '''compstmt : multcompstmt
+    '''compstmt : stmt
+                | stmt newline
+                | stmt newline expr
+                | stmt newline expr newline
     '''
     getRule(p,'compstmt')
-
-def p_multcompstmt(p):
-    '''multcompstmt : newline expr multcompstmt
-                | expr multcompstmt
-                | newline
-                | empty
-    '''
-    getRule(p,'multcompstmt')
 
 def p_stmt(p):
     '''stmt : call do BIT_OR blockvar BIT_OR compstmt end
@@ -176,32 +171,22 @@ def p_function(p):
     '''
     getRule(p,'function')
 
-def p_arg_equals(p):
-    '''arg : lhs EQUALS arg
-           | lhs opasgn arg
-           | term0
+def p_arg(p):
+    '''arg : primary
+           | term1
     '''
     getRule(p,'arg')
 
-def p_term0(p):
-    '''term0 : term1 INCL_RANGE term1
-            | term1 EXCL_RANGE term1
-            | term1
-    '''
-    getRule(p,'term0')
 
 def p_term1(p):
-    '''term1 : term2 DOUBLE_EQUALS term2
+    '''term1 : term1 BIT_OR term2
             | term2
     '''
     getRule(p,'term1')
 
 def p_term2(p):
-    '''term2 : term2 LESS term3
-            | term2 LESS_EQUALS term3
-            | term2 GREATER term3
-            | term2 GREATER_EQUALS term3
-            | term3
+    '''term2 : lhs opasgn term3
+             | term3
     '''
     getRule(p,'term2')
 
@@ -259,8 +244,8 @@ def p_primary(p):
             | function OPEN_FLOWER BIT_OR blockvar BIT_OR compstmt CLOSE_FLOWER
             | function OPEN_FLOWER BIT_OR BIT_OR compstmt CLOSE_FLOWER
             | function OPEN_FLOWER compstmt CLOSE_FLOWER
-            | if expr pthen compstmt end
             | if expr pthen compstmt multelsif else compstmt end
+            | if expr pthen compstmt end
             | unless expr pthen compstmt else compstmt end
             | unless expr pthen compstmt end
             | while expr pdo compstmt end
@@ -291,7 +276,6 @@ def p_multelsif(p):
 
 def p_literal(p):
     '''literal : NUMBER
-               | FLOAT
                | symbol
                | STRING
                | STRING2
@@ -517,7 +501,7 @@ def p_varname(p):
 
 def p_newline(p):
     '''newline : SEMI_COLON
-               | NEWLINE
+               | NEWLINE 
     '''
     getRule(p,'newline')
 
@@ -531,7 +515,6 @@ def p_empty(p):
 def p_error(p):
     print(p)
     print("Syntax error in input!")
-    quit()
 
 # Build the parser
 parser = yacc.yacc()

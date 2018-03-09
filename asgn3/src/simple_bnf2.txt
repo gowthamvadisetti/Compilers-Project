@@ -13,7 +13,7 @@ PROGRAM		: COMPSTMT
 *EXPR		: ARG
 
 *ARG		14N	: LHS `=` ARG
-		14N	| LHS OP_ASGN ARG
+		15N	| LHS OP_ASGN ARG
 		13N	| ARG `..` ARG
 		13N	| ARG `...` ARG
 		5L	| ARG `+` ARG
@@ -43,7 +43,6 @@ PROGRAM		: COMPSTMT
 		6L	| ARG `>>` ARG
 		11L	| ARG `&&` ARG
 		12L	| ARG `||` ARG
-		15N	| defined? ARG
 		17N	| PRIMARY
 
 *PRIMARY		: `(` COMPSTMT `)`
