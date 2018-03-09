@@ -8,6 +8,9 @@ case c
         wflg = 1
     when 't'
     	l=10
+    when 'W'
+        wflg = 1
+    when 't'
     when 'T'
         tflg = 1       
     when 'W'
