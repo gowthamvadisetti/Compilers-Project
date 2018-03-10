@@ -88,7 +88,7 @@ def rightDerivation(tuple_part,curr_tuple):
 
 #Get list representaion at each BNF rule 
 def getRule(p,node_name):
-    # print(node_name)
+    print(node_name)
     # print(p[1:])
     if len(p) > 2:
         p[0] = [node_name]+p[1:]
