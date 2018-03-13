@@ -8,9 +8,6 @@ test6 - arrays
 
 test7 - syntactically wrong and correctly showing an error with parser3
 
-test8 - fibonacci
-		both syntactically and semantically correct, running in ruby   compiler but not working with parser3
-
 test10 - classes
 		 both syntactically and semantically correct, running in ruby compiler but not working with parser3.
 

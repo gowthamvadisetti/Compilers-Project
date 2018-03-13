@@ -4,3 +4,4 @@ def fibonacci( n )
     fibonacci( n - 1 ) + fibonacci( n - 2 )
 end 
 puts fibonacci( 9 )
+end
