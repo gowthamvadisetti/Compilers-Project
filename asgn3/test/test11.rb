@@ -12,7 +12,7 @@ class Tables
     @val += 1
   end
   def to_s
-    return "Tables(val=" + @val.to_s + ")"
+    return "Tables(val=" + @val + ")"
   end
 end
 class Chairs < Tables
@@ -24,4 +24,4 @@ a = Tables.new(621)
 b = Chairs.new(144)
 a.increment
 b.increment
-print a, b, "\n"
+print(a, b,"\n")

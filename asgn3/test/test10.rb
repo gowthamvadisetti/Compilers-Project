@@ -12,9 +12,9 @@ class Tables
     @val += 1
   end
   def to_s
-    return "Tables(val=" + @val.to_s + ")"
+    return "Tables(val=" + @val + ")"
   end
 end
 a = Tables.new(621)
 a.increment
-print a, "\n"
+print(a,"\n")
