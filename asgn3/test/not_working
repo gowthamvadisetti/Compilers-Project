@@ -11,3 +11,6 @@ test17 - bitwise OR |
 
 test18 - logical OR ||
           both syntactically and semantically correct, running in ruby compiler but not working with parser3.
+
+
+All demo cases working fine
