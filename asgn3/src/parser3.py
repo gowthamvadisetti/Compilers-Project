@@ -90,7 +90,7 @@ def rightDerivation(tuple_part,curr_tuple):
 def getRule(p,node_name):
     print(node_name)
     # print(p[1:])
-    if len(p) > 0:
+    if len(p) > 2:
         p[0] = [node_name]+p[1:]
     else:
         p[0] = (p[1])
@@ -178,8 +178,8 @@ def p_function(p):
     getRule(p,'function')
 
 def p_arg(p):
-    '''arg : lhs EQUALS arg
-           | lhs opasgn arg
+    '''arg : mlhs EQUALS arg
+           | mlhs opasgn arg
            | term0
     '''
     getRule(p,'arg')
@@ -293,6 +293,7 @@ def p_mlhs(p):
             | mlhsitem COMMA MULTIPLY lhs
             | mlhsitem COMMA MULTIPLY
             | mlhsitem COMMA
+            | mlhsitem
     '''
     getRule(p,'mlhs')
 
