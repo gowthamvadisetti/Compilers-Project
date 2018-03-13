@@ -116,6 +116,8 @@ def p_stmt(p):
     '''stmt : def fname argdecl compstmt end
             | def singleton DOT fname argdecl compstmt end
             | def singleton CONSTANT_RESOLUTION fname argdecl compstmt end
+            | class IDENTIFIER LESS IDENTIFIER compstmt end
+            | class IDENTIFIER compstmt end
             | expr
     '''
     getRule(p,'stmt')
@@ -178,8 +180,8 @@ def p_function(p):
     getRule(p,'function')
 
 def p_arg(p):
-    '''arg : mlhs EQUALS arg
-           | mlhs opasgn arg
+    '''arg : mlhs EQUALS mrhs
+           | mlhs opasgn mrhs
            | term0
     '''
     getRule(p,'arg')
@@ -319,6 +321,7 @@ def p_lhs(p):
 
 def p_mrhs(p):
     '''mrhs : args
+            | call
             | args COMMA MULTIPLY arg
             | MULTIPLY arg
     '''
@@ -512,10 +515,6 @@ parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-# root = Node("root")
-# createTree(root,t)
-# for pre, fill, node in RenderTree(root):
-#     print("%s%s" % (pre, node.name))
 print(t)
 curr_derivation=[0]
 number_tuple(t)
