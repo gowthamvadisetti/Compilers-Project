@@ -1,9 +1,7 @@
-
 class Sample
 	def hello
       puts "Hello Ruby!"
    end
 end
-
-object = Sample.new
+a=Sample(a,b)
 object.hello
