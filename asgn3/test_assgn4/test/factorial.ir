@@ -1,0 +1,14 @@
+1,puts,"enter number"
+2,scan,inp
+3,=,aa,inp
+4,=,out,1
+5,call,fact
+6,label,fact
+7,*,out,out,aa
+8,-,aa,aa,1
+9,ifgoto,<=,aa,1,11
+10,call,fact
+11,puts,"factorial of number is  "
+12,print,out
+13,puts,"\n"
+14,ret

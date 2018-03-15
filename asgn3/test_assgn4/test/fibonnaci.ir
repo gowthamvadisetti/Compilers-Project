@@ -1,0 +1,16 @@
+1,=,aa,1
+2,=,bb,0
+3,puts,"enter number"
+4,puts,"\n"
+5,scan,cc
+6,=,ee,cc
+7,=,dd,0
+8,+,dd,aa,bb
+9,=,bb,aa
+10,=,aa,dd
+11,-,ee,ee,1
+12,ifgoto,>=,ee,1,8
+13,puts,"output is "
+14,print,dd
+15,puts,"\n"
+16,ret

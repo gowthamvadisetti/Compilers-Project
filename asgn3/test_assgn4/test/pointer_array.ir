@@ -1,0 +1,15 @@
+1,=,aa,2
+2,=,cc,16
+3,array,ar[2]
+4,*,dd,aa,cc
+5,=,ar[0],dd
+6,=,ar[1],cc
+7,=,ee,ar
+8,=,ff,*ee
+9,print,ff
+10,+,ee,ee,4
+11,=,ff,*ee
+12,puts,"\n"
+13,print,ff
+14,puts,"\n"
+15,ret
