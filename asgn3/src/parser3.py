@@ -113,9 +113,9 @@ def p_multcompstmt(p):
     getRule(p,'multcompstmt')
 
 def p_stmt(p):
-    '''stmt : def fname argdecl compstmt end
-            | def singleton DOT fname argdecl compstmt end
-            | def singleton CONSTANT_RESOLUTION fname argdecl compstmt end
+    '''stmt : def IDENTIFIER argdecl compstmt end
+            | def singleton DOT IDENTIFIER argdecl compstmt end
+            | def singleton CONSTANT_RESOLUTION IDENTIFIER argdecl compstmt end
             | class IDENTIFIER LESS IDENTIFIER compstmt end
             | class IDENTIFIER compstmt end
             | expr
@@ -130,7 +130,7 @@ def p_expr(p):
             | until expr1 pdo compstmt end
             | case compstmt multcase else compstmt end
             | case compstmt multcase end
-            | for blockvar in expr1 pdo compstmt end
+            | for mlhs in expr1 pdo compstmt end
             | expr1
     '''
     getRule(p,'expr1')
@@ -156,22 +156,21 @@ def p_call(p):
     getRule(p,'call')
 
 def p_function(p):
-    '''function : operation OPEN_BRACKET callargs CLOSE_BRACKET
-                | operation OPEN_BRACKET CLOSE_BRACKET
-                | primary DOT operation OPEN_BRACKET callargs CLOSE_BRACKET
-                | primary DOT operation OPEN_BRACKET CLOSE_BRACKET
-                | primary CONSTANT_RESOLUTION operation OPEN_BRACKET callargs CLOSE_BRACKET
-                | primary CONSTANT_RESOLUTION operation OPEN_BRACKET CLOSE_BRACKET
-                | primary DOT operation
-                | primary CONSTANT_RESOLUTION operation
+    '''function : IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+                | IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+                | primary DOT IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+                | primary DOT IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+                | primary CONSTANT_RESOLUTION IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+                | primary CONSTANT_RESOLUTION IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+                | primary DOT IDENTIFIER
+                | primary CONSTANT_RESOLUTION IDENTIFIER
     '''
     getRule(p,'function')
 
 def p_arg(p):
-    '''arg : mlhs EQUALS operation OPEN_BRACKET CLOSE_BRACKET
-           | mlhs EQUALS operation OPEN_BRACKET callargs CLOSE_BRACKET
-           | mlhs opasgn operation OPEN_BRACKET CLOSE_BRACKET
-           | mlhs opasgn operation OPEN_BRACKET callargs CLOSE_BRACKET
+    '''arg : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+           | mlhs EQUALS IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+           | mlhs opasgn IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
            | term00
     '''
     getRule(p,'arg')
@@ -438,47 +437,15 @@ def p_opasgn(p):
     '''
     getRule(p,'opasgn')
 def p_symbol(p):
-    '''symbol : COLON fname
+    '''symbol : COLON IDENTIFIER
               | COLON varname
     '''
     getRule(p,'symbol')
 
 def p_fname(p):
     '''fname : IDENTIFIER
-             | INCL_RANGE
-             | BIT_OR
-             | BIT_XOR
-             | BIT_AND
-             | COMPARISON
-             | DOUBLE_EQUALS
-             | TRIPLE_EQUALS
-             | EQUAL_TILDE
-             | GREATER
-             | GREATER_EQUALS
-             | LESS
-             | LESS_EQUALS
-             | PLUS
-             | MINUS
-             | MULTIPLY
-             | DIVIDE
-             | MODULO
-             | POWER
-             | LEFT_SHIFT
-             | RIGHT_SHIFT
-             | COMPLEMENT
-             | PLUS_AT
-             | MINUS_AT
-             | ELEMENT_REFERENCE
-             | ELEMENT_SET
     '''
     getRule(p,'fname')
-
-def p_operation(p):
-    '''operation  : IDENTIFIER
-                | IDENTIFIER SYMBOL_NOT
-                | IDENTIFIER QUESTION_MARK
-    '''
-    getRule(p,'operation')
 
 def p_varname(p):
     '''varname : GLOBAL 
