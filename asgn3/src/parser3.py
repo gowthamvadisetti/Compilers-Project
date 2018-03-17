@@ -155,15 +155,6 @@ def p_call(p):
     '''
     getRule(p,'call')
 
-def p_command(p):
-    '''command : operation callargs
-               | primary DOT operation callargs
-               | primary CONSTANT_RESOLUTION operation callargs
-               | super callargs
-    '''
-    getRule(p,'command')
-
-
 def p_function(p):
     '''function : operation OPEN_BRACKET callargs CLOSE_BRACKET
                 | operation OPEN_BRACKET CLOSE_BRACKET
@@ -177,15 +168,17 @@ def p_function(p):
     getRule(p,'function')
 
 def p_arg(p):
-    '''arg : mlhs EQUALS mrhs
-           | mlhs opasgn mrhs
+    '''arg : mlhs EQUALS operation OPEN_BRACKET CLOSE_BRACKET
+           | mlhs EQUALS operation OPEN_BRACKET callargs CLOSE_BRACKET
+           | mlhs opasgn operation OPEN_BRACKET CLOSE_BRACKET
+           | mlhs opasgn operation OPEN_BRACKET callargs CLOSE_BRACKET
            | term00
     '''
     getRule(p,'arg')
 
 def p_term00(p):
-    '''term00 : mlhs EQUALS call
-              | mlhs opasgn call
+    '''term00 : mlhs EQUALS mrhs
+              | mlhs opasgn mrhs
               | term0
     '''
     getRule(p,'term00')
@@ -317,9 +310,9 @@ def p_mlhsitem(p):
 
 def p_lhs(p):
     '''lhs : variable
-           | primary OPEN_SQUARE args CLOSE_SQUARE
-           | primary OPEN_SQUARE CLOSE_SQUARE
-           | primary DOT IDENTIFIER 
+           | variable OPEN_SQUARE args CLOSE_SQUARE
+           | variable OPEN_SQUARE CLOSE_SQUARE
+           | variable DOT IDENTIFIER 
     '''
     getRule(p,'lhs')
 
