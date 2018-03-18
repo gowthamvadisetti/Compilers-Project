@@ -232,11 +232,11 @@ def p_term6(p):
     getRule(p,'term6')
 
 def p_primary(p):
-    '''primary : OPEN_BRACKET compstmt CLOSE_BRACKET
-            | primary CONSTANT_RESOLUTION IDENTIFIER
+    '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
+            | variable CONSTANT_RESOLUTION IDENTIFIER
             | CONSTANT_RESOLUTION IDENTIFIER
-            | primary OPEN_SQUARE args CLOSE_SQUARE
-            | primary OPEN_SQUARE CLOSE_SQUARE
+            | variable OPEN_SQUARE args CLOSE_SQUARE
+            | variable OPEN_SQUARE CLOSE_SQUARE
             | OPEN_SQUARE args COMMA CLOSE_SQUARE
             | OPEN_SQUARE args CLOSE_SQUARE
             | OPEN_SQUARE CLOSE_SQUARE
@@ -500,4 +500,3 @@ html+='''
 '''
 fp=open(file_location.replace(".rb",".html"),'w')
 fp.write(html)
-# print(html)
