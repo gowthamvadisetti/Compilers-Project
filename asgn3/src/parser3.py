@@ -235,8 +235,6 @@ def p_primary(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
             | variable CONSTANT_RESOLUTION IDENTIFIER
             | CONSTANT_RESOLUTION IDENTIFIER
-            | variable OPEN_SQUARE args CLOSE_SQUARE
-            | variable OPEN_SQUARE CLOSE_SQUARE
             | OPEN_SQUARE args COMMA CLOSE_SQUARE
             | OPEN_SQUARE args CLOSE_SQUARE
             | OPEN_SQUARE CLOSE_SQUARE
@@ -246,7 +244,7 @@ def p_primary(p):
             | OPEN_FLOWER assocs COMMA CLOSE_FLOWER
             | OPEN_FLOWER assocs CLOSE_FLOWER
             | literal
-            | variable
+            | lhs
     '''
     getRule(p,'primary')
 
@@ -266,7 +264,6 @@ def p_multelsif(p):
 def p_literal(p):
     '''literal : NUMBER
                | FLOAT
-               | symbol
                | STRING
     '''
     getRule(p,'literal')
