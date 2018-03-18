@@ -1,0 +1,19 @@
+1,=,aa,0
+2,=,bb,1
+3,|,cc,aa,bb
+4,puts,"output of 0 or 1  is \n"
+5,print,cc
+6,puts,"\n"
+7,&,cc,aa,bb
+8,puts,"output of 0 and 1  is \n"
+9,print,cc
+10,puts,"\n"
+11,^,cc,aa,bb
+12,puts,"output of 0 Xor 1  is \n"
+13,print,cc
+14,puts,"\n"
+15,~,cc,4,5
+16,puts,"output of 4 nor 5  is \n"
+17,print,cc
+18,puts,"\n"
+19,ret

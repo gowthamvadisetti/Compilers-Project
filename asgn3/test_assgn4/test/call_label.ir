@@ -1,0 +1,9 @@
+1,=,a,2
+2,call,foo
+3,print,a
+4,ret
+5,puts,"\n"
+6,label,foo
+7,=,e,21
+8,print,e
+9,ret

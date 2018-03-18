@@ -6,19 +6,11 @@ test5 - alias
 test6 - arrays
 		both syntactically and semantically correct, running in ruby compiler but not working with parser3
 
-test7 - syntactically wrong and correctly showing an error with parser3
-
-test10 - classes
-		 both syntactically and semantically correct, running in ruby compiler but not working with parser3.
-
-test11 - inheritance
-         both syntactically and semantically correct, running in ruby compiler but not working with parser3.
-
- test15 - = and == in the same line
- 		  both syntactically and semantically correct, running in ruby compiler but not working with parser3.
-
- test17 - bitwise OR |
+test17 - bitwise OR |
           both syntactically and semantically correct, running in ruby compiler but not working with parser3.
 
- test18 - logical OR ||
+test18 - logical OR ||
           both syntactically and semantically correct, running in ruby compiler but not working with parser3.
+
+
+All demo cases working fine

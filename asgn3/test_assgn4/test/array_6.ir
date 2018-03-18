@@ -1,0 +1,13 @@
+1,array,a[6]
+2,=,bb,-1
+3,puts,"enter 6 numbers \n"
+4,+,bb,bb,1
+5,print,bb
+6,scan,cc
+7,=,a[bb],cc
+8,ifgoto,<=,bb,4,4
+9,=,dd,a[3]
+10,puts,"printing a[3] is  "
+11,print,dd
+12,puts,"\n"
+13,ret

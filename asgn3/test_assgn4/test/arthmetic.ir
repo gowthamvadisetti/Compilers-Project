@@ -1,0 +1,20 @@
+1,puts,"enter num1\n"
+2,scan,aa
+3,puts,"enter num2\n"
+4,scan,bb
+5,puts,"addition is "
+6,+,cc,aa,bb
+7,print,cc
+8,puts," \n"
+9,puts,"subtraction is "
+10,-,cc,aa,bb
+11,print,cc
+12,puts," \n"
+13,puts,"mult is "
+14,*,cc,aa,bb
+15,print,cc
+16,puts," \n"
+17,puts,"division is "
+18,/,cc,aa,bb
+19,print,cc
+20,ret

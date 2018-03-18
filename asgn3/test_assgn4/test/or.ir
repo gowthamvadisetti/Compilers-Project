@@ -1,0 +1,7 @@
+1,=,a,2
+2,=,bb,7
+3,|,cc,a,bb
+4,puts,"output of 2 or 7  is \n"
+5,print,cc
+6,puts,"\n"
+7,ret

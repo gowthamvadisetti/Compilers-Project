@@ -1,0 +1,7 @@
+1,array,a[10]
+2,=,bb,5
+3,=,a[2],bb
+4,=,cc,a[2]
+5,print,cc
+6,puts,"\n"
+7,ret

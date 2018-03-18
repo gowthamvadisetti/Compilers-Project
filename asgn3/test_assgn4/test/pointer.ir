@@ -1,0 +1,10 @@
+1,=,aa,2
+2,=,cc,&aa
+3,=,dd,7
+4,=,*cc,dd
+5,print,aa
+6,puts,"\n"
+7,=,gg,*cc
+8,print,gg
+9,puts,"\n"
+10,ret

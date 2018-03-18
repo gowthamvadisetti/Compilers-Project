@@ -1,0 +1,6 @@
+1,=,a,40
+2,+,a,a,5
+3,print,a
+4,puts,"\n"
+5,ifgoto,<=,a,50,2
+6,ret
