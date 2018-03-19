@@ -122,6 +122,7 @@ def p_stmt(p):
             | def singleton CONSTANT_RESOLUTION IDENTIFIER argdecl compstmt end
             | class IDENTIFIER LESS IDENTIFIER compstmt end
             | class IDENTIFIER compstmt end
+            | break
             | expr
     '''
     getRule(p,'stmt')
@@ -311,6 +312,8 @@ def p_literal(p):
     '''literal : NUMBER
                | FLOAT
                | STRING
+               | true
+               | false
     '''
     getRule(p,'literal')
 

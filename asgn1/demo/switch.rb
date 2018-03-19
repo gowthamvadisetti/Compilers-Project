@@ -18,18 +18,4 @@ case c
 
     when 'W'
         dflg = 1
-        
-
 end
-
-
-
-
-
-
-
-
-
-
-
-

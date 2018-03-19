@@ -6,5 +6,5 @@ for i in 0..9
 		end
 	end
 end
-puts res
-print "\"#{res}"
+puts(res)
+print("\"#{res}")
