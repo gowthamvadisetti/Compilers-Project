@@ -17,11 +17,11 @@ class Tables
 end
 class Chairs < Tables
   def initialize(x)
-    super(x)
+    inherit(x)
   end
 end
-a = Tables.new(621)
-b = Chairs.new(144)
+a = Tables(621)
+b = Chairs(144)
 a.increment
 b.increment
 print(a, b,"\n")
