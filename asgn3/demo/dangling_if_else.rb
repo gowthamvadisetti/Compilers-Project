@@ -1,9 +1,22 @@
-i=2
+#!/usr/bin/ruby -w
+
+i = 0
+a = [1, 2, 3]
+
+
 if i <= 3
-i = 1
+	a[i] += 1
 end
+
+
 if i >= 2
-i = 1
+	a[i] -= 1
+
 else
-i = 1
+	a[i] = 1
 end
+
+
+
+
+	
