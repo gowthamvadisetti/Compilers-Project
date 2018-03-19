@@ -9,10 +9,10 @@ while(true) do
 	end
 
 	if i >= 0
-		puts "Yes"
+		puts ("Yes")
 
 	else
-		puts "No"
+		puts ("No")
 
 	end
 
