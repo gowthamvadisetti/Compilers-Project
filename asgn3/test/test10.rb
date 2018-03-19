@@ -15,6 +15,6 @@ class Tables
     return "Tables(val=" + @val + ")"
   end
 end
-a = Tables.new(621)
+a = Tables(621)
 a.increment
 print(a,"\n")
