@@ -168,12 +168,18 @@ def p_function(p):
     getRule(p,'function')
 
 def p_arg(p):
-    '''arg : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+    '''arg : arg BIT_OR term000
+           | term000
+    '''
+    getRule(p,'arg')
+
+def p_term000(p):
+    '''term000 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
            | mlhs EQUALS IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
            | mlhs opasgn IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
            | term00
     '''
-    getRule(p,'arg')
+    getRule(p,'term000')
 
 def p_term00(p):
     '''term00 : mlhs EQUALS mrhs
@@ -183,14 +189,25 @@ def p_term00(p):
     getRule(p,'term00')
 
 def p_term0(p):
-    '''term0 : term1 INCL_RANGE term1
-            | term1 EXCL_RANGE term1
-            | term1
+    '''term0 : term11 INCL_RANGE term11
+            | term11 EXCL_RANGE term11
+            | term11
     '''
     getRule(p,'term0')
 
+def p_term11(p):
+    '''term11 : term11 LOGICAL_OR term1
+            | term1
+    '''
+    getRule(p,'term11')
+
 def p_term1(p):
     '''term1 : term2 DOUBLE_EQUALS term2
+             | term2 TRIPLE_EQUALS term2
+             | term2 NOT_EQUALS term2
+             | term2 EQUAL_TILDE term2
+             | term2 BANG_TILDE term2
+             | term2 COMPARISON term2
             | term2
     '''
     getRule(p,'term1')
@@ -203,6 +220,25 @@ def p_term2(p):
             | term3
     '''
     getRule(p,'term2')
+
+def p_term3333(p):
+    '''term3333 : term3333 BIT_XOR term333
+            | term333
+    '''
+    getRule(p,'term3333')
+
+def p_term333(p):
+    '''term333 : term333 BIT_AND term33
+            | term33
+    '''
+    getRule(p,'term333')
+
+def p_term33(p):
+    '''term33 : term33 LEFT_SHIFT term3
+            | term33 RIGHT_SHIFT term3
+            | term3
+    '''
+    getRule(p,'term33')
 
 def p_term3(p):
     '''term3 : term3 PLUS term4
@@ -227,9 +263,15 @@ def p_term5(p):
 
 def p_term6(p):
     '''term6 : PLUS term6
-            | primary
+            | term7
     '''
     getRule(p,'term6')
+
+def p_term7(p):
+    '''term7 : primary POWER term7
+            | primary
+    '''
+    getRule(p,'term7')
 
 def p_primary(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
