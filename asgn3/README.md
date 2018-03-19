@@ -3,6 +3,7 @@
 ##Prerequisites:##
 1. python2 on python3 should installed
 2. ply module for python installed
+3. anytree module for python installed
 
 
 Use the following set of commands to test the parser
@@ -17,4 +18,4 @@ make
 bin/parser test/test1.rb
 ```
 
-After testing run ```make clean```to remove the binaries
+After testing run ```make clean``` to remove the binaries

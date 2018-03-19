@@ -1,8 +1,0 @@
-1)add all operators
-*2)Convert output to HTML
-3)begin-end block
-4)What to do with HERE_DOC,STRING2,REGEXP?
-5)complete parser verification
-6)verification with lexer demo test cases
-**7)How to get left derivation?
-8)fix warnings during execution of parser

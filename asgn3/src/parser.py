@@ -2,6 +2,7 @@ import ply.yacc as yacc
 from anytree import Node, RenderTree
 import lexer
 import sys
+import re
 tokens=lexer.tokens
 counter=0
 number_map={}
@@ -68,17 +69,20 @@ def rightDerivation(tuple_part,curr_tuple):
                 replace_derivation.append(tuple_part[i])
     curr_tuple=curr_derivation.index(node_name)
     curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
-    curr_out=""
+    curr_out=[]
     for i in curr_derivation:
         if i in children_map.keys():
-            if last_tuple and tuple_part[last_tuple[-1]][0] == i:
-                curr_out+="<b>"+str(number_map[i])+"</b>"+" "
-            else:
-                curr_out+="<b>"+str(number_map[i])+"</b>"+" "
+            curr_out.append("<a>"+str(number_map[i])+"</a>")
         else:
-            curr_out+=str(number_map[i])+" "
-    # print(last_tuple)
+            curr_out.append(str(number_map[i]))
+    for j in range(len(curr_out)-1,-1,-1):
+        if "<a>" in curr_out[j] and "</a>" in curr_out[j]:
+            curr_out[j]=curr_out[j].replace("<a>","<b>")
+            curr_out[j]=curr_out[j].replace("</a>","</b>")
+            break
+    curr_out=" ".join(curr_out)
     curr_out=curr_out.replace('\n','\\n')
+    curr_out=curr_out.replace('None','&epsilon;')
     html+=curr_out+"</br>"
     if last_tuple is []:
         return
@@ -90,7 +94,7 @@ def rightDerivation(tuple_part,curr_tuple):
 def getRule(p,node_name):
     print(node_name)
     # print(p[1:])
-    if len(p) > 2:
+    if len(p) > 0:
         p[0] = [node_name]+p[1:]
     else:
         p[0] = (p[1])
@@ -105,141 +109,178 @@ def p_compstmt(p):
     getRule(p,'compstmt')
 
 def p_multcompstmt(p):
-    '''multcompstmt : newline expr multcompstmt
-                | expr multcompstmt
+    '''multcompstmt : newline stmt multcompstmt
+                | stmt multcompstmt
                 | newline
                 | empty
     '''
     getRule(p,'multcompstmt')
 
 def p_stmt(p):
-    '''stmt : call do BIT_OR blockvar BIT_OR compstmt end
-            | call do BIT_OR BIT_OR compstmt end
-            | call do compstmt end
-            | undef fname
-            | alias fname fname
-            | stmt if expr
-            | stmt while expr
-            | stmt unless expr
-            | stmt until expr
-            | BEGIN OPEN_FLOWER compstmt CLOSE_FLOWER
-            | END OPEN_FLOWER compstmt CLOSE_FLOWER
-            | lhs EQUALS command do BIT_OR blockvar BIT_OR compstmt end
-            | lhs EQUALS command do BIT_OR BIT_OR compstmt end
-            | lhs EQUALS command do compstmt end
-            | lhs EQUALS command
+    '''stmt : def IDENTIFIER argdecl compstmt end
+            | def singleton DOT IDENTIFIER argdecl compstmt end
+            | def singleton CONSTANT_RESOLUTION IDENTIFIER argdecl compstmt end
+            | class IDENTIFIER LESS IDENTIFIER compstmt end
+            | class IDENTIFIER compstmt end
             | expr
     '''
     getRule(p,'stmt')
 
+
 def p_expr(p):
-    '''expr : mlhs EQUALS mrhs
-            | return callargs
-            | yield callargs
-            | expr and expr
-            | expr or expr
-            | not expr
-            | command
-            | SYMBOL_NOT command
+    '''expr : if expr1 pthen compstmt end
+            | if expr1 pthen compstmt multelsif else compstmt end
+            | while expr1 pdo compstmt end
+            | until expr1 pdo compstmt end
+            | case compstmt multcase else compstmt end
+            | case compstmt multcase end
+            | for mlhs in expr1 pdo compstmt end
+            | expr1
+    '''
+    getRule(p,'expr1')
+
+def p_expr1(p):
+    '''expr1 : return callargs
+            | return OPEN_BRACKET callargs CLOSE_BRACKET
+            | return OPEN_BRACKET CLOSE_BRACKET
+            | return
+            | expr2
+    '''
+    getRule(p,'expr1')
+
+def p_expr2(p):
+    '''expr2 : call
             | arg
     '''
-    getRule(p,'expr')
+    getRule(p,'expr2')
 
 def p_call(p):
     '''call : function
-            | command
     '''
     getRule(p,'call')
 
-def p_command(p):
-    '''command : operation callargs
-               | primary DOT operation callargs
-               | primary CONSTANT_RESOLUTION operation callargs
-               | super callargs
-    '''
-    getRule(p,'command')
-
-
 def p_function(p):
-    '''function : operation OPEN_BRACKET callargs CLOSE_BRACKET
-                | operation OPEN_BRACKET CLOSE_BRACKET
-                | operation
-                | primary DOT operation OPEN_BRACKET callargs CLOSE_BRACKET
-                | primary DOT operation OPEN_BRACKET CLOSE_BRACKET
-                | primary CONSTANT_RESOLUTION operation OPEN_BRACKET callargs CLOSE_BRACKET
-                | primary CONSTANT_RESOLUTION operation OPEN_BRACKET CLOSE_BRACKET
-                | primary DOT operation
-                | primary CONSTANT_RESOLUTION operation
-                | super OPEN_BRACKET callargs CLOSE_BRACKET
-                | super OPEN_BRACKET CLOSE_BRACKET
-                | super
+    '''function : IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+                | IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+                | primary DOT IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+                | primary DOT IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+                | primary CONSTANT_RESOLUTION IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+                | primary CONSTANT_RESOLUTION IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+                | primary DOT IDENTIFIER
+                | primary CONSTANT_RESOLUTION IDENTIFIER
     '''
     getRule(p,'function')
 
-def p_arg_equals(p):
-    '''arg : lhs EQUALS arg
-           | lhs opasgn arg
+def p_arg(p):
+    '''arg : arg BIT_OR term0
            | term0
     '''
     getRule(p,'arg')
 
 def p_term0(p):
-    '''term0 : term1 INCL_RANGE term1
-            | term1 EXCL_RANGE term1
-            | term1
+    '''term0 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+           | mlhs EQUALS IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+           | mlhs opasgn IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+           | term1
     '''
     getRule(p,'term0')
 
 def p_term1(p):
-    '''term1 : term2 DOUBLE_EQUALS term2
-            | term2
+    '''term1 : mlhs EQUALS mrhs
+              | mlhs opasgn mrhs
+              | term2
     '''
     getRule(p,'term1')
 
 def p_term2(p):
-    '''term2 : term2 LESS term3
-            | term2 LESS_EQUALS term3
-            | term2 GREATER term3
-            | term2 GREATER_EQUALS term3
+    '''term2 : term3 INCL_RANGE term3
+            | term3 EXCL_RANGE term3
             | term3
     '''
     getRule(p,'term2')
 
 def p_term3(p):
-    '''term3 : term3 PLUS term4
-            | term3 MINUS term4
+    '''term3 : term3 LOGICAL_OR term4
             | term4
     '''
     getRule(p,'term3')
 
 def p_term4(p):
-    '''term4 : term4 MULTIPLY term5
-            | term4 DIVIDE term5
-            | term4 MODULO term5
+    '''term4 : term5 DOUBLE_EQUALS term5
+             | term5 TRIPLE_EQUALS term5
+             | term5 NOT_EQUALS term5
+             | term5 EQUAL_TILDE term5
+             | term5 BANG_TILDE term5
+             | term5 COMPARISON term5
             | term5
     '''
     getRule(p,'term4')
 
 def p_term5(p):
-    '''term5 : MINUS term5
+    '''term5 : term5 LESS term6
+            | term5 LESS_EQUALS term6
+            | term5 GREATER term6
+            | term5 GREATER_EQUALS term6
             | term6
     '''
     getRule(p,'term5')
 
 def p_term6(p):
-    '''term6 : PLUS term6
-            | primary
+    '''term6 : term6 BIT_XOR term7
+            | term7
     '''
     getRule(p,'term6')
 
+def p_term7(p):
+    '''term7 : term7 BIT_AND term8
+            | term8
+    '''
+    getRule(p,'term7')
+
+def p_term8(p):
+    '''term8 : term8 LEFT_SHIFT term9
+            | term8 RIGHT_SHIFT term9
+            | term9
+    '''
+    getRule(p,'term8')
+
+def p_term9(p):
+    '''term9 : term9 PLUS term10
+            | term9 MINUS term10
+            | term10
+    '''
+    getRule(p,'term9')
+
+def p_term10(p):
+    '''term10 : term10 MULTIPLY term11
+            | term10 DIVIDE term11
+            | term10 MODULO term11
+            | term11
+    '''
+    getRule(p,'term10')
+
+def p_term11(p):
+    '''term11 : MINUS term11
+            | term12
+    '''
+    getRule(p,'term11')
+
+def p_term12(p):
+    '''term12 : PLUS term12
+            | term13
+    '''
+    getRule(p,'term12')
+
+def p_term13(p):
+    '''term13 : primary POWER term13
+            | primary
+    '''
+    getRule(p,'term13')
+
 def p_primary(p):
-    '''primary : OPEN_BRACKET compstmt CLOSE_BRACKET
-            | literal
-            | variable
-            | primary CONSTANT_RESOLUTION IDENTIFIER
+    '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
+            | variable CONSTANT_RESOLUTION IDENTIFIER
             | CONSTANT_RESOLUTION IDENTIFIER
-            | primary OPEN_SQUARE args CLOSE_SQUARE
-            | primary OPEN_SQUARE CLOSE_SQUARE
             | OPEN_SQUARE args COMMA CLOSE_SQUARE
             | OPEN_SQUARE args CLOSE_SQUARE
             | OPEN_SQUARE CLOSE_SQUARE
@@ -248,34 +289,11 @@ def p_primary(p):
             | OPEN_FLOWER CLOSE_FLOWER
             | OPEN_FLOWER assocs COMMA CLOSE_FLOWER
             | OPEN_FLOWER assocs CLOSE_FLOWER
-            | return OPEN_BRACKET callargs CLOSE_BRACKET
-            | return OPEN_BRACKET CLOSE_BRACKET
-            | return
-            | yield OPEN_BRACKET callargs CLOSE_BRACKET
-            | yield OPEN_BRACKET CLOSE_BRACKET
-            | yield
-            | defined OPEN_BRACKET arg CLOSE_BRACKET
-            | function
-            | function OPEN_FLOWER BIT_OR blockvar BIT_OR compstmt CLOSE_FLOWER
-            | function OPEN_FLOWER BIT_OR BIT_OR compstmt CLOSE_FLOWER
-            | function OPEN_FLOWER compstmt CLOSE_FLOWER
-            | if expr pthen compstmt end
-            | if expr pthen compstmt multelsif else compstmt end
-            | unless expr pthen compstmt else compstmt end
-            | unless expr pthen compstmt end
-            | while expr pdo compstmt end
-            | until expr pdo compstmt end
-            | case compstmt multcase else compstmt end
-            | case compstmt multcase end
-            | for blockvar in expr pdo compstmt end
-            | class IDENTIFIER LESS IDENTIFIER compstmt end
-            | class IDENTIFIER compstmt end
-            | module IDENTIFIER compstmt end
-            | def fname argdecl compstmt end
-            | def singleton DOT fname argdecl compstmt end
-            | def singleton CONSTANT_RESOLUTION fname argdecl compstmt end
+            | literal
+            | lhs
     '''
     getRule(p,'primary')
+
 
 def p_multcase(p):
     '''multcase : when whenargs pthen compstmt multcase
@@ -292,19 +310,9 @@ def p_multelsif(p):
 def p_literal(p):
     '''literal : NUMBER
                | FLOAT
-               | symbol
                | STRING
-               | STRING2
-               | HEREDOC
-               | REGEXP
     '''
     getRule(p,'literal')
-
-def p_blockvar(p):
-    '''blockvar : lhs
-                | mlhs
-    '''
-    getRule(p,'blockvar')
 
 def p_whenargs(p):
     '''whenargs : args COMMA MULTIPLY arg
@@ -320,6 +328,7 @@ def p_mlhs(p):
             | mlhsitem COMMA MULTIPLY lhs
             | mlhsitem COMMA MULTIPLY
             | mlhsitem COMMA
+            | mlhsitem
     '''
     getRule(p,'mlhs')
 
@@ -337,9 +346,9 @@ def p_mlhsitem(p):
 
 def p_lhs(p):
     '''lhs : variable
-           | primary OPEN_SQUARE args CLOSE_SQUARE
-           | primary OPEN_SQUARE CLOSE_SQUARE
-           | primary DOT IDENTIFIER 
+           | variable OPEN_SQUARE args CLOSE_SQUARE
+           | variable OPEN_SQUARE CLOSE_SQUARE
+           | variable DOT IDENTIFIER 
     '''
     getRule(p,'lhs')
 
@@ -365,7 +374,6 @@ def p_callargs(p):
                 | assocs
                 | MULTIPLY arg COMMA BIT_AND arg
                 | BIT_AND arg
-                | command
     '''
     getRule(p,'callargs')
 
@@ -465,48 +473,6 @@ def p_opasgn(p):
               | POWER_EQUALS
     '''
     getRule(p,'opasgn')
-def p_symbol(p):
-    '''symbol : COLON fname
-              | COLON varname
-    '''
-    getRule(p,'symbol')
-
-def p_fname(p):
-    '''fname : IDENTIFIER
-             | INCL_RANGE
-             | BIT_OR
-             | BIT_XOR
-             | BIT_AND
-             | COMPARISON
-             | DOUBLE_EQUALS
-             | TRIPLE_EQUALS
-             | EQUAL_TILDE
-             | GREATER
-             | GREATER_EQUALS
-             | LESS
-             | LESS_EQUALS
-             | PLUS
-             | MINUS
-             | MULTIPLY
-             | DIVIDE
-             | MODULO
-             | POWER
-             | LEFT_SHIFT
-             | RIGHT_SHIFT
-             | COMPLEMENT
-             | PLUS_AT
-             | MINUS_AT
-             | ELEMENT_REFERENCE
-             | ELEMENT_SET
-    '''
-    getRule(p,'fname')
-
-def p_operation(p):
-    '''operation  : IDENTIFIER
-                | IDENTIFIER SYMBOL_NOT
-                | IDENTIFIER QUESTION_MARK
-    '''
-    getRule(p,'operation')
 
 def p_varname(p):
     '''varname : GLOBAL 
@@ -539,10 +505,6 @@ parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-# root = Node("root")
-# createTree(root,t)
-# for pre, fill, node in RenderTree(root):
-#     print("%s%s" % (pre, node.name))
 print(t)
 curr_derivation=[0]
 number_tuple(t)
@@ -565,4 +527,3 @@ html+='''
 '''
 fp=open(file_location.replace(".rb",".html"),'w')
 fp.write(html)
-# print(html)
