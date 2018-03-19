@@ -96,7 +96,7 @@ def rightDerivation(tuple_part,curr_tuple):
 def getRule(p,node_name):
     # print(node_name)
     # print(p[1:])
-    if len(p) > 2:
+    if len(p) > 0:
         p[0] = [node_name]+p[1:]
     else:
         p[0] = (p[1])
