@@ -2,6 +2,7 @@ import ply.yacc as yacc
 from anytree import Node, RenderTree
 import lexer
 import sys
+import re
 tokens=lexer.tokens
 counter=0
 number_map={}
@@ -68,17 +69,20 @@ def rightDerivation(tuple_part,curr_tuple):
                 replace_derivation.append(tuple_part[i])
     curr_tuple=curr_derivation.index(node_name)
     curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
-    curr_out=""
+    curr_out=[]
     for i in curr_derivation:
         if i in children_map.keys():
-            if last_tuple and tuple_part[last_tuple[-1]][0] == i:
-                curr_out+="<b>"+str(number_map[i])+"</b>"+" "
-            else:
-                curr_out+="<b>"+str(number_map[i])+"</b>"+" "
+            curr_out.append("<a>"+str(number_map[i])+"</a>")
         else:
-            curr_out+=str(number_map[i])+" "
-    # print(last_tuple)
+            curr_out.append(str(number_map[i]))
+    for j in range(len(curr_out)-1,-1,-1):
+        if "<a>" in curr_out[j] and "</a>" in curr_out[j]:
+            curr_out[j]=curr_out[j].replace("<a>","<b>")
+            curr_out[j]=curr_out[j].replace("</a>","</b>")
+            break
+    curr_out=" ".join(curr_out)
     curr_out=curr_out.replace('\n','\\n')
+    curr_out=curr_out.replace('None','&epsilon;')
     html+=curr_out+"</br>"
     if last_tuple is []:
         return
@@ -168,110 +172,110 @@ def p_function(p):
     getRule(p,'function')
 
 def p_arg(p):
-    '''arg : arg BIT_OR term000
-           | term000
+    '''arg : arg BIT_OR term0
+           | term0
     '''
     getRule(p,'arg')
 
-def p_term000(p):
-    '''term000 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
+def p_term0(p):
+    '''term0 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
            | mlhs EQUALS IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
            | mlhs opasgn IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
-           | term00
-    '''
-    getRule(p,'term000')
-
-def p_term00(p):
-    '''term00 : mlhs EQUALS mrhs
-              | mlhs opasgn mrhs
-              | term0
-    '''
-    getRule(p,'term00')
-
-def p_term0(p):
-    '''term0 : term11 INCL_RANGE term11
-            | term11 EXCL_RANGE term11
-            | term11
+           | term1
     '''
     getRule(p,'term0')
 
-def p_term11(p):
-    '''term11 : term11 LOGICAL_OR term1
-            | term1
-    '''
-    getRule(p,'term11')
-
 def p_term1(p):
-    '''term1 : term2 DOUBLE_EQUALS term2
-             | term2 TRIPLE_EQUALS term2
-             | term2 NOT_EQUALS term2
-             | term2 EQUAL_TILDE term2
-             | term2 BANG_TILDE term2
-             | term2 COMPARISON term2
-            | term2
+    '''term1 : mlhs EQUALS mrhs
+              | mlhs opasgn mrhs
+              | term2
     '''
     getRule(p,'term1')
 
 def p_term2(p):
-    '''term2 : term2 LESS term3
-            | term2 LESS_EQUALS term3
-            | term2 GREATER term3
-            | term2 GREATER_EQUALS term3
+    '''term2 : term3 INCL_RANGE term3
+            | term3 EXCL_RANGE term3
             | term3
     '''
     getRule(p,'term2')
 
-def p_term3333(p):
-    '''term3333 : term3333 BIT_XOR term333
-            | term333
-    '''
-    getRule(p,'term3333')
-
-def p_term333(p):
-    '''term333 : term333 BIT_AND term33
-            | term33
-    '''
-    getRule(p,'term333')
-
-def p_term33(p):
-    '''term33 : term33 LEFT_SHIFT term3
-            | term33 RIGHT_SHIFT term3
-            | term3
-    '''
-    getRule(p,'term33')
-
 def p_term3(p):
-    '''term3 : term3 PLUS term4
-            | term3 MINUS term4
+    '''term3 : term3 LOGICAL_OR term4
             | term4
     '''
     getRule(p,'term3')
 
 def p_term4(p):
-    '''term4 : term4 MULTIPLY term5
-            | term4 DIVIDE term5
-            | term4 MODULO term5
+    '''term4 : term5 DOUBLE_EQUALS term5
+             | term5 TRIPLE_EQUALS term5
+             | term5 NOT_EQUALS term5
+             | term5 EQUAL_TILDE term5
+             | term5 BANG_TILDE term5
+             | term5 COMPARISON term5
             | term5
     '''
     getRule(p,'term4')
 
 def p_term5(p):
-    '''term5 : MINUS term5
+    '''term5 : term5 LESS term6
+            | term5 LESS_EQUALS term6
+            | term5 GREATER term6
+            | term5 GREATER_EQUALS term6
             | term6
     '''
     getRule(p,'term5')
 
 def p_term6(p):
-    '''term6 : PLUS term6
+    '''term6 : term6 BIT_XOR term7
             | term7
     '''
     getRule(p,'term6')
 
 def p_term7(p):
-    '''term7 : primary POWER term7
-            | primary
+    '''term7 : term7 BIT_AND term8
+            | term8
     '''
     getRule(p,'term7')
+
+def p_term8(p):
+    '''term8 : term8 LEFT_SHIFT term9
+            | term8 RIGHT_SHIFT term9
+            | term9
+    '''
+    getRule(p,'term8')
+
+def p_term9(p):
+    '''term9 : term9 PLUS term10
+            | term9 MINUS term10
+            | term10
+    '''
+    getRule(p,'term9')
+
+def p_term10(p):
+    '''term10 : term10 MULTIPLY term11
+            | term10 DIVIDE term11
+            | term10 MODULO term11
+            | term11
+    '''
+    getRule(p,'term10')
+
+def p_term11(p):
+    '''term11 : MINUS term11
+            | term12
+    '''
+    getRule(p,'term11')
+
+def p_term12(p):
+    '''term12 : PLUS term12
+            | term13
+    '''
+    getRule(p,'term12')
+
+def p_term13(p):
+    '''term13 : primary POWER term13
+            | primary
+    '''
+    getRule(p,'term13')
 
 def p_primary(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
