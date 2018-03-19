@@ -53,11 +53,13 @@ def rightDerivation(tuple_part,curr_tuple):
     global number_map
     global children_map
     global html
+
     if type(tuple_part) is list:
         node_name=tuple_part[0]
         tuple_part=tuple_part[1:]
     else:
         node_name=""
+
     last_tuple=[]
     replace_derivation=[]
     if type(tuple_part) is list:
@@ -92,7 +94,7 @@ def rightDerivation(tuple_part,curr_tuple):
 
 #Get list representaion at each BNF rule 
 def getRule(p,node_name):
-    print(node_name)
+    # print(node_name)
     # print(p[1:])
     if len(p) > 0:
         p[0] = [node_name]+p[1:]
@@ -102,6 +104,8 @@ def getRule(p,node_name):
 file_location=sys.argv[1]
 
 start='compstmt'
+
+#The Actual Grammar Rules Below
 
 def p_compstmt(p):
     '''compstmt : multcompstmt
@@ -498,13 +502,12 @@ def p_empty(p):
 
 # Error rule for syntax errors
 def p_error(p):
-    print(p)
     print("Syntax error in input!")
+    print("ERROR at line number:"+str(p.lineno)+" with token:"+str(p.type)+" and value:"+str(p.value))
     quit()
 
 # Build the parser
-parser = yacc.yacc()
-
+parser = yacc.yacc(errorlog=yacc.NullLogger())
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()

@@ -13,9 +13,19 @@ test folder contains the sample test cases
 src folder contains the main code
 
 ```
-cd assgn3
+cd asgn3
 make
 bin/parser test/test1.rb
 ```
+
+This will generate a html file in the same folder showing the right 
+most derivation.
+
+we can see it in firefox using the following command
+
+```
+firefox test/test1.html
+```
+
 
 After testing run ```make clean``` to remove the binaries
