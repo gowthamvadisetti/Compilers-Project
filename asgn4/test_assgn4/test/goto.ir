@@ -1,7 +1,0 @@
-1,puts,"press enter \n"
-2,scan,inp
-3,puts,"i am villian \n"
-4,goto,7
-5,puts,"i am not your villian"
-6,puts,"\n"
-7,ret
