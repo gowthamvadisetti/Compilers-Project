@@ -47,51 +47,6 @@ def number_tuple(tuple_repr):
             tuple_repr[i]=counter
             counter+=1
 
-#Get right derivation from list representation
-def rightDerivation(tuple_part,curr_tuple):
-    global curr_derivation
-    global number_map
-    global children_map
-    global html
-
-    if type(tuple_part) is list:
-        node_name=tuple_part[0]
-        tuple_part=tuple_part[1:]
-    else:
-        node_name=""
-
-    last_tuple=[]
-    replace_derivation=[]
-    if type(tuple_part) is list:
-        for i in range(len(tuple_part)):
-            if type(tuple_part[i]) is list:
-                replace_derivation.append(tuple_part[i][0])
-                last_tuple.append(i)
-            else:
-                replace_derivation.append(tuple_part[i])
-    curr_tuple=curr_derivation.index(node_name)
-    curr_derivation=curr_derivation[0:curr_tuple]+replace_derivation+curr_derivation[curr_tuple+1:]
-    curr_out=[]
-    for i in curr_derivation:
-        if i in children_map.keys():
-            curr_out.append("<a>"+str(number_map[i])+"</a>")
-        else:
-            curr_out.append(str(number_map[i]))
-    for j in range(len(curr_out)-1,-1,-1):
-        if "<a>" in curr_out[j] and "</a>" in curr_out[j]:
-            curr_out[j]=curr_out[j].replace("<a>","<b>")
-            curr_out[j]=curr_out[j].replace("</a>","</b>")
-            break
-    curr_out=" ".join(curr_out)
-    curr_out=curr_out.replace('\n','\\n')
-    curr_out=curr_out.replace('None','&epsilon;')
-    html+=curr_out+"</br>"
-    if last_tuple is []:
-        return
-    else:
-        for j in range(len(last_tuple)-1,-1,-1):
-            rightDerivation(tuple_part[last_tuple[j]],last_tuple[j])
-
 #Get list representaion at each BNF rule 
 def getRule(p,node_name):
     # print(node_name)
