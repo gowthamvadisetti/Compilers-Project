@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'compstmtBEGIN class ensure nil self when END def false not super while alias defined for or then yield and do if redo true begin else in rescue undef break elsif module retry unless case end next return until CONSTANT_RESOLUTION ELEMENT_REFERENCE ELEMENT_SET POWER SYMBOL_NOT COMPLEMENT MULTIPLY DIVIDE MODULO PLUS MINUS LEFT_SHIFT RIGHT_SHIFT BIT_AND BIT_OR BIT_XOR GREATER GREATER_EQUALS LESS LESS_EQUALS COMPARISON DOUBLE_EQUALS TRIPLE_EQUALS NOT_EQUALS EQUAL_TILDE BANG_TILDE LOGICAL_AND LOGICAL_OR INCL_RANGE EXCL_RANGE EQUALS MODULO_EQUALS DIVIDE_EQUALS MINUS_EQUALS PLUS_EQUALS OR_EQUALS AND_EQUALS XOR_EQUALS RIGHT_SHIFT_EQUALS LEFT_SHIFT_EQUALS MULTIPLY_EQUALS LOGICAL_AND_EQUALS LOGICAL_OR_EQUALS POWER_EQUALS WORD_NOT WORD_AND WORD_OR MAP PLUS_AT MINUS_AT IDENTIFIER FLOAT NUMBER GLOBAL STRING STRING2 HEREDOC REGEXP DOUBLE_QUOTE DOLLAR COLON QUESTION_MARK OPEN_BRACKET CLOSE_BRACKET OPEN_FLOWER CLOSE_FLOWER OPEN_SQUARE CLOSE_SQUARE COMMA DOT SEMI_COLON AT_THE_RATE NEWLINEcompstmt : IDENTIFIER EQUALS term9\n    term9 : term9 PLUS IDENTIFIER\n            | term9 MINUS IDENTIFIER\n            | IDENTIFIER\n    '
+_lr_signature = 'compstmtBEGIN class ensure nil self when END def false not super while alias defined for or then yield and do if redo true begin else in rescue undef break elsif module retry unless case end next return until CONSTANT_RESOLUTION ELEMENT_REFERENCE ELEMENT_SET POWER SYMBOL_NOT COMPLEMENT MULTIPLY DIVIDE MODULO PLUS MINUS LEFT_SHIFT RIGHT_SHIFT BIT_AND BIT_OR BIT_XOR GREATER GREATER_EQUALS LESS LESS_EQUALS COMPARISON DOUBLE_EQUALS TRIPLE_EQUALS NOT_EQUALS EQUAL_TILDE BANG_TILDE LOGICAL_AND LOGICAL_OR INCL_RANGE EXCL_RANGE EQUALS MODULO_EQUALS DIVIDE_EQUALS MINUS_EQUALS PLUS_EQUALS OR_EQUALS AND_EQUALS XOR_EQUALS RIGHT_SHIFT_EQUALS LEFT_SHIFT_EQUALS MULTIPLY_EQUALS LOGICAL_AND_EQUALS LOGICAL_OR_EQUALS POWER_EQUALS WORD_NOT WORD_AND WORD_OR MAP PLUS_AT MINUS_AT IDENTIFIER FLOAT NUMBER GLOBAL STRING STRING2 HEREDOC REGEXP DOUBLE_QUOTE DOLLAR COLON QUESTION_MARK OPEN_BRACKET CLOSE_BRACKET OPEN_FLOWER CLOSE_FLOWER OPEN_SQUARE CLOSE_SQUARE COMMA DOT SEMI_COLON AT_THE_RATE NEWLINEcompstmt : stmt2 NEWLINE stmt\n    stmt2 : IDENTIFIER EQUALS NUMBER\n    stmt : IDENTIFIER EQUALS IDENTIFIER\n    term9 : term9 PLUS IDENTIFIER\n            | term9 MINUS IDENTIFIER\n            | IDENTIFIER\n    '
     
-_lr_action_items = {'$end':([1,4,5,8,9,],[0,-1,-4,-2,-3,]),'IDENTIFIER':([0,3,6,7,],[2,5,8,9,]),'EQUALS':([2,],[3,]),'PLUS':([4,5,8,9,],[6,-4,-2,-3,]),'MINUS':([4,5,8,9,],[7,-4,-2,-3,]),}
+_lr_action_items = {'EQUALS':([1,7,],[4,9,]),'IDENTIFIER':([0,5,9,],[1,7,10,]),'$end':([3,8,10,],[0,-1,-3,]),'NEWLINE':([2,6,],[5,-2,]),'NUMBER':([4,],[6,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'term9':([3,],[4,]),'compstmt':([0,],[1,]),}
+_lr_goto_items = {'stmt2':([0,],[2,]),'compstmt':([0,],[3,]),'stmt':([5,],[8,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,8 +26,10 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> compstmt","S'",1,None,None,None),
-  ('compstmt -> IDENTIFIER EQUALS term9','compstmt',3,'p_compstmt','parser_minimal.py',33),
-  ('term9 -> term9 PLUS IDENTIFIER','term9',3,'p_term9','parser_minimal.py',39),
-  ('term9 -> term9 MINUS IDENTIFIER','term9',3,'p_term9','parser_minimal.py',40),
-  ('term9 -> IDENTIFIER','term9',1,'p_term9','parser_minimal.py',41),
+  ('compstmt -> stmt2 NEWLINE stmt','compstmt',3,'p_compstmt','parser_minimal.py',53),
+  ('stmt2 -> IDENTIFIER EQUALS NUMBER','stmt2',3,'p_stmt2','parser_minimal.py',61),
+  ('stmt -> IDENTIFIER EQUALS IDENTIFIER','stmt',3,'p_stmt','parser_minimal.py',70),
+  ('term9 -> term9 PLUS IDENTIFIER','term9',3,'p_term9','parser_minimal.py',78),
+  ('term9 -> term9 MINUS IDENTIFIER','term9',3,'p_term9','parser_minimal.py',79),
+  ('term9 -> IDENTIFIER','term9',1,'p_term9','parser_minimal.py',80),
 ]

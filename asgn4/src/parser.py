@@ -518,18 +518,3 @@ root = Node(0)
 createTree(root,t)
 for pre, fill, node in RenderTree(root):
     print("%s%s" % (pre,number_map[node.name]))
-
-html+='''<!DOCTYPE html>
-<html>
-<head>
-<title>Right derivation</title>
-</head>
-<body>'''
-html+="<b>compstmt</b></br>"
-rightDerivation(t,0)
-html+='''
-</body>
-</html>
-'''
-fp=open(file_location.replace(".rb",".html"),'w')
-fp.write(html)

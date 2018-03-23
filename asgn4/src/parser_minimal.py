@@ -49,14 +49,32 @@ start='compstmt'
 #The Actual Grammar Rules Below
 
 
-
 def p_compstmt(p):
-    '''compstmt : IDENTIFIER EQUALS term9
+    '''compstmt : stmt2 NEWLINE stmt
     '''
     p[0]={}
-    p[0]["code"]=""+p[3]["code"]+"\n"+p[1]+"="+p[3]["place"]
+    p[0]["code"]=p[1]["code"]+"\n"+p[3]["code"]
     p[0]["place"]=None
     print(p[0]["code"])
+
+def p_stmt2(p):
+    '''stmt2 : IDENTIFIER EQUALS NUMBER
+    '''
+    p[0]={}
+    st.insert(p[1],"int")
+    print(st.table)
+    p[0]["code"]=p[1]+"="+str(p[3])
+    p[0]["place"]=None
+
+def p_stmt(p):
+    '''stmt : IDENTIFIER EQUALS IDENTIFIER
+    '''
+    p[0]={}
+    if st.lookup(p[3]):
+        p[0]["code"]=p[1]+"="+p[3]
+    else:
+        print("Error not declared")
+
 
 def p_term9(p):
     '''term9 : term9 PLUS IDENTIFIER
