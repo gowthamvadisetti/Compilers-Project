@@ -289,7 +289,7 @@ def p_term11(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+"-1*"+p[2].place
+        p[0].code=""+p[2].code+"\n"+temp+"="+"-1*"+p[2].place
         p[0].place=temp
 
 def p_term12(p):
@@ -303,7 +303,7 @@ def p_term12(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[2].place
+        p[0].code=""+p[2].code+"\n"+temp+"="+p[2].place
         p[0].place=temp
 
 def p_term13(p):
