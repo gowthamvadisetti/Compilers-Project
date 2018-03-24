@@ -9,43 +9,34 @@ number_map={}
 children_map={}
 curr_derivation=[]
 html=""
+class SymbolTable():
+    """docstring for ClassName"""
+    def __init__(self):
+        self.table={}
+        self.tempcount=0        
 
-#For creating parse tree
-def createTree(root,tuple_part):
-    global children_map
-    if type(tuple_part) is list:
-        node_name=tuple_part[0]
-        tuple_part=tuple_part[1:]
-    else:
-        node_name=""
-    curr=Node(node_name,parent=root)
-    if root.name in children_map:
-        children_map[root.name].append(node_name)
-    else:
-        children_map[root.name]=[node_name]
-    if type(tuple_part) is list:
-        for i in tuple_part:
-            if type(i) is list:
-                createTree(curr,i)
-            else:
-                endnode=Node(i,parent=curr)
-                if curr.name in children_map:
-                    children_map[curr.name].append(i)
-                else:
-                    children_map[curr.name]=[i]
-    return
+    def insert(self,varname,vartype):
+        self.table[varname]=vartype
 
-#Numbering Variables to distinguish them
-def number_tuple(tuple_repr):
-    global counter
-    global number_map
-    for i in range(len(tuple_repr)):
-        if type(tuple_repr[i]) is list:
-            number_tuple(tuple_repr[i])
+    def lookup(self,varname):
+        if varname in self.table:
+            return self.table[varname]
         else:
-            number_map[counter]=tuple_repr[i]
-            tuple_repr[i]=counter
-            counter+=1
+            return None
+
+    def newtemp(self):
+        tempname="t"+str(self.tempcount)
+        self.table[tempname]="int"
+        self.tempcount+=1
+        return tempname
+
+class SDT():
+    def __init__(self):
+        self.code=""
+        self.place=None
+
+st=SymbolTable()
+
 
 #Get list representaion at each BNF rule 
 def getRule(p,node_name):
@@ -77,12 +68,13 @@ def p_multcompstmt(p):
 
 def p_stmt(p):
     '''stmt : def IDENTIFIER argdecl compstmt end
-            | def singleton DOT IDENTIFIER argdecl compstmt end
-            | def singleton CONSTANT_RESOLUTION IDENTIFIER argdecl compstmt end
             | break
             | expr
     '''
-    getRule(p,'stmt')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
+    print(p[0].code)
 
 
 def p_expr(p):
@@ -94,7 +86,9 @@ def p_expr(p):
             | for mlhs in expr1 pdo compstmt end
             | expr1
     '''
-    getRule(p,'expr1')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
 
 def p_expr1(p):
     '''expr1 : return callargs
@@ -103,13 +97,17 @@ def p_expr1(p):
             | return
             | expr2
     '''
-    getRule(p,'expr1')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
 
 def p_expr2(p):
     '''expr2 : call
             | arg
     '''
-    getRule(p,'expr2')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
 
 def p_call(p):
     '''call : function
@@ -126,7 +124,9 @@ def p_arg(p):
     '''arg : arg BIT_OR term0
            | term0
     '''
-    getRule(p,'arg')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
 
 def p_term0(p):
     '''term0 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
@@ -134,27 +134,49 @@ def p_term0(p):
            | mlhs opasgn IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
            | term1
     '''
-    getRule(p,'term0')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
 
 def p_term1(p):
     '''term1 : mlhs EQUALS mrhs
               | mlhs opasgn mrhs
               | term2
     '''
-    getRule(p,'term1')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=None
+    else:
+        p[0]=SDT()
+        st.insert(p[1].place,"int")
+        # print(p[3].place)
+        p[0].code=p[3].code+"\n"+p[1].place+p[2]+p[3].place
+        p[0].place=p[1].place
 
 def p_term2(p):
     '''term2 : term3 INCL_RANGE term3
             | term3 EXCL_RANGE term3
             | term3
     '''
-    getRule(p,'term2')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
 
 def p_term3(p):
     '''term3 : term3 LOGICAL_OR term4
             | term4
     '''
-    getRule(p,'term3')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].place=temp
 
 def p_term4(p):
     '''term4 : term5 DOUBLE_EQUALS term5
@@ -165,7 +187,10 @@ def p_term4(p):
              | term5 COMPARISON term5
             | term5
     '''
-    getRule(p,'term4')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
 
 def p_term5(p):
     '''term5 : term5 LESS term6
@@ -174,33 +199,68 @@ def p_term5(p):
             | term5 GREATER_EQUALS term6
             | term6
     '''
-    getRule(p,'term5')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
 
 def p_term6(p):
     '''term6 : term6 BIT_XOR term7
             | term7
     '''
-    getRule(p,'term6')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].place=temp
 
 def p_term7(p):
     '''term7 : term7 BIT_AND term8
             | term8
     '''
-    getRule(p,'term7')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].place=temp
 
 def p_term8(p):
     '''term8 : term8 LEFT_SHIFT term9
             | term8 RIGHT_SHIFT term9
             | term9
     '''
-    getRule(p,'term8')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].place=temp
 
 def p_term9(p):
     '''term9 : term9 PLUS term10
             | term9 MINUS term10
             | term10
     '''
-    getRule(p,'term9')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].place=temp
 
 def p_term10(p):
     '''term10 : term10 MULTIPLY term11
@@ -208,25 +268,52 @@ def p_term10(p):
             | term10 MODULO term11
             | term11
     '''
-    getRule(p,'term10')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].place=temp
 
 def p_term11(p):
     '''term11 : MINUS term11
             | term12
     '''
-    getRule(p,'term11')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+"-1*"+p[2].place
+        p[0].place=temp
 
 def p_term12(p):
     '''term12 : PLUS term12
             | term13
     '''
-    getRule(p,'term12')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[2].place
+        p[0].place=temp
 
 def p_term13(p):
     '''term13 : primary POWER term13
             | primary
     '''
-    getRule(p,'term13')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
 
 def p_primary(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
@@ -236,9 +323,12 @@ def p_primary(p):
             | OPEN_SQUARE args CLOSE_SQUARE
             | OPEN_SQUARE CLOSE_SQUARE
             | literal
-            | lhs
+            | varname
     '''
-    getRule(p,'primary')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].code=p[1].code
+        p[0].place=p[1].place
 
 
 def p_multcase(p):
@@ -260,7 +350,12 @@ def p_literal(p):
                | true
                | false
     '''
-    getRule(p,'literal')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        # temp=st.newtemp()
+        p[0].code=""
+        p[0].place=str(p[1])
+        # print(p[0].code)
 
 def p_whenargs(p):
     '''whenargs : args COMMA MULTIPLY arg
@@ -278,7 +373,10 @@ def p_mlhs(p):
             | mlhsitem COMMA
             | mlhsitem
     '''
-    getRule(p,'mlhs')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].place=p[1].place
+        p[0].code=""
 
 def p_multmlhs(p):
     '''multmlhs : COMMA mlhsitem multmlhs
@@ -287,24 +385,34 @@ def p_multmlhs(p):
     getRule(p,'multmlhs')
 
 def p_mlhsitem(p):
-    '''mlhsitem : lhs
+    '''mlhsitem : IDENTIFIER
                 | OPEN_BRACKET mlhs CLOSE_BRACKET
     '''
-    getRule(p,'mlhsitem')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].place=p[1]
+        p[0].code=""
 
 def p_lhs(p):
     '''lhs : variable
            | variable OPEN_SQUARE args CLOSE_SQUARE
            | variable OPEN_SQUARE CLOSE_SQUARE
     '''
-    getRule(p,'lhs')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].place=p[1].place
+        p[0].code=p[1].code
 
 def p_mrhs(p):
-    '''mrhs : args
+    '''mrhs : term2
             | args COMMA MULTIPLY arg
             | MULTIPLY arg
     '''
-    getRule(p,'mrhs')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].place=p[1].place
+        p[0].code=p[1].code
+        # print(p[0].place)
 
 def p_callargs(p):
     '''callargs : args
@@ -388,7 +496,10 @@ def p_variable(p):
                 | nil
                 | self
     '''
-    getRule(p,'variable')
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].place=p[1].place
+        p[0].code=""
 
 def p_pthen(p):
     '''pthen : newline
@@ -426,7 +537,13 @@ def p_varname(p):
               | AT_THE_RATE IDENTIFIER
               | IDENTIFIER
     '''
-    getRule(p,'varname')
+    if len(p[1:]) == 1:
+        if st.lookup(p[1]):
+            p[0]=SDT()
+            p[0].place=p[1]
+            p[0].code=""
+        else:
+            print("Error not declared")
 
 def p_newline(p):
     '''newline : SEMI_COLON
@@ -451,10 +568,4 @@ parser = yacc.yacc(errorlog=yacc.NullLogger())
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-print(t)
-curr_derivation=[0]
-number_tuple(t)
-root = Node(0)
-createTree(root,t)
-for pre, fill, node in RenderTree(root):
-    print("%s%s" % (pre,number_map[node.name]))
+# print(t)
