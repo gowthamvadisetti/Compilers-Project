@@ -1,1 +1,3 @@
-b= 1 == 2
+b=true
+a=false
+c=a&b

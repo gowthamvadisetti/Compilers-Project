@@ -65,7 +65,7 @@ def p_expr1(p):
     '''
     p[0]=SDT()
     p[0].code=p[1].code
-    p[0].place=None
+    p[0].place=p[1].place
 
 def p_expr2(p):
     '''expr2 : call
@@ -73,7 +73,7 @@ def p_expr2(p):
     '''
     p[0]=SDT()
     p[0].code=p[1].code
-    p[0].place=None
+    p[0].place=p[1].place
 
 def p_call(p):
     '''call : function
@@ -92,7 +92,7 @@ def p_arg(p):
     '''
     p[0]=SDT()
     p[0].code=p[1].code
-    p[0].place=None
+    p[0].place=p[1].place
 
 def p_term0(p):
     '''term0 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
@@ -102,7 +102,7 @@ def p_term0(p):
     '''
     p[0]=SDT()
     p[0].code=p[1].code
-    p[0].place=None
+    p[0].place=p[1].place
 
 def p_term1(p):
     '''term1 : mlhs EQUALS mrhs
@@ -112,7 +112,7 @@ def p_term1(p):
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].code=p[1].code
-        p[0].place=None
+        p[0].place=p[1].place
     else:
         p[0]=SDT()
         st.insert(p[1].place,"int")
@@ -313,6 +313,10 @@ def p_primary(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+    elif p[1]=="(":
+        p[0]=SDT()
+        p[0].code=p[2].code
+        p[0].place=p[2].place
 
 
 def p_multcase(p):
