@@ -3,49 +3,19 @@ from anytree import Node, RenderTree
 import lexer
 import sys
 import re
+from main import *
 tokens=lexer.tokens
 counter=0
 number_map={}
 children_map={}
 curr_derivation=[]
 html=""
-class SymbolTable():
-    """docstring for ClassName"""
-    def __init__(self):
-        self.table={}
-        self.tempcount=0        
-
-    def insert(self,varname,vartype):
-        self.table[varname]=vartype
-
-    def lookup(self,varname):
-        if varname in self.table:
-            return self.table[varname]
-        else:
-            return None
-
-    def newtemp(self):
-        tempname="t"+str(self.tempcount)
-        self.table[tempname]="int"
-        self.tempcount+=1
-        return tempname
-
-class SDT():
-    def __init__(self):
-        self.code=""
-        self.place=None
+ir_code=[]
 
 st=SymbolTable()
 
-
-#Get list representaion at each BNF rule 
 def getRule(p,node_name):
-    # print(node_name)
-    # print(p[1:])
-    if len(p) > 2:
-        p[0] = [node_name]+p[1:]
-    else:
-        p[0] = (p[1])
+    pass
 
 file_location=sys.argv[1]
 
@@ -71,10 +41,11 @@ def p_stmt(p):
             | break
             | expr
     '''
+    global ir_code
     p[0]=SDT()
     p[0].code=p[1].code
     p[0].place=None
-    print(p[0].code)
+    ir_code+=p[0].code
 
 
 def p_expr(p):
@@ -150,8 +121,7 @@ def p_term1(p):
     else:
         p[0]=SDT()
         st.insert(p[1].place,"int")
-        # print(p[3].place)
-        p[0].code=p[3].code+"\n"+p[1].place+p[2]+p[3].place
+        p[0].code=p[3].code+[Instruction3AC(None,p[2],p[1].place,p[3].place,None,None)]
         p[0].place=p[1].place
 
 def p_term2(p):
@@ -175,7 +145,7 @@ def p_term3(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None)]
         p[0].place=temp
 
 def p_term4(p):
@@ -215,7 +185,7 @@ def p_term6(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None)]
         p[0].place=temp
 
 def p_term7(p):
@@ -229,7 +199,7 @@ def p_term7(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None)]
         p[0].place=temp
 
 def p_term8(p):
@@ -244,7 +214,7 @@ def p_term8(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None)]
         p[0].place=temp
 
 def p_term9(p):
@@ -259,7 +229,7 @@ def p_term9(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None)]
         p[0].place=temp
 
 def p_term10(p):
@@ -275,7 +245,7 @@ def p_term10(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[1].code+"\n"+p[3].code+"\n"+temp+"="+p[1].place+p[2]+p[3].place
+        p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None)]
         p[0].place=temp
 
 def p_term11(p):
@@ -289,7 +259,7 @@ def p_term11(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[2].code+"\n"+temp+"="+"-1*"+p[2].place
+        p[0].code=p[2].code+[Instruction3AC(None,"*",temp,"-1",p[2].place,None)]
         p[0].place=temp
 
 def p_term12(p):
@@ -303,7 +273,8 @@ def p_term12(p):
     else:
         p[0]=SDT()
         temp=st.newtemp()
-        p[0].code=""+p[2].code+"\n"+temp+"="+p[2].place
+        p[0].code=p[2].code+[temp+"="+p[2].place]
+        p[0].code=p[2].code+[Instruction3AC(None,"*",temp,"1",p[2].place,None)]
         p[0].place=temp
 
 def p_term13(p):
@@ -353,7 +324,7 @@ def p_literal(p):
     if len(p[1:]) == 1:
         p[0]=SDT()
         # temp=st.newtemp()
-        p[0].code=""
+        p[0].code=[]
         p[0].place=str(p[1])
         # print(p[0].code)
 
@@ -376,7 +347,7 @@ def p_mlhs(p):
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].place=p[1].place
-        p[0].code=""
+        p[0].code=[]
 
 def p_multmlhs(p):
     '''multmlhs : COMMA mlhsitem multmlhs
@@ -391,7 +362,7 @@ def p_mlhsitem(p):
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].place=p[1]
-        p[0].code=""
+        p[0].code=[]
 
 def p_lhs(p):
     '''lhs : variable
@@ -499,7 +470,7 @@ def p_variable(p):
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].place=p[1].place
-        p[0].code=""
+        p[0].code=[]
 
 def p_pthen(p):
     '''pthen : newline
@@ -541,7 +512,7 @@ def p_varname(p):
         if st.lookup(p[1]):
             p[0]=SDT()
             p[0].place=p[1]
-            p[0].code=""
+            p[0].code=[]
         else:
             print("Error not declared")
 
@@ -568,4 +539,5 @@ parser = yacc.yacc(errorlog=yacc.NullLogger())
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-# print(t)
+output_location=file_location.replace(".rb",".ir")
+Print3AC(ir_code,output_location)
