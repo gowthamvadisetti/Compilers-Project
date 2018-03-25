@@ -155,28 +155,28 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="move "+reg2+","+reg1+"\n"
 		elif ir[i].typ=="logical":									#logical operaters
-				if ir[i].op=="|":
+				if (ir[i].op=="|" or ir[i].op == '|='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="or "+reg3+","+reg1+","+reg2+"\n"
-				elif ir[i].op=="^":
+				elif (ir[i].op=="^" or ir[i].op == '^='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="xor "+reg3+","+reg1+","+reg2+"\n"
-				elif ir[i].op==">>":
+				elif (ir[i].op==">>" or ir[i].op == '>>='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="srlv "+reg3+","+reg1+","+reg2+"\n"
 					
-				elif ir[i].op=="<<":
+				elif (ir[i].op=="<<" or ir[i].op == '<<='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="sllv "+reg3+","+reg1+","+reg2+"\n"
-				elif ir[i].op=="&":
+				elif (ir[i].op=="&" or ir[i].op == '&='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
