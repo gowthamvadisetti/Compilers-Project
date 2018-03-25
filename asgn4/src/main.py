@@ -40,6 +40,8 @@ def Print3AC(TAClist,output_location):
         lineno=str(i+1)
         currline.append(lineno)
         if TAClist[i].typ is not None:
+            if TAClist[i].typ in ["ifgoto","goto"]:
+                TAClist[i].target=str(TAClist[i].target+i+1)
             currline.append(TAClist[i].typ)
         if TAClist[i].op is not None:
             currline.append(TAClist[i].op)
@@ -56,3 +58,6 @@ def Print3AC(TAClist,output_location):
         else:
             fp.write(",".join(currline)+"\n")
     fp.close()
+
+def getRule(p,node_name):
+    pass

@@ -1,8 +1,6 @@
 import ply.yacc as yacc
-from anytree import Node, RenderTree
 import lexer
 import sys
-import re
 from main import *
 tokens=lexer.tokens
 counter=0
@@ -13,9 +11,6 @@ html=""
 ir_code=[]
 
 st=SymbolTable()
-
-def getRule(p,node_name):
-    pass
 
 file_location=sys.argv[1]
 
@@ -161,6 +156,15 @@ def p_term4(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=p[1].code+p[3].code
+        p[0].code+=[Instruction3AC("ifgoto",p[2],None,p[1].place,p[3].place,3)]
+        p[0].code+=[Instruction3AC(None,"=",temp,"0",None,None)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,2)]
+        p[0].code+=[Instruction3AC(None,"=",temp,"1",None,None)]
+        p[0].place=temp
 
 def p_term5(p):
     '''term5 : term5 LESS term6
@@ -173,6 +177,15 @@ def p_term5(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+    else:
+        p[0]=SDT()
+        temp=st.newtemp()
+        p[0].code=p[1].code+p[3].code
+        p[0].code+=[Instruction3AC("ifgoto",p[2],None,p[1].place,p[3].place,3)]
+        p[0].code+=[Instruction3AC(None,"=",temp,"0",None,None)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,2)]
+        p[0].code+=[Instruction3AC(None,"=",temp,"1",None,None)]
+        p[0].place=temp
 
 def p_term6(p):
     '''term6 : term6 BIT_XOR term7
@@ -323,8 +336,11 @@ def p_literal(p):
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
-        # temp=st.newtemp()
         p[0].code=[]
+        if p[1] == "true":
+            p[1]=1
+        elif p[1] == "false":
+            p[1]=0
         p[0].place=str(p[1])
         # print(p[0].code)
 
