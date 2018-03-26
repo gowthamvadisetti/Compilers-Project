@@ -362,10 +362,10 @@ def p_arraya(p):
     '''arraya : variable OPEN_SQUARE array_args CLOSE_SQUARE
     '''
     p[0]=SDT()
-    temp=st.newtemp()
+    # temp=st.newtemp()
     p[0].code=p[3].code
-    p[0].code+=[Instruction3AC(None,"=",temp,p[1].place+"["+str(p[3].place)+"]",None,None)]
-    p[0].place=temp
+    # p[0].code+=[Instruction3AC(None,"=",temp,p[1].place+"["+str(p[3].place)+"]",None,None)]
+    p[0].place=p[1].place+"["+str(p[3].place)+"]"
 
 def p_array_args(p):
     '''array_args : primary COMMA array_args
