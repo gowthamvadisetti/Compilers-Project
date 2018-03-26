@@ -321,10 +321,8 @@ def p_primary(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
             | variable CONSTANT_RESOLUTION IDENTIFIER
             | CONSTANT_RESOLUTION IDENTIFIER
-            | OPEN_SQUARE args COMMA CLOSE_SQUARE
-            | OPEN_SQUARE args CLOSE_SQUARE
-            | OPEN_SQUARE CLOSE_SQUARE
             | arrayd
+            | arraya
             | literal
             | varname
     '''
@@ -359,6 +357,30 @@ def p_array_size(p):
         p[0].code=p[3].code
         p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
         p[0].place=temp
+
+def p_arraya(p):
+    '''arraya : variable OPEN_SQUARE array_args CLOSE_SQUARE
+    '''
+    p[0]=SDT()
+    temp=st.newtemp()
+    p[0].code=p[3].code
+    p[0].code+=[Instruction3AC(None,"=",temp,p[1].place+"["+str(p[3].place)+"]",None,None)]
+    p[0].place=temp
+
+def p_array_args(p):
+    '''array_args : primary COMMA array_args
+                | primary
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=p[1].place
+    elif len(p[1:]) == 3:
+        pass
+        # temp=st.newtemp()
+        # p[0].code=p[3].code
+        # p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
+        # p[0].place=temp
 def p_multcase(p):
     '''multcase : when whenargs pthen compstmt multcase
                 | when whenargs pthen compstmt
