@@ -134,7 +134,7 @@ def p_term1(p):
     else:
         p[0]=SDT()
         st.insert(p[1].place,"int")
-        p[0].code=p[3].code+[Instruction3AC(None,p[2],p[1].place,p[3].place,None,None)]
+        p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],p[1].place,p[3].place,None,None)]
         p[0].place=p[1].place
 
 def p_term2(p):
@@ -418,33 +418,65 @@ def p_whenargs(p):
     getRule(p,'whenargs')
 
 def p_mlhs(p):
-    '''mlhs : mlhsitem COMMA mlhsitem multmlhs MULTIPLY lhs
-            | mlhsitem COMMA mlhsitem multmlhs MULTIPLY
-            | mlhsitem COMMA mlhsitem multmlhs
-            | mlhsitem COMMA MULTIPLY lhs
-            | mlhsitem COMMA MULTIPLY
-            | mlhsitem COMMA
-            | mlhsitem
+    '''mlhs : mlhsitem
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].place=p[1].place
-        p[0].code=[]
+        p[0].code=p[1].code
 
-def p_multmlhs(p):
-    '''multmlhs : COMMA mlhsitem multmlhs
-                | empty
-    '''
-    getRule(p,'multmlhs')
-
-def p_mlhsitem(p):
+def p_mlhsitem_1(p):
     '''mlhsitem : IDENTIFIER
-                | OPEN_BRACKET mlhs CLOSE_BRACKET
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].place=p[1]
         p[0].code=[]
+
+def p_mlhsitem_2(p):
+    '''mlhsitem : arraya
+    '''
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].place=p[1].place
+        p[0].code=p[1].code
+
+def p_arrayl(p):
+    '''arrayl : primary2 OPEN_SQUARE array_argsl CLOSE_SQUARE
+    '''
+    p[0]=SDT()
+    p[0].code=p[3].code
+    # p[0].code+=[Instruction3AC(None,"=",temp,p[1]+"["+str(p[3].place)+"]",None,None)]
+    p[0].place=p[1].place+"["+str(p[3].place)+"]"
+
+def p_array_argsl(p):
+    '''array_argsl : primary2 COMMA array_argsl
+                | primary2
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=p[1].place
+    elif len(p[1:]) == 3:
+        pass
+        # temp=st.newtemp()
+        # p[0].code=p[3].code
+        # p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
+        # p[0].place=temp
+def p_primary2_1(p):
+    '''primary2 : IDENTIFIER
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=p[1]
+def p_primary2_2(p):
+    '''primary2 : literal
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=p[1].place
 
 def p_lhs(p):
     '''lhs : variable
