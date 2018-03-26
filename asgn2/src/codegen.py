@@ -17,13 +17,16 @@ def getEmptyRegister():
 def end_block(symbol_attach,line):
 	global reg_desc
 	global mips
+	del_keys=[]
 	for i in reg_desc.keys():
 		# print(line)
 		# print(symbol_attach)
 		if not(reg_desc[i] in symbol_attach[line] and symbol_attach[line][reg_desc[i]][0]=="live"):
 			mips+="sw "+i+","+reg_desc[i]+"\n"
 			addr_desc[reg_desc[i]]=["memory",None]
-			del reg_desc[i]
+			del_keys.append(i)
+	for i in del_keys:
+		del reg_desc[i]
 
 def getreg(instruction,variable,symbol_attach,line,is_input):
 	global addr_desc
@@ -45,15 +48,20 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 				mips+="li "+reg+","+str(variable)+"\n"
 				
 	else:
+
 		maxnextuse=line
 		reqvar=None
 		for i in reg_desc.keys():
+			print(line)
+			print(symbol_attach[line])
 			if (reg_desc[i] in symbol_attach[line]) and symbol_attach[line][reg_desc[i]][1] is not None:
 				if symbol_attach[line][reg_desc[i]][1] > maxnextuse:
 					reqvar=reg_desc[i]
 					reg=i
 					maxnextuse=symbol_attach[line][i][1]
 			else:
+				print(i)
+				print(reg_desc[i])
 				reg=i
 				reqvar=reg_desc[i]
 				break
@@ -63,7 +71,7 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 			reg_desc[reg]=variable
 			addr_desc[variable]=["register",reg]
 		mips+="sw "+reg+","+reqvar+"\n"
-		print(reg_desc[reg])
+		# print(reg_desc[reg])
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
