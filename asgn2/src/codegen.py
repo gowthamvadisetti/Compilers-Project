@@ -232,17 +232,35 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 			if ir[i].op=="<=":
-				mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				if type(ir[i].target) is int:
+					mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				else:
+					mips+="ble "+reg1+","+reg2+","+ir[i].target+"\n"
 			elif ir[i].op==">=":
-				mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				if type(ir[i].target) is int:
+					mips+="bge "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				else:
+					mips+="bge "+reg1+","+reg2+","+ir[i].target+"\n"
 			elif ir[i].op=="<":
-				mips+="blt "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				if type(ir[i].target) is int:
+					mips+="blt "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				else:
+					mips+="blt "+reg1+","+reg2+","+ir[i].target+"\n"
 			elif ir[i].op==">":
-				mips+="bgt "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				if type(ir[i].target) is int:
+					mips+="bgt "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				else:
+					mips+="bgt "+reg1+","+reg2+","+ir[i].target+"\n"
 			elif ir[i].op=="==":
-				mips+="beq "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				if type(ir[i].target) is int:
+					mips+="beq "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				else:
+					mips+="beq "+reg1+","+reg2+","+ir[i].target+"\n"
 			elif ir[i].op=="!=":
-				mips+="bne "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				if type(ir[i].target) is int:
+					mips+="bne "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
+				else:
+					mips+="bne "+reg1+","+reg2+","+ir[i].target+"\n"
 		elif ir[i].typ=="goto":
 			mips+="j line"+str(ir[i].target)+"\n"
 		if i==block_end:

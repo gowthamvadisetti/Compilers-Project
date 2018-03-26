@@ -1,0 +1,3 @@
+Some of these might be optional
+1)array to array assignment
+2)b=a[i]+1 type
