@@ -11,7 +11,7 @@ keywords=['BEGIN','class','ensure','nil','self','when','END',
 			'defined','for','or','then','yield','and',
 			'do','if','redo','true','begin','else','in','rescue',
 			'undef','break','elsif','module','retry','unless','case',
-			'end','next','return','until']
+			'end','next','return','until','Array']
 
 operators=['CONSTANT_RESOLUTION','ELEMENT_REFERENCE','ELEMENT_SET',
 			'POWER','SYMBOL_NOT',

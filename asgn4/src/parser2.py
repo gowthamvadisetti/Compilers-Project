@@ -15,6 +15,12 @@ st=SymbolTable()
 file_location=sys.argv[1]
 
 start='compstmt'
+labelcount=0
+def newlabel():
+    global labelcount
+    labelname="l"+str(labelcount)
+    labelcount+=1
+    return labelname
 
 #The Actual Grammar Rules Below
 
@@ -53,8 +59,20 @@ def p_expr(p):
             | expr1
     '''
     p[0]=SDT()
-    p[0].code=p[1].code
-    p[0].place=None
+    if len(p[1:]) == 1:
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    elif p[1]=="if" and len(p[1:]) == 5:
+        p[0].code=p[1].code
+        label1=newlabel()
+        # p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",label1)]
+
+    elif p[1]=="if" and len(p[1:]) == 7:
+        pass
+    elif p[1]=="while":
+        pass
+    elif p[1]=="for":
+        pass
 
 def p_expr1(p):
     '''expr1 : return callargs
@@ -306,6 +324,7 @@ def p_primary(p):
             | OPEN_SQUARE args COMMA CLOSE_SQUARE
             | OPEN_SQUARE args CLOSE_SQUARE
             | OPEN_SQUARE CLOSE_SQUARE
+            | arrayd
             | literal
             | varname
     '''
@@ -318,7 +337,28 @@ def p_primary(p):
         p[0].code=p[2].code
         p[0].place=p[2].place
 
+def p_arrayd(p):
+    '''arrayd : Array OPEN_BRACKET array_size CLOSE_BRACKET
+    '''
+    p[0]=SDT()
+    temp=st.newtemp()
+    p[0].code=p[3].code
+    p[0].code+=[Instruction3AC("array",temp+"["+str(p[3].place)+"]",None,None,None,None)]
+    p[0].place=temp
 
+def p_array_size(p):
+    '''array_size : primary COMMA array_size
+                | primary
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=p[1].place
+    elif len(p[1:]) == 3:
+        temp=st.newtemp()
+        p[0].code=p[3].code
+        p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
+        p[0].place=temp
 def p_multcase(p):
     '''multcase : when whenargs pthen compstmt multcase
                 | when whenargs pthen compstmt
