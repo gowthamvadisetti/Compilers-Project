@@ -81,7 +81,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 			mips+="line"+str(ir[i].lineno)+": \n"
 		if i==block_end and ir[i].typ in ["ifgoto","goto","call"]:
 			pass
-			# end_block(symbol_attach,ir[i].lineno-1)
+			#end_block(symbol_attach,ir[i].lineno-1)
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
 			if (ir[i].op=="+" or ir[i].op == "++" or ir[i].op == "+="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -267,10 +267,6 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 		elif ir[i].typ=="goto":
 			mips+="j line"+str(ir[i].target)+"\n"
 		if i==block_end and ir[i].typ not in ["ifgoto","goto","call"]:
-			# end_block(symbol_attach,ir[i].lineno-1)
+			#end_block(symbol_attach,ir[i].lineno-1)
 			pass
-<<<<<<< HEAD
-			end_block(symbol_attach,ir[i].lineno-1)
-=======
->>>>>>> fe65ae499f644d204c67d35c6cff3c01959059c2
-	return mips
+			return mips

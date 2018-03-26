@@ -11,10 +11,10 @@
 11,ifgoto,<=,k,9,9
 12,ifgoto,>,dd,0,13
 13,+,bb,bb,1
-14,ifgoto,<=,bb,0,7
+14,ifgoto,<=,bb,9,7
 15,ifgoto,>,dd,0,16
 16,+,i,i,1
-17,ifgoto,<=,i,0,5
+17,ifgoto,<=,i,9,5
 18,ifgoto,>,dd,0,19
 19,print,res
 20,puts,"\n"
