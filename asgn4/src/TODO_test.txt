@@ -1,12 +1,12 @@
-1)simple operations (b=2,a=a+b+b type)
-2)complex operations
-3)1D arrays(declaration + access)
-4)2D arrays
-5)small if else
-6)nested if else
-7)loops (for,while)
-8)nested loops
-9) functions
-10)recursion
+1)simple operations (b=2,a=a+b+b type) -done
+2)complex operations -done
+3)1D arrays(declaration + access) -done
+4)2D arrays -done
+5)small if else -done 
+6)nested if else -done
+7)loops (for,while) -done
+8)nested loops-done
+9) functions -done
+10)recursion-done
 11)class
 12)class + inheritance
