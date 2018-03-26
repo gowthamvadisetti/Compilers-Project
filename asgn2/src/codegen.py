@@ -63,6 +63,7 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 			reg_desc[reg]=variable
 			addr_desc[variable]=["register",reg]
 		mips+="sw "+reg+","+reqvar+"\n"
+		print(reg_desc[reg])
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
@@ -80,8 +81,8 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
 		if i==block_end and ir[i].typ in ["ifgoto","goto","call"]:
-			pass
 			# end_block(symbol_attach,ir[i].lineno-1)
+			pass
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
 			if (ir[i].op=="+" or ir[i].op == "++" or ir[i].op == "+="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -154,9 +155,13 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					if not type(ir[i].in2) is int:
 						mips+="lw "+reg3+","+str(ir[i].in2)+"\n"
 				else:
-					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
-					mips+="move "+reg2+","+reg1+"\n"
+					if type(ir[i].in1) is int:
+						reg1=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+						mips+="li "+reg1+","+str(ir[i].in1)+"\n"
+					else:	
+						reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,False)
+						reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
+						mips+="move "+reg2+","+reg1+"\n"
 		elif ir[i].typ=="logical":									#logical operaters
 				if (ir[i].op=="|" or ir[i].op == '|='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
