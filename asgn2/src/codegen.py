@@ -4,7 +4,7 @@ reg_desc={}
 mips=""
 #18 mips registers for our use
 registers=["$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7","$t8","$t9","$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7"]
-registers=registers[:4]
+# registeers=registers[:4]
 
 def getEmptyRegister():
 	global reg_desc
@@ -18,8 +18,8 @@ def end_block(symbol_attach,line):
 	global reg_desc
 	global mips
 	for i in reg_desc.keys():
-		print(line)
-		print(symbol_attach)
+		# print(line)
+		# print(symbol_attach)
 		if not(reg_desc[i] in symbol_attach[line] and symbol_attach[line][reg_desc[i]][0]=="live"):
 			mips+="sw "+i+","+reg_desc[i]+"\n"
 			addr_desc[reg_desc[i]]=["memory",None]
@@ -79,6 +79,9 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	for i in range(block_start,block_end+1):
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
+		if i==block_end and ir[i].typ in ["ifgoto","goto","call"]:
+			pass
+			end_block(symbol_attach,ir[i].lineno-1)
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
 			if (ir[i].op=="+" or ir[i].op == "++" or ir[i].op == "+="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -263,6 +266,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 					mips+="bne "+reg1+","+reg2+","+ir[i].target+"\n"
 		elif ir[i].typ=="goto":
 			mips+="j line"+str(ir[i].target)+"\n"
-		if i==block_end:
+		if i==block_end and ir[i].typ not in ["ifgoto","goto","call"]:
+			pass
 			end_block(symbol_attach,ir[i].lineno-1)
 	return mips
