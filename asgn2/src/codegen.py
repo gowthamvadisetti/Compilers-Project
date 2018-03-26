@@ -229,8 +229,8 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 				is_exit = True
 			else:
 				mips+="li $v0,10\n"
-        		mips+="syscall\n"
-        		is_exit = False
+				mips+="syscall\n"
+				is_exit = False
 		elif ir[i].typ=="ifgoto":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)

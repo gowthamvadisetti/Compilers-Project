@@ -10,8 +10,8 @@
 10,print,bb
 11,ifgoto,>,D.1736,0,13
 12,+,sum,sum,i
-13,*,bb,i,2
-14,+,i,i,1
+13,+,i,i,1
+14,*,bb,i,2
 15,ifgoto,<=,i,99,7
 16,ifgoto,>,D.1736,0,17
 17,print,sum
