@@ -269,8 +269,5 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 		if i==block_end and ir[i].typ not in ["ifgoto","goto","call"]:
 			# end_block(symbol_attach,ir[i].lineno-1)
 			pass
-<<<<<<< HEAD
-			end_block(symbol_attach,ir[i].lineno-1)
-=======
->>>>>>> fe65ae499f644d204c67d35c6cff3c01959059c2
-	return mips
+			#end_block(symbol_attach,ir[i].lineno-1)
+			return mips
