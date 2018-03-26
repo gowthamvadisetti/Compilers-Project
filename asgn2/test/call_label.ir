@@ -6,4 +6,6 @@
 6,label,foo
 7,=,e,21
 8,print,e
-9,ret
+9,label,foo1
+10,print,e
+11,ret
