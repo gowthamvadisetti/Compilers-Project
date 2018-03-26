@@ -222,9 +222,9 @@ for i in range(len(leaders)):
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
 	if i==len(leaders)-1:
-		mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach)
+		mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach,num_vars)
 	else:
-		temp=codegen.generate_code(ir,block_start,block_end,symbol_attach)
+		temp=codegen.generate_code(ir,block_start,block_end,symbol_attach,num_vars)
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
 print (mips)
