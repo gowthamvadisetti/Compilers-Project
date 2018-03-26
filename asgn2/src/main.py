@@ -72,6 +72,7 @@ def parse_input(file_location,ir,leaders):
 					ir[curr].in1=words[3]
 					ir[curr].out=words[2]
 			except:
+				# print(words)
 				ir[curr].typ="assign"
 				ir[curr].in1=words[3]
 				ir[curr].out=words[2]	
@@ -203,6 +204,9 @@ leaders=sorted(leaders)
 print(leaders)
 mips=""
 mips+=".data\n"
+num_vars=len(variables.keys())
+print(num_vars)
+# quit()
 for i in variables.keys():
 	if i is not None and type(i) is not int:
 		mips+=i+": .word 0\n"

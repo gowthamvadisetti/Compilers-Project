@@ -23,6 +23,7 @@ def end_block(symbol_attach,line):
 		# print(symbol_attach)
 		if not(reg_desc[i] in symbol_attach[line] and symbol_attach[line][reg_desc[i]][0]=="live"):
 			mips+="sw "+i+","+reg_desc[i]+"\n"
+			print("sw "+i+","+reg_desc[i]+"\n")
 			addr_desc[reg_desc[i]]=["memory",None]
 			del_keys.append(i)
 	for i in del_keys:
@@ -85,12 +86,14 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 	global mips
 	global is_exit
 	is_exit = True
+	print(block_start,block_end)
 	for i in range(block_start,block_end+1):
+		if i==block_end:
+			print(ir[i].lineno)
 		if ir[i].typ != "label":
 			mips+="line"+str(ir[i].lineno)+": \n"
 		if i==block_end and ir[i].typ in ["ifgoto","goto","call"]:
-			# end_block(symbol_attach,ir[i].lineno-1)
-			pass
+			end_block(symbol_attach,ir[i].lineno-1)
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
 			if (ir[i].op=="+" or ir[i].op == "++" or ir[i].op == "+="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
@@ -280,6 +283,7 @@ def generate_code(ir,block_start,block_end,symbol_attach):
 		elif ir[i].typ=="goto":
 			mips+="j line"+str(ir[i].target)+"\n"
 		if i==block_end and ir[i].typ not in ["ifgoto","goto","call"]:
-			#end_block(symbol_attach,ir[i].lineno-1)
+			end_block(symbol_attach,ir[i].lineno-1)
+			print(symbol_attach[ir[i].lineno-1],ir[i].lineno-1)
 			pass
 			return mips
