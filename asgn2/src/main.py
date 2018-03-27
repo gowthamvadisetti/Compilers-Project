@@ -72,6 +72,7 @@ def parse_input(file_location,ir,leaders):
 					ir[curr].in1=words[3]
 					ir[curr].out=words[2]
 			except:
+				# print(words)
 				ir[curr].typ="assign"
 				ir[curr].in1=words[3]
 				ir[curr].out=words[2]	
@@ -203,9 +204,14 @@ leaders=sorted(leaders)
 print(leaders)
 mips=""
 mips+=".data\n"
+num_vars=0
+print(num_vars)
+print(variables)
+# quit()
 for i in variables.keys():
 	if i is not None and type(i) is not int:
 		mips+=i+": .word 0\n"
+		num_vars+=1
 for i in string_vars.keys():
 	mips+="str"+str(i)+": .asciiz "+string_vars[i]+"\n"
 mips+=".text\nmain:\n"
@@ -218,9 +224,9 @@ for i in range(len(leaders)):
 		block_end=len(ir)-1
 	create_symbol_table(ir,block_start,block_end,symbol_attach)
 	if i==len(leaders)-1:
-		mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach)
+		mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach,num_vars)
 	else:
-		temp=codegen.generate_code(ir,block_start,block_end,symbol_attach)
+		temp=codegen.generate_code(ir,block_start,block_end,symbol_attach,num_vars)
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
 print (mips)
