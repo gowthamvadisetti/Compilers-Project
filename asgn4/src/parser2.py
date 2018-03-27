@@ -30,17 +30,15 @@ def p_compstmt(p):
     getRule(p,'compstmt')
 
 def p_multcompstmt(p):
-    '''multcompstmt : newline stmt multcompstmt
-                | stmt multcompstmt
+    '''multcompstmt : newline stmt1 multcompstmt
+                | stmt1 multcompstmt
                 | newline
                 | empty
     '''
     getRule(p,'multcompstmt')
 
-def p_stmt(p):
-    '''stmt : def IDENTIFIER argdecl compstmt end
-            | break
-            | expr
+def p_stmt1(p):
+    '''stmt1 : stmt
     '''
     global ir_code
     p[0]=SDT()
@@ -48,10 +46,18 @@ def p_stmt(p):
     p[0].place=None
     ir_code+=p[0].code
 
+def p_stmt(p):
+    '''stmt : def IDENTIFIER argdecl compstmt end
+            | break
+            | expr
+    '''
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
+
 
 def p_expr(p):
-    '''expr : if expr1 pthen compstmt end
-            | if expr1 pthen compstmt multelsif else compstmt end
+    '''expr : if expr1 pthen M_1 stmt newline end M_2
             | while expr1 pdo compstmt end
             | case compstmt multcase else compstmt end
             | case compstmt multcase end
@@ -62,17 +68,34 @@ def p_expr(p):
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
-    elif p[1]=="if" and len(p[1:]) == 5:
-        p[0].code=p[1].code
-        label1=newlabel()
-        # p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",label1)]
-
+    elif p[1]=="if" and len(p[1:]) == 8:
+        p[0].code=p[2].code
+        p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[8].label)]
+        p[0].code+=p[4].code+p[5].code
+        p[0].code+=p[8].code
     elif p[1]=="if" and len(p[1:]) == 7:
         pass
     elif p[1]=="while":
         pass
     elif p[1]=="for":
         pass
+
+def p_M_1(p):
+    '''M_1 : empty
+    '''
+    p[0]=SDT()
+    label1=newlabel()
+    p[0].code=[Instruction3AC("label",None,None,label1,None,None)]
+    p[0].label=label1
+
+def p_M_2(p):
+    '''M_2 : empty
+    '''
+    p[0]=SDT()
+    label1=newlabel()
+    p[0].code=[Instruction3AC("label",None,None,label1,None,None)]
+    p[0].label=label1
 
 def p_expr1(p):
     '''expr1 : return callargs
