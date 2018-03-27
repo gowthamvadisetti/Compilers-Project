@@ -29,4 +29,5 @@
 29,+,k,k,1
 30,ifgoto,<,k,bb,26
 31,ifgoto,>=,k,bb,32
-32,ret
+32,print,a
+33,ret

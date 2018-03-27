@@ -1,15 +1,17 @@
-1,call,myfunc
-2,ret
-3,label,myfunc
-4,=,g.0,0
-5,=,g.1,0
-6,=,g.2,0
-7,=,g.3,0
+1,=,g.0,1
+2,=,g.1,0
+3,=,g.2,0
+4,=,g.3,0
+5,call,myfunc
+6,ret
+7,label,myfunc
 8,ifgoto,==,g.0,0,10
 9,ifgoto,!=,g.0,0,11
 10,ret
 11,puts,"value of g is NA"
 12,print,g.1
-13,-,g.3,g.2,1
-14,call,myfunc
-15,ret
+13,=,g.2,0
+14,-,g.3,g.2,1
+15,=,g.0,0
+16,call,myfunc
+17,ret

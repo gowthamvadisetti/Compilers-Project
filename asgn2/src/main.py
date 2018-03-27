@@ -204,12 +204,14 @@ leaders=sorted(leaders)
 print(leaders)
 mips=""
 mips+=".data\n"
-num_vars=len(variables.keys())
+num_vars=0
 print(num_vars)
+print(variables)
 # quit()
 for i in variables.keys():
 	if i is not None and type(i) is not int:
 		mips+=i+": .word 0\n"
+		num_vars+=1
 for i in string_vars.keys():
 	mips+="str"+str(i)+": .asciiz "+string_vars[i]+"\n"
 mips+=".text\nmain:\n"

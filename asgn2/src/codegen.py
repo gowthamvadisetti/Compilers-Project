@@ -292,3 +292,4 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			# pass
 			return mips
 		# return mips
+
