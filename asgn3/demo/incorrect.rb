@@ -1,4 +1,3 @@
-#!/usr/bin/ruby -w
 i = 6
 while(true) do
 	if (i < 8 || i 6.67 || i == 7) 

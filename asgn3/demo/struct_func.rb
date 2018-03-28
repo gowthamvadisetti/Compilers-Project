@@ -1,8 +1,4 @@
-#!/usr/bin/ruby -w
-
-
 class T
-
 def initialize
     @a
     @b = 0
@@ -12,9 +8,7 @@ def initialize
     @name = Array.new(10)
     @f = 'a'
 end
-
 end
-
 def f(x)
   x.a = 'a'
   x.b = 47114711
