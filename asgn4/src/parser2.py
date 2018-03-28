@@ -70,8 +70,8 @@ def p_multstmt(p):
 
 
 def p_expr(p):
-    '''expr : if expr1 pthen M_1 multstmt end M_2
-            | if expr1 pthen M_3 multstmt else M_4 multstmt end M_5
+    '''expr : if expr1 pthen M_1 multstmt else M_1 multstmt end M_1
+            | if expr1 pthen M_1 multstmt end M_1
             | while expr1 pdo compstmt end
             | case compstmt multcase end
             | for mlhs in expr1 pdo compstmt end
@@ -81,14 +81,19 @@ def p_expr(p):
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
+    elif p[1]=="if" and len(p[1:]) == 10:
+        p[0].code=p[2].code
+        p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[7].label)]
+        p[0].code+=p[4].code+p[5].code
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
+        p[0].code+=p[7].code+p[8].code+p[10].code
     elif p[1]=="if" and len(p[1:]) == 7:
         p[0].code=p[2].code
         p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
         p[0].code+=[Instruction3AC("goto",None,None,None,None,p[7].label)]
         p[0].code+=p[4].code+p[5].code
         p[0].code+=p[7].code
-    elif p[1]=="if" and len(p[1:]) == 10:
-        pass
     elif p[1]=="while":
         pass
     elif p[1]=="for":
