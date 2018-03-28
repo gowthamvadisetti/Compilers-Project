@@ -55,11 +55,24 @@ def p_stmt(p):
     p[0].code=p[1].code
     p[0].place=None
 
+def p_multstmt(p):
+    '''multstmt : stmt newline multstmt
+                | empty 
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=None
+    elif len(p[1:]) == 3:
+        p[0].code=p[1].code+p[3].code
+        p[0].place=None
+
+
 
 def p_expr(p):
-    '''expr : if expr1 pthen M_1 stmt newline end M_2
+    '''expr : if expr1 pthen M_1 multstmt end M_2
+            | if expr1 pthen M_3 multstmt else M_4 multstmt end M_5
             | while expr1 pdo compstmt end
-            | case compstmt multcase else compstmt end
             | case compstmt multcase end
             | for mlhs in expr1 pdo compstmt end
             | expr1
@@ -68,13 +81,13 @@ def p_expr(p):
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
-    elif p[1]=="if" and len(p[1:]) == 8:
+    elif p[1]=="if" and len(p[1:]) == 7:
         p[0].code=p[2].code
         p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
-        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[8].label)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[7].label)]
         p[0].code+=p[4].code+p[5].code
-        p[0].code+=p[8].code
-    elif p[1]=="if" and len(p[1:]) == 7:
+        p[0].code+=p[7].code
+    elif p[1]=="if" and len(p[1:]) == 10:
         pass
     elif p[1]=="while":
         pass
@@ -91,6 +104,29 @@ def p_M_1(p):
 
 def p_M_2(p):
     '''M_2 : empty
+    '''
+    p[0]=SDT()
+    label1=newlabel()
+    p[0].code=[Instruction3AC("label",None,None,label1,None,None)]
+    p[0].label=label1
+def p_M_3(p):
+    '''M_3 : empty
+    '''
+    p[0]=SDT()
+    label1=newlabel()
+    p[0].code=[Instruction3AC("label",None,None,label1,None,None)]
+    p[0].label=label1
+
+def p_M_4(p):
+    '''M_4 : empty
+    '''
+    p[0]=SDT()
+    label1=newlabel()
+    p[0].code=[Instruction3AC("label",None,None,label1,None,None)]
+    p[0].label=label1
+
+def p_M_5(p):
+    '''M_5 : empty
     '''
     p[0]=SDT()
     label1=newlabel()
