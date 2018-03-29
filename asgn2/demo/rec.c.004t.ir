@@ -1,4 +1,4 @@
-1,=,g,0
+1,=,g,10
 2,call,myfunc
 3,ret
 4,label,myfunc
@@ -8,12 +8,13 @@
 8,=,g.3,0
 9,=,g.0,g
 10,ifgoto,==,g.0,0,12
-11,ifgoto,!=,g.0,0,13
+11,goto,13
 12,ret
 13,=,g.1,g
 14,print,g.1
-15,=,g.2,g
-16,-,g.3,g.2,1
-17,=,g,g.3
-18,call,myfunc
-19,ret
+15,puts,"\n"
+16,=,g.2,g
+17,-,g.3,g.2,1
+18,=,g,g.3
+19,call,myfunc
+20,ret
