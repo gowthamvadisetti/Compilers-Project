@@ -6,8 +6,8 @@ while(true) do
 	36a %= 0
 #	`$#@name = 0
 	if i >= 0
-		print "yes\n"
+		print("yes\n")
 	else
-		print "no\n"
+		print("no\n")
 	end
 end

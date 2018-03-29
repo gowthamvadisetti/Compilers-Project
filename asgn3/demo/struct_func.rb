@@ -5,7 +5,7 @@ def initialize
     @c = 'c'
     @d = 0
     @e = 0.00
-    @name = Array.new(10)
+    @name = Array(10)
     @f = 'a'
 end
 end
