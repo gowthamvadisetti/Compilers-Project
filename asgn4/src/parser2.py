@@ -48,12 +48,21 @@ def p_stmt1(p):
 
 def p_stmt(p):
     '''stmt : def IDENTIFIER argdecl compstmt end
+            | puts OPEN_BRACKET STRING CLOSE_BRACKET
+            | print OPEN_BRACKET varname CLOSE_BRACKET
             | break
             | expr
     '''
     p[0]=SDT()
-    p[0].code=p[1].code
-    p[0].place=None
+    if len(p[1:])==1:
+        p[0].code=p[1].code
+        p[0].place=None
+    elif p[1]=="puts":
+        p[0].code=[Instruction3AC("puts",None,None,p[3],None,None)]
+        p[0].place=None
+    elif p[1]=="print":
+        p[0].code=[Instruction3AC("print",None,None,p[3].place,None,None)]
+        p[0].place=None
 
 def p_multstmt(p):
     '''multstmt : stmt newline multstmt
