@@ -72,8 +72,8 @@ def p_multstmt(p):
 def p_expr(p):
     '''expr : if expr1 pthen M_1 multstmt else newline M_1 multstmt end M_1
             | if expr1 pthen M_1 multstmt end M_1
-            | while expr1 pdo compstmt end
-            | case compstmt multcase end
+            | while M_1 expr1 pdo M_1 multstmt end M_1
+            | case multstmt M_1 multcase end M_1
             | for mlhs in expr1 pdo compstmt end
             | expr1
     '''
@@ -94,12 +94,27 @@ def p_expr(p):
         p[0].code+=[Instruction3AC("goto",None,None,None,None,p[7].label)]
         p[0].code+=p[4].code+p[5].code
         p[0].code+=p[7].code
+
     elif p[1]=="while":
-        pass
+        p[0].code = p[2].code
+        p[0].code += p[3].code
+        p[0].code += [Instruction3AC("ifgoto", ">", None, p[3].place, "0", p[5].label)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[8].label)]
+        p[0].code += p[5].code+p[6].code
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]
+        p[0].code += p[8].code
+
     elif p[1]=="for":
         pass
+    
     elif p[1]=="case":
-        pass
+        p[0].code = p[2].code
+        #p[0].code += p[3].code
+        p[0].code += [Instruction3AC("goto",None,None,None,None,p[3].label)]
+        p[0].code += p[4].code
+        p[0].code += p[6].code
+
+
 
 def p_M_1(p):
     '''M_1 : empty
@@ -417,13 +432,22 @@ def p_array_args(p):
         # p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
         # p[0].place=temp
 def p_multcase(p):
-    '''multcase : when whenargs pthen multstmt multcase
-                | when whenargs pthen multstmt
+    '''multcase : when whenargs pthen M_1 multstmt multcase M_1
+                | when whenargs pthen M_1 multstmt M_1
     '''
-    if len(p[1:]) == 4:
+    p[0] = SDT()
+    if len(p[1:]) == 6: 
+        
+        #p[0].code += [Instruction3AC("ifgoto", ">", None, p[2].place, "0", p[4].label)]
+        p[0].code = [Instruction3AC("goto", None, None, None, None, p[6].label)]
+        p[0].code += p[4].code+p[5].code
+        p[0].code += p[6].code
+        #pass
+
+    elif len(p[1:]) == 7:
         pass
-    elif len(p[1:]) == 5:
-        pass
+    #getRule(p, 'multcase')
+
 def p_multelsif(p):
     '''multelsif : elsif expr pthen compstmt multelsif
                  | empty
@@ -448,9 +472,23 @@ def p_literal(p):
         # print(p[0].code)
 
 def p_whenargs(p):
-    '''whenargs : literal
+    '''whenargs : args COMMA MULTIPLY arg
+                | args
+                | MULTIPLY arg
     '''
-    pass
+    p[0] = SDT()
+    if len(p[1:]) == 1:
+        p[0] = p[1].code
+    
+
+    elif len(p[1:]) == 2:
+        pass
+
+    elif len(p[1:]) == 4:
+        pass
+
+    #getRule(p,'whenargs')
+
 def p_mlhs(p):
     '''mlhs : mlhsitem
     '''
@@ -554,13 +592,26 @@ def p_callargs(p):
 def p_args(p):
     '''args : arg multargs
     '''
-    getRule(p,'args')
+    p[0] = SDT()
+    p[0].code = p[1].code
+    p[0].code += p[2].code
+    #getRule(p,'args')
 
 def p_multargs(p):
     '''multargs : COMMA arg multargs
                 | empty
     '''
-    getRule(p,'multargs')
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code = []
+        p[0].place = None
+
+    elif len(p[1:]) == 3:
+        p[0].code = p[2].code+p[3].code
+        p[0].place=None
+
+
+    #getRule(p,'multargs')
 
 def p_argdecl(p):
     '''argdecl : OPEN_BRACKET arglist CLOSE_BRACKET
