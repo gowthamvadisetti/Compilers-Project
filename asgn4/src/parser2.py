@@ -417,11 +417,13 @@ def p_array_args(p):
         # p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
         # p[0].place=temp
 def p_multcase(p):
-    '''multcase : when whenargs pthen compstmt multcase
-                | when whenargs pthen compstmt
+    '''multcase : when whenargs pthen multstmt multcase
+                | when whenargs pthen multstmt
     '''
-    getRule(p,'multcase')
-
+    if len(p[1:]) == 4:
+        pass
+    elif len(p[1:]) == 5:
+        pass
 def p_multelsif(p):
     '''multelsif : elsif expr pthen compstmt multelsif
                  | empty
@@ -446,12 +448,9 @@ def p_literal(p):
         # print(p[0].code)
 
 def p_whenargs(p):
-    '''whenargs : args COMMA MULTIPLY arg
-                | args
-                | MULTIPLY arg
+    '''whenargs : literal
     '''
-    getRule(p,'whenargs')
-
+    pass
 def p_mlhs(p):
     '''mlhs : mlhsitem
     '''
