@@ -1,6 +1,7 @@
-1,ifgoto,==,10,10,l1
+1,ifgoto,==,10,l1
 2,goto,l2
 3,label,l1
 4,=,j,10
 5,label,l2
 6,label,l3
+7,=,j,5
