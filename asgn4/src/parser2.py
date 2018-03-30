@@ -82,7 +82,7 @@ def p_expr(p):
     '''expr : if expr1 pthen M_1 multstmt else newline M_1 multstmt end M_1
             | if expr1 pthen M_1 multstmt end M_1
             | while M_1 expr1 pdo M_1 multstmt end M_1
-            | case multstmt M_1 multcase end M_1
+            | case expr1 M_1 multcase end M_1
             | for mlhs in expr1 pdo compstmt end
             | expr1
     '''
@@ -481,14 +481,12 @@ def p_literal(p):
         # print(p[0].code)
 
 def p_whenargs(p):
-    '''whenargs : args COMMA MULTIPLY arg
-                | args
-                | MULTIPLY arg
+    '''whenargs : arg
     '''
     p[0] = SDT()
     if len(p[1:]) == 1:
         p[0] = p[1].code
-    
+        p[0].place=p[1].place
 
     elif len(p[1:]) == 2:
         pass
