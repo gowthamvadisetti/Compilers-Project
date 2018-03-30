@@ -129,8 +129,11 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].op=words[2]
 			ir[curr].in1=words[3]
 			ir[curr].in2=words[4]
-			ir[curr].target=words[5]
-			leaders.append(int(words[5]))
+			if type(words[5]) is int:
+				ir[curr].target=words[5]
+				leaders.append(int(words[5]))
+			else:
+				ir[curr].target=words[5]
 			leaders.append(ir[curr].lineno+1)
 		elif words[1]=="goto":
 			ir[curr].typ="goto"
