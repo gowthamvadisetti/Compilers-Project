@@ -47,7 +47,7 @@ def p_stmt1(p):
     ir_code+=p[0].code
 
 def p_stmt(p):
-    '''stmt : def IDENTIFIER argdecl compstmt end
+    '''stmt : def IDENTIFIER argdecl newline multstmt end
             | puts OPEN_BRACKET STRING CLOSE_BRACKET
             | print OPEN_BRACKET varname CLOSE_BRACKET
             | break
@@ -144,9 +144,15 @@ def p_expr1(p):
     p[0].code=p[1].code
     p[0].place=p[1].place
 
-def p_expr2(p):
+def p_expr2_1(p):
+    '''expr2 : arg
+    '''
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=p[1].place
+
+def p_expr2_2(p):
     '''expr2 : call
-            | arg
     '''
     p[0]=SDT()
     p[0].code=p[1].code
@@ -746,4 +752,5 @@ fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
 output_location=file_location.replace(".rb",".ir")
+ir_code+=[Instruction3AC("ret", None, None,None, None,None)]
 Print3AC(ir_code,output_location)
