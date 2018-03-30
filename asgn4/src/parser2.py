@@ -119,7 +119,7 @@ def p_expr(p):
     elif p[1]=="case":
         p[0].code = p[2].code
         #p[0].code += p[3].code
-        p[0].code += [Instruction3AC("goto",None,None,None,None,p[3].label)]
+        # p[0].code += [Instruction3AC("goto",None,None,None,None,p[3].label)]
         p[0].code += p[4].code
         p[0].code += p[6].code
 
@@ -446,9 +446,8 @@ def p_multcase(p):
     '''
     p[0] = SDT()
     if len(p[1:]) == 6: 
-        
-        #p[0].code += [Instruction3AC("ifgoto", ">", None, p[2].place, "0", p[4].label)]
-        p[0].code = [Instruction3AC("goto", None, None, None, None, p[6].label)]
+        p[0].code = [Instruction3AC("ifgoto", "==",p[-2].place, p[2].place,None, p[4].label)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
         p[0].code += p[4].code+p[5].code
         p[0].code += p[6].code
         #pass
@@ -478,14 +477,15 @@ def p_literal(p):
         elif p[1] == "false":
             p[1]=0
         p[0].place=str(p[1])
-        # print(p[0].code)
+        # print(p[0].place)
 
 def p_whenargs(p):
     '''whenargs : arg
     '''
     p[0] = SDT()
     if len(p[1:]) == 1:
-        p[0] = p[1].code
+        # print(p[1].place)
+        p[0].code = p[1].code
         p[0].place=p[1].place
 
     elif len(p[1:]) == 2:
