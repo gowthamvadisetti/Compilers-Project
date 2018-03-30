@@ -1,5 +1,5 @@
 1,=,a,1
-2,goto,l0
+2,ifgoto,==,1,l1
 3,goto,l2
 4,label,l1
 5,=,a,2

@@ -51,7 +51,7 @@ def number_tuple(tuple_repr):
 def getRule(p,node_name):
     # print(node_name)
     # print(p[1:])
-    if len(p) > 2:
+    if len(p) > 0:
         p[0] = [node_name]+p[1:]
     else:
         p[0] = (p[1])
@@ -97,7 +97,7 @@ def p_expr(p):
             | for mlhs in expr1 pdo compstmt end
             | expr1
     '''
-    getRule(p,'expr1')
+    getRule(p,'expr')
 
 def p_expr1(p):
     '''expr1 : return callargs

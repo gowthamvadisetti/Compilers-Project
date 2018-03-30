@@ -82,8 +82,8 @@ def p_expr(p):
     '''expr : if expr1 pthen M_1 multstmt else newline M_1 multstmt end M_1
             | if expr1 pthen M_1 multstmt end M_1
             | while M_1 expr1 pdo M_1 multstmt end M_1
-            | case expr1 M_1 multcase end M_1
-            | for mlhs in expr1 pdo compstmt end
+            | case expr1 M_1 newline multcase end M_1
+            | for M_1 mlhs in expr1 pdo M_1 multstmt end M_1
             | expr1
     '''
     p[0]=SDT()
@@ -114,14 +114,23 @@ def p_expr(p):
         p[0].code += p[8].code
 
     elif p[1]=="for":
-        pass
-    
+        p[0].code = p[2].code
+        p[0].code += p[3].code+p[5].code
+        low = str(p[5].place[0])
+        high = str(p[5].place[1])
+        p[0].code += [Instruction3AC("ifgoto",">=", None, p[3].place, low, 2)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
+        p[0].code += [Instruction3AC("ifgoto","<=", None, p[3].place, high, p[7].label)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
+        p[0].code += p[7].code + p[8].code
+        p[0].code += [Instruction3AC(None, "+=", p[3].place, None, "1", None)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]  
+        p[0].code += p[10].code
+        
     elif p[1]=="case":
         p[0].code = p[2].code
-        #p[0].code += p[3].code
-        # p[0].code += [Instruction3AC("goto",None,None,None,None,p[3].label)]
-        p[0].code += p[4].code
-        p[0].code += p[6].code
+        p[0].code += p[5].code
+        p[0].code += p[7].code
 
 
 
@@ -206,11 +215,29 @@ def p_term2(p):
     '''term2 : term3 INCL_RANGE term3
             | term3 EXCL_RANGE term3
             | term3
-    '''
+    '''   
+    p[0]=SDT()
+
     if len(p[1:]) == 1:
-        p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+
+    if len(p[1:]) == 3:
+        p[0].code = p[1].code+p[3].code
+        temp1 = st.newtemp()
+        temp2 = st.newtemp()
+
+        if (p[2:][0] == ".."):
+            p[0].code += [Instruction3AC(None, "=", None, temp1, p[1].place, None)]
+            p[0].code += [Instruction3AC(None, "=", None, temp2, p[3].place, None)]
+            p[0].place = [temp1, temp2]
+
+        elif (p[2:][0] == "..."):
+            p[0].code += [Instruction3AC(None, "=", None, temp1, str(int(p[1].place)+1), None)]
+            p[0].code += [Instruction3AC(None, "=", None, temp2, str(int(p[3].place)-1), None)]
+            p[0].place = [temp1, temp2] 
+
+   
 
 def p_term3(p):
     '''term3 : term3 LOGICAL_OR term4
@@ -447,19 +474,25 @@ def p_array_args(p):
         # p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
         # p[0].place=temp
 def p_multcase(p):
-    '''multcase : when whenargs pthen M_1 multstmt multcase M_1
+    '''multcase : when whenargs pthen M_1 multstmt M_1 multcase
                 | when whenargs pthen M_1 multstmt M_1
     '''
     p[0] = SDT()
     if len(p[1:]) == 6: 
         p[0].code = [Instruction3AC("ifgoto", "==",p[-2].place, p[2].place,None, p[4].label)]
+        #print (p[-2].code)
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
         p[0].code += p[4].code+p[5].code
         p[0].code += p[6].code
         #pass
 
     elif len(p[1:]) == 7:
-        pass
+        p[0].code = [Instruction3AC("ifgoto", "==",p[-2].place, p[2].place,None, p[4].label)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
+        p[0].code += p[4].code+p[5].code
+        p[0].code += p[6].code+p[7].code
+
+
     #getRule(p, 'multcase')
 
 def p_multelsif(p):
