@@ -1,0 +1,14 @@
+1,=,j,1
+2,label,l0
+3,=,t0,0
+4,=,t1,5
+5,ifgoto,>=,i,t0,7
+6,goto,l2
+7,ifgoto,<=,i,t1,l1
+8,goto,l2
+9,label,l1
+10,=,j,5
+11,+=,i,1
+12,goto,l0
+13,label,l2
+14,=,j,10
