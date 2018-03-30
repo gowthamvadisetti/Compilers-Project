@@ -220,10 +220,18 @@ def p_term2(p):
         p[0].code = p[1].code+p[3].code
         temp1 = st.newtemp()
         temp2 = st.newtemp()
-        p[0].code += [Instruction3AC(None, "=", None, temp1, p[1].place, None)]
-        p[0].code += [Instruction3AC(None, "=", None, temp2, p[3].place, None)]
-        p[0].place = [temp1, temp2]
-        
+
+        if (p[2:][0] == ".."):
+            p[0].code += [Instruction3AC(None, "=", None, temp1, p[1].place, None)]
+            p[0].code += [Instruction3AC(None, "=", None, temp2, p[3].place, None)]
+            p[0].place = [temp1, temp2]
+
+        elif (p[2:][0] == "..."):
+            p[0].code += [Instruction3AC(None, "=", None, temp1, str(int(p[1].place)+1), None)]
+            p[0].code += [Instruction3AC(None, "=", None, temp2, str(int(p[3].place)-1), None)]
+            p[0].place = [temp1, temp2] 
+
+   
 
 def p_term3(p):
     '''term3 : term3 LOGICAL_OR term4
