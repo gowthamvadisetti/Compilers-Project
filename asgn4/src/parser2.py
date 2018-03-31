@@ -500,14 +500,23 @@ def p_array_size(p):
         p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
         p[0].place=temp
 
-def p_arraya(p):
-    '''arraya : variable OPEN_SQUARE array_args CLOSE_SQUARE
+def p_arrayal(p):
+    '''arrayal : variable OPEN_SQUARE array_args CLOSE_SQUARE
     '''
     p[0]=SDT()
     # temp=st.newtemp()
     p[0].code=p[3].code
     # p[0].code+=[Instruction3AC(None,"=",temp,p[1].place+"["+str(p[3].place)+"]",None,None)]
     p[0].place=p[1].place+"["+str(p[3].place)+"]"
+
+def p_arraya(p):
+    '''arraya : variable OPEN_SQUARE array_args CLOSE_SQUARE
+    '''
+    p[0]=SDT()
+    p[0].code=p[3].code
+    temp=st.newtemp()
+    p[0].code+=[Instruction3AC(None,"=",temp,p[1].place+"["+str(p[3].place)+"]",None,None)]
+    p[0].place=temp
 
 def p_array_args(p):
     '''array_args : primary COMMA array_args
@@ -602,7 +611,7 @@ def p_mlhsitem_1(p):
         p[0].code=[]
 
 def p_mlhsitem_2(p):
-    '''mlhsitem : arraya
+    '''mlhsitem : arrayal
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
