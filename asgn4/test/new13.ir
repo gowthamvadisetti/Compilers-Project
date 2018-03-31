@@ -1,0 +1,17 @@
+1,=,k,2
+2,label,l0
+3,deparam,a
+4,deparam,b
+5,+,f_t0,a,2
+6,+,f_t1,f_t0,3
+7,=,i,f_t1
+8,=,j,b
+9,ret,j
+10,ret
+11,+,t0,2,2
+12,=,k,t0
+13,=,l,2
+14,param,k
+15,param,l
+16,call,f,s
+17,ret

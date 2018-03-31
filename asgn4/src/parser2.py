@@ -10,7 +10,7 @@ curr_derivation=[]
 html=""
 ir_code=[]
 
-st=SymbolTable()
+st=SymbolTable(None,None)
 
 file_location=sys.argv[1]
 
@@ -47,7 +47,7 @@ def p_stmt1(p):
     ir_code+=p[0].code
 
 def p_stmt(p):
-    '''stmt : def IDENTIFIER argdecl newline multstmt end
+    '''stmt : keydef argdecl newline multstmt keyend
             | puts OPEN_BRACKET STRING CLOSE_BRACKET
             | print OPEN_BRACKET varname CLOSE_BRACKET
             | break
@@ -63,11 +63,32 @@ def p_stmt(p):
     elif p[1]=="print":
         p[0].code=[Instruction3AC("print",None,None,p[3].place,None,None)]
         p[0].place=None
+    elif len(p[1:])==5:
+        print(p[2].code)
+        p[0].code=p[1].code+p[2].code+p[4].code
+        p[0].code+=[Instruction3AC("ret",None,None,None,None,None)]
 
+def p_keydef(p):
+    '''keydef : def IDENTIFIER
+    '''
+    global st
+    p[0]=SDT()
+    print(st)
+    temp=SymbolTable(p[2],st)
+    st=temp
+    label1=newlabel()
+    p[0].code=[Instruction3AC("label",None,None,label1,None,None)]
+    p[0].place=None
+def p_keyend(p):
+    '''keyend : end
+    '''
+    global st
+    st=st.parent
 def p_multstmt(p):
     '''multstmt : stmt newline multstmt
                 | empty 
     '''
+    print(2)
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=[]
@@ -143,15 +164,20 @@ def p_M_1(p):
     p[0].label=label1
 
 def p_expr1(p):
-    '''expr1 : return callargs
-            | return OPEN_BRACKET callargs CLOSE_BRACKET
-            | return OPEN_BRACKET CLOSE_BRACKET
+    '''expr1 : return IDENTIFIER
             | return
             | expr2
     '''
     p[0]=SDT()
-    p[0].code=p[1].code
-    p[0].place=p[1].place
+    if (len(p[1:]) == 1) and p[1]=="return":
+        p[0].code=[Instruction3AC("ret",None,None,None,None,None)]
+        p[0].place=None
+    elif p[1] == "return":
+        p[0].code=[Instruction3AC("ret",None,None,p[2],None,None)]
+        p[0].place=None
+    elif len(p[1:]) == 1:
+        p[0].code=p[1].code
+        p[0].place=p[1].place
 
 def p_expr2_1(p):
     '''expr2 : arg
@@ -170,13 +196,22 @@ def p_expr2_2(p):
 def p_call(p):
     '''call : function
     '''
-    getRule(p,'call')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=p[1].place
 
 def p_function(p):
     '''function : IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
                 | IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
     '''
-    getRule(p,'function')
+    p[0]=SDT()
+    if len(p[1:]) == 3:
+        p[0].code=[Instruction3AC("call",None,None,p[1],None,None)]
+        p[0].place=None
+    elif len(p[1:]) == 4:
+        p[0].code=p[3].code
+        p[0].code+=[Instruction3AC("call",None,None,p[1],None,None)]
+        p[0].place=None
 
 def p_arg(p):
     '''arg : arg BIT_OR term0
@@ -189,12 +224,19 @@ def p_arg(p):
 def p_term0(p):
     '''term0 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
            | mlhs EQUALS IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
-           | mlhs opasgn IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
            | term1
     '''
     p[0]=SDT()
-    p[0].code=p[1].code
-    p[0].place=p[1].place
+    if len(p[1:]) == 1:
+        p[0].code=p[1].code
+        p[0].place=p[1].place
+    elif len(p[1:]) == 5:
+        p[0].code=[Instruction3AC("call",None,None,p[3],p[1].place,None)]
+        p[0].place=p[1].place
+    elif len(p[1:]) == 6:
+        p[0].code=p[5].code
+        p[0].code+=[Instruction3AC("call",None,None,p[3],p[1].place,None)]
+        p[0].place=p[1].place
 
 def p_term1(p):
     '''term1 : mlhs EQUALS mrhs
@@ -618,22 +660,37 @@ def p_mrhs(p):
         # print(p[0].place)
 
 def p_callargs(p):
-    '''callargs : args
-                | args COMMA assocs COMMA MULTIPLY arg COMMA BIT_AND arg
-                | args COMMA MULTIPLY arg COMMA BIT_AND arg
-                | args COMMA assocs COMMA BIT_AND arg
-                | args COMMA assocs COMMA MULTIPLY arg
-                | args COMMA assocs
-                | args COMMA MULTIPLY arg
-                | args COMMA BIT_AND arg
-                | assocs COMMA MULTIPLY arg COMMA BIT_AND arg
-                | assocs COMMA MULTIPLY arg
-                | assocs COMMA BIT_AND arg
-                | assocs
-                | MULTIPLY arg COMMA BIT_AND arg
-                | BIT_AND arg
+    '''callargs : callarglist
     '''
-    getRule(p,'callargs')
+    p[0]=SDT()
+    p[0].code=p[1].code
+    p[0].place=None
+
+def p_callarglist(p):
+    '''callarglist : IDENTIFIER callmultarglist
+               | empty
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=None
+    elif len(p[1:]) == 2:
+        p[0].code=[Instruction3AC("param",None,None,p[1],None,None)]
+        p[0].code+=p[2].code
+        p[0].place=None
+
+def p_callmultarglist(p):
+    '''callmultarglist : COMMA IDENTIFIER callmultarglist
+                 | empty
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=None
+    elif len(p[1:]) == 3:
+        p[0].code=[Instruction3AC("param",None,None,p[2],None,None)]
+        p[0].code+=p[3].code
+        p[0].place=None
 
 def p_args(p):
     '''args : arg multargs
@@ -661,30 +718,38 @@ def p_multargs(p):
 
 def p_argdecl(p):
     '''argdecl : OPEN_BRACKET arglist CLOSE_BRACKET
-               | arglist newline
     '''
-    getRule(p,'argdecl')
-
+    p[0]=SDT()
+    if len(p[1:]) == 3:
+        p[0].code=p[2].code
+        p[0].place=None
 def p_arglist(p):
-    '''arglist : IDENTIFIER multarglist COMMA MULTIPLY IDENTIFIER COMMA BIT_AND IDENTIFIER
-               | IDENTIFIER multarglist COMMA MULTIPLY COMMA BIT_AND IDENTIFIER
-               | IDENTIFIER multarglist COMMA BIT_AND IDENTIFIER
-               | IDENTIFIER multarglist COMMA MULTIPLY IDENTIFIER
-               | IDENTIFIER multarglist COMMA MULTIPLY
-               | IDENTIFIER multarglist
-               | MULTIPLY IDENTIFIER COMMA BIT_AND IDENTIFIER
-               | MULTIPLY IDENTIFIER
-               | BIT_AND IDENTIFIER
+    '''arglist : IDENTIFIER multarglist
                | empty
     '''
-    getRule(p,'arglist')
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=None
+    elif len(p[1:]) == 2:
+        p[0].code=[Instruction3AC("deparam",None,None,p[1],None,None)]
+        st.insert(p[1],"int")
+        p[0].code+=p[2].code
+        p[0].place=None
 
 def p_multarglist(p):
     '''multarglist : COMMA IDENTIFIER multarglist
                  | empty
     '''
-    getRule(p,'multarglist')
-
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=[]
+        p[0].place=None
+    elif len(p[1:]) == 3:
+        p[0].code=[Instruction3AC("deparam",None,None,p[2],None,None)]
+        st.insert(p[2],"int")
+        p[0].code+=p[3].code
+        p[0].place=None
 def p_singleton(p):
     '''singleton : variable
                | OPEN_BRACKET expr CLOSE_BRACKET
@@ -760,6 +825,7 @@ def p_varname(p):
             p[0].code=[]
         else:
             print("Error not declared")
+            quit()
 
 def p_newline(p):
     '''newline : SEMI_COLON
@@ -780,7 +846,7 @@ def p_error(p):
     quit()
 
 # Build the parser
-parser = yacc.yacc(errorlog=yacc.NullLogger())
+parser = yacc.yacc()
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()

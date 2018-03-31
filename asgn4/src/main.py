@@ -1,8 +1,10 @@
 class SymbolTable():
     """docstring for ClassName"""
-    def __init__(self):
+    def __init__(self,fname,parent):
         self.table={}
-        self.tempcount=0        
+        self.tempcount=0
+        self.fname=fname
+        self.parent=parent        
 
     def insert(self,varname,vartype):
         self.table[varname]=vartype
@@ -14,7 +16,10 @@ class SymbolTable():
             return None
 
     def newtemp(self):
-        tempname="t"+str(self.tempcount)
+        if self.fname:
+            tempname=self.fname+"_t"+str(self.tempcount)
+        else:
+            tempname="t"+str(self.tempcount)
         self.table[tempname]="int"
         self.tempcount+=1
         return tempname
