@@ -1,11 +1,11 @@
-i = 6
-while(1)
+i = 5
+while(i)
 if (i < 6)
-i=2
+i-=2
 end
 if i >= 0
-puts "Yes"
+puts("Yes")
 else
-puts "No"
+puts("No")
 end	
 end
