@@ -2,7 +2,8 @@ all:
 	mkdir bin
 	python -m compileall src/*
 	mv src/lexer.pyc bin/lexer.pyc
-	mv src/parser.pyc bin/parser
+	mv src/main.pyc bin/main.pyc
+	mv src/parser2.pyc bin/parser
 	chmod +x bin/parser
 
 clean:

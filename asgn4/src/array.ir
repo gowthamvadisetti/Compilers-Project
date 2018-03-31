@@ -1,6 +1,0 @@
-1,=,bb,5
-2,array,a[bb]
-3,=,a[0],1
-4,=,bb,a[0]
-5,print,bb
-6,ret
