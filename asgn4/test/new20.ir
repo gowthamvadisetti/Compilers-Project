@@ -1,0 +1,14 @@
+1,=,a,1
+2,label,l0
+3,ifgoto,==,a,7,6
+4,=,t0,0
+5,goto,7
+6,=,t0,1
+7,ifgoto,==,t0,0,l1
+8,goto,l2
+9,label,l1
+10,+=,a,1
+11,goto,l0
+12,label,l2
+13,print,a
+14,ret
