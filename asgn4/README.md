@@ -8,7 +8,7 @@ src folder contains the main code
 ```
 cd asgn4
 make
-bin/parser2 test/test1.rb
+bin/parser test/test1.rb
 ```
 
 This will generate a IR file in the same folder with name test1.ir
