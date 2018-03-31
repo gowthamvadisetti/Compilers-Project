@@ -288,7 +288,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 		if boolval:
 			if num_vars>=18:
 				end_block(symbol_attach,ir[i].lineno-1)
-			print(symbol_attach[ir[i].lineno-1],ir[i].lineno-1)
+			#print(symbol_attach[ir[i].lineno-1],ir[i].lineno-1)
 			# pass
 			return mips
 		# return mips

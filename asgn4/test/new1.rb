@@ -1,4 +1,5 @@
-b=2
-a=b+2
-a=b+b-b
-c=a+b*b
+bb=2
+a=bb+2
+a=bb+bb-bb
+c=a+bb*bb
+print (a)
