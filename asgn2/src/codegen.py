@@ -86,8 +86,8 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 	is_exit = True
 	print(block_start,block_end)
 	for i in range(block_start,block_end+1):
-		if ir[i].typ != "label":
-			mips+="line"+str(ir[i].lineno)+": \n"
+		# if ir[i].typ != "label":
+		# 	mips+="line"+str(ir[i].lineno)+": \n"
 		if i==block_end and ir[i].typ in ["ifgoto","goto","call"]:
 			if num_vars>=18:
 				end_block(symbol_attach,ir[i].lineno-1)
@@ -284,7 +284,10 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				else:
 					mips+="bne "+reg1+","+reg2+","+ir[i].target+"\n"
 		elif ir[i].typ=="goto":
-			mips+="j line"+str(ir[i].target)+"\n"
+			if type(ir[i].target) is int:
+				mips+="j line"+str(ir[i].target)+"\n"
+			else:
+				mips+="j "+str(ir[i].target)+"\n"
 		boolval=i==block_end and ir[i].typ not in ["ifgoto","goto","call"]
 		boolval=boolval
 		print(boolval)

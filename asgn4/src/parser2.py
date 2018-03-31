@@ -351,10 +351,14 @@ def p_term4(p):
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code
-        p[0].code+=[Instruction3AC("ifgoto",p[2],None,p[1].place,p[3].place,3)]
+        label1=newlabel()
+        label2=newlabel()
+        p[0].code+=[Instruction3AC("ifgoto",p[2],None,p[1].place,p[3].place,label1)]
         p[0].code+=[Instruction3AC(None,"=",temp,"0",None,None)]
-        p[0].code+=[Instruction3AC("goto",None,None,None,None,2)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,label2)]
+        p[0].code+=[Instruction3AC("label",None,None,label1,None,None)]
         p[0].code+=[Instruction3AC(None,"=",temp,"1",None,None)]
+        p[0].code+=[Instruction3AC("label",None,None,label2,None,None)]
         p[0].place=temp
 
 def p_term5(p):
@@ -372,10 +376,14 @@ def p_term5(p):
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code
-        p[0].code+=[Instruction3AC("ifgoto",p[2],None,p[1].place,p[3].place,3)]
+        label1=newlabel()
+        label2=newlabel()
+        p[0].code+=[Instruction3AC("ifgoto",p[2],None,p[1].place,p[3].place,label1)]
         p[0].code+=[Instruction3AC(None,"=",temp,"0",None,None)]
-        p[0].code+=[Instruction3AC("goto",None,None,None,None,2)]
+        p[0].code+=[Instruction3AC("goto",None,None,None,None,label2)]
+        p[0].code+=[Instruction3AC("label",None,None,label1,None,None)]
         p[0].code+=[Instruction3AC(None,"=",temp,"1",None,None)]
+        p[0].code+=[Instruction3AC("label",None,None,label2,None,None)]
         p[0].place=temp
 
 def p_term6(p):

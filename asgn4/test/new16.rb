@@ -1,5 +1,4 @@
-dd=10
-a=Array(dd)
+a=Array(10)
 bb=1
 a[0]=bb
 a[1]=bb
