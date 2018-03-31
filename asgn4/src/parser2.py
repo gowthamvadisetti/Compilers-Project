@@ -103,6 +103,7 @@ def p_multstmt(p):
 
 def p_expr(p):
     '''expr : if expr1 pthen M_1 multstmt else newline M_1 multstmt end M_1
+            | if expr1 pthen M_1 multstmt M_1 multelsif end M_1
             | if expr1 pthen M_1 multstmt end M_1
             | while M_1 expr1 pdo M_1 multstmt end M_1
             | case expr1 M_1 newline multcase end M_1
@@ -113,6 +114,7 @@ def p_expr(p):
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
+
     elif p[1]=="if" and len(p[1:]) == 11:
         p[0].code=p[2].code
         p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
@@ -120,6 +122,18 @@ def p_expr(p):
         p[0].code+=p[4].code+p[5].code
         p[0].code+=[Instruction3AC("goto",None,None,None,None,p[11].label)]
         p[0].code+=p[8].code+p[9].code+p[11].code
+
+    elif p[1] == "if" and len(p[1:]) == 9:
+        p[0].code = p[2].code
+        p[0].code += [Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
+        p[0].code += [Instruction3AC("goto",None,None,None,None,p[6].label)]
+        p[0].code += p[4].code+p[5].code
+        p[0].code += [Instruction3AC("goto",None,None,None,None,p[9].label)]
+        p[0].code += p[6].code+p[7].code
+        #p[0].code += [Instruction3AC("goto",None,None,None,None,p[12].label)]
+        p[0].code += p[9].code
+
+
     elif p[1]=="if" and len(p[1:]) == 7:
         p[0].code=p[2].code
         p[0].code+=[Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
@@ -561,10 +575,30 @@ def p_multcase(p):
     #getRule(p, 'multcase')
 
 def p_multelsif(p):
-    '''multelsif : elsif expr pthen compstmt multelsif
+    '''multelsif : elsif expr pthen M_1 multstmt M_1 multelsif M_1
+                 | else newline multstmt
                  | empty
     '''
-    getRule(p,'multelsif')
+    p[0] = SDT()
+
+    if len(p[1:]) == 1:
+        p[0].code = []
+        p[0].place = None
+
+    elif len(p[1:]) == 8:
+        p[0].code = p[2].code
+        p[0].code += [Instruction3AC("ifgoto", ">", None, p[2].place, "0", p[4].label)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
+        p[0].code += p[4].code+p[5].code
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[8].label)]
+        p[0].code += p[6].code+p[7].code+p[8].code
+
+    elif len(p[1:]) == 3:
+        p[0].code = p[3].code
+
+
+    #getRule(p, 'multelsif')
+
 
 def p_literal(p):
     '''literal : NUMBER
