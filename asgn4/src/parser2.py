@@ -54,7 +54,10 @@ def p_stmt(p):
             | expr
     '''
     p[0]=SDT()
-    if len(p[1:])==1:
+    if len(p[1:])== 1 and p[1]=="break":
+        p[0].code=["break"]
+        p[0].place=None
+    elif len(p[1:])==1:
         p[0].code=p[1].code
         p[0].place=None
     elif p[1]=="puts":
@@ -130,6 +133,9 @@ def p_expr(p):
         p[0].code += p[3].code
         p[0].code += [Instruction3AC("ifgoto", ">", None, p[3].place, "0", p[5].label)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[8].label)]
+        for i in range(len(p[6].code)):
+            if p[6].code[i]=="break":
+                p[6].code[i]= Instruction3AC("goto", None, None, None, None, p[8].label)
         p[0].code += p[5].code+p[6].code
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]
         p[0].code += p[8].code
@@ -143,6 +149,10 @@ def p_expr(p):
         p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
         p[0].code += [Instruction3AC("ifgoto","<=", None, p[3].place, high, p[7].label)]
         p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
+        print(p[8].code)
+        for i in range(len(p[8].code)):
+            if p[8].code[i]=="break":
+                p[8].code[i]= Instruction3AC("goto", None, None, None, None, p[10].label)
         p[0].code += p[7].code + p[8].code
         p[0].code += [Instruction3AC(None, "+=", p[3].place, None, "1", None)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]  
