@@ -106,6 +106,7 @@ def p_expr(p):
             | if expr1 pthen M_1 multstmt M_1 multelsif end M_1
             | if expr1 pthen M_1 multstmt end M_1
             | while M_1 expr1 pdo M_1 multstmt end M_1
+            | until M_1 expr1 pdo M_1 multstmt end M_1
             | case expr1 M_1 newline multcase end M_1
             | for M_1 mlhs in expr1 pdo M_1 multstmt end M_1
             | expr1
@@ -169,6 +170,14 @@ def p_expr(p):
         p[0].code += [Instruction3AC(None, "+=", p[3].place, None, "1", None)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]  
         p[0].code += p[10].code
+
+    elif p[1] == "until":
+        p[0].code = p[2].code+p[3].code
+        p[0].code += [Instruction3AC("ifgoto", "==", None, p[3].place, "0", p[5].label)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[8].label)]
+        p[0].code += p[5].code+p[6].code
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]
+        p[0].code += p[8].code
         
     elif p[1]=="case":
         p[0].code = p[2].code
@@ -827,7 +836,7 @@ def p_pthen(p):
 
 def p_pdo(p):
     '''pdo : newline
-           | do
+           | do newline
            | newline do
     '''
     getRule(p,'pdo')
