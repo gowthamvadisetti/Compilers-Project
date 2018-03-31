@@ -14,3 +14,4 @@ clean:
 	rm -rf test/*.html
 	rm -rf demo/*.html
 	rm -rf test/*.ir
+	rm -rf src/parsetab.py

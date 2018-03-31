@@ -50,7 +50,7 @@ def p_stmt1(p):
 def p_stmt(p):
     '''stmt : keydef argdecl newline multstmt keyend
             | puts OPEN_BRACKET STRING CLOSE_BRACKET
-            | print OPEN_BRACKET varname CLOSE_BRACKET
+            | print OPEN_BRACKET primary CLOSE_BRACKET
             | break
             | expr
     '''
@@ -257,7 +257,15 @@ def p_term1(p):
         p[0].place=p[1].place
     else:
         p[0]=SDT()
-        st.insert(p[1].place,"int")
+        if "[" in p[1].place and "]" in p[1].place:
+            pass
+        else:
+            if p[2] == "=":
+                st.insert(p[1].place,"int")
+            else:
+                if st.lookup(p[1].place) is None:
+                    print("Error Not declared")
+                    quit()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],p[1].place,p[3].place,None,None)]
         p[0].place=p[1].place
 
@@ -765,27 +773,6 @@ def p_multarglist(p):
         st.insert(p[2],"int")
         p[0].code+=p[3].code
         p[0].place=None
-def p_singleton(p):
-    '''singleton : variable
-               | OPEN_BRACKET expr CLOSE_BRACKET
-    '''
-    getRule(p,'singleton')
-
-def p_assocs(p):
-    '''assocs : assoc multassocs
-    '''
-    getRule(p,'assocs')
-
-def p_multassocs(p):
-    '''multassocs : COMMA assoc multassocs
-                  | empty
-    '''
-    getRule(p,'multassocs')
-
-def p_assoc(p):
-    '''assoc : arg MAP arg
-    '''
-    getRule(p,'assoc')
 
 def p_variable(p):
     '''variable : varname
@@ -826,7 +813,7 @@ def p_opasgn(p):
               | LOGICAL_OR_EQUALS
               | POWER_EQUALS
     '''
-    getRule(p,'opasgn')
+    p[0]=p[1]
 
 def p_varname(p):
     '''varname : GLOBAL 

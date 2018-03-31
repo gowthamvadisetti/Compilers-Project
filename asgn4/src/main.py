@@ -26,7 +26,7 @@ class SymbolTable():
 
 class SDT():
     def __init__(self):
-        self.code=""
+        self.code=[]
         self.place=None
         self.label=None
 
