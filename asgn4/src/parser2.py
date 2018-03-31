@@ -9,6 +9,7 @@ children_map={}
 curr_derivation=[]
 html=""
 ir_code=[]
+func_code=[]
 
 st=SymbolTable(None,None)
 
@@ -53,6 +54,7 @@ def p_stmt(p):
             | break
             | expr
     '''
+    global func_code
     p[0]=SDT()
     if len(p[1:])== 1 and p[1]=="break":
         p[0].code=["break"]
@@ -67,20 +69,18 @@ def p_stmt(p):
         p[0].code=[Instruction3AC("print",None,None,p[3].place,None,None)]
         p[0].place=None
     elif len(p[1:])==5:
-        print(p[2].code)
-        p[0].code=p[1].code+p[2].code+p[4].code
-        p[0].code+=[Instruction3AC("ret",None,None,None,None,None)]
+        p[0].code=[]
+        func_code+=p[1].code+p[2].code+p[4].code
+        func_code+=[Instruction3AC("ret",None,None,None,None,None)]
 
 def p_keydef(p):
     '''keydef : def IDENTIFIER
     '''
     global st
     p[0]=SDT()
-    print(st)
     temp=SymbolTable(p[2],st)
     st=temp
-    label1=newlabel()
-    p[0].code=[Instruction3AC("label",None,None,label1,None,None)]
+    p[0].code=[Instruction3AC("label",None,None,p[2],None,None)]
     p[0].place=None
 def p_keyend(p):
     '''keyend : end
@@ -91,7 +91,6 @@ def p_multstmt(p):
     '''multstmt : stmt newline multstmt
                 | empty 
     '''
-    print(2)
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=[]
@@ -149,7 +148,6 @@ def p_expr(p):
         p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
         p[0].code += [Instruction3AC("ifgoto","<=", None, p[3].place, high, p[7].label)]
         p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
-        print(p[8].code)
         for i in range(len(p[8].code)):
             if p[8].code[i]=="break":
                 p[8].code[i]= Instruction3AC("goto", None, None, None, None, p[10].label)
@@ -869,4 +867,5 @@ file_contents=fp.read()
 t=yacc.parse()
 output_location=file_location.replace(".rb",".ir")
 ir_code+=[Instruction3AC("ret", None, None,None, None,None)]
+ir_code+=func_code
 Print3AC(ir_code,output_location)
