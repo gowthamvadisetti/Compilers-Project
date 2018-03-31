@@ -13,3 +13,4 @@ clean:
 	rm -rf src/*.out
 	rm -rf test/*.html
 	rm -rf demo/*.html
+	rm -rf test/*.ir
