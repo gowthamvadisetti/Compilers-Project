@@ -4,11 +4,11 @@ for i in 1..7
 for j in 0...10
 b += 1
 if b == 8
-puts (b)
+b=2
 break
 end
 end
-if b == 58
-break
 end
+if a==1
+a=3
 end

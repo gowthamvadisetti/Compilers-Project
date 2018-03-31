@@ -4,7 +4,6 @@ reg_desc={}
 mips=""
 #18 mips registers for our use
 registers=["$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7","$t8","$t9","$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7"]
-# registeers=registers[:4]
 
 def getEmptyRegister():
 	global reg_desc
@@ -72,7 +71,6 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 			reg_desc[reg]=variable
 			addr_desc[variable]=["register",reg]
 		mips+="sw "+reg+","+reqvar+"\n"
-		# print(reg_desc[reg])
 		if is_input:
 			if type(variable) is not int:
 				mips+="lw "+reg+","+variable+"\n"
@@ -149,7 +147,12 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg1+","+reg1+","+reg3+"\n"
 					mips+="sw "+reg2+",0("+reg1+")\n"
-					mips+="lw "+reg1+","+ir[i].out+"\n"
+					if ir[i].out in addr_desc and addr_desc[ir[i].out][0]=="memory":
+						mips+="lw "+reg1+","+ir[i].out+"\n"
+					elif ir[i].out not  in addr_desc:
+						mips+="lw "+reg1+","+ir[i].out+"\n"
+					else:
+						mips+="move "+reg1+","+addr_desc[ir[i].out][1]+"\n"
 					if not type(ir[i].in1) is int:
 						mips+="lw "+reg3+","+str(ir[i].in1)+"\n"
 				elif ir[i].typ == "assign_from_array":
@@ -169,8 +172,8 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					if type(ir[i].in1) is int:
 						reg1=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 						mips+="li "+reg1+","+str(ir[i].in1)+"\n"
-					else:	
-						reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,False)
+					else:
+						reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 						reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 						mips+="move "+reg2+","+reg1+"\n"
 		elif ir[i].typ=="logical":									#logical operaters

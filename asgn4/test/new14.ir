@@ -1,6 +1,0 @@
-1,=,i,0
-2,call,foo
-3,ret
-4,label,foo
-5,=,i,1
-6,ret
