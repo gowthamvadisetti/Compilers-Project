@@ -143,16 +143,18 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					if not type(ir[i].in1) is int:
 						mips+="sw "+reg3+","+str(ir[i].in1)+"\n"
+					if not type(ir[i].in1) is int:
+						mips+="sw "+reg1+","+str(ir[i].out)+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg1+","+reg1+","+reg3+"\n"
 					mips+="sw "+reg2+",0("+reg1+")\n"
-					if ir[i].out in addr_desc and addr_desc[ir[i].out][0]=="memory":
-						mips+="lw "+reg1+","+ir[i].out+"\n"
-					elif ir[i].out not  in addr_desc:
-						mips+="lw "+reg1+","+ir[i].out+"\n"
-					else:
-						mips+="move "+reg1+","+addr_desc[ir[i].out][1]+"\n"
+					# if ir[i].out in addr_desc and addr_desc[ir[i].out][0]=="memory":
+					# 	mips+="lw "+reg1+","+ir[i].out+"\n"
+					# elif ir[i].out not  in addr_desc:
+					mips+="lw "+reg1+","+ir[i].out+"\n"
+					# else:
+					# 	mips+="move "+reg1+","+addr_desc[ir[i].out][1]+"\n"
 					if not type(ir[i].in1) is int:
 						mips+="lw "+reg3+","+str(ir[i].in1)+"\n"
 				elif ir[i].typ == "assign_from_array":
@@ -161,6 +163,8 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					reg3=getreg(ir[i],ir[i].in2,symbol_attach,i,True)#array index
 					if not type(ir[i].in2) is int:
 						mips+="sw "+reg3+","+str(ir[i].in2)+"\n"
+					if not type(ir[i].in1) is int:
+						mips+="sw "+reg2+","+str(ir[i].in1)+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg2+","+reg2+","+reg3+"\n"

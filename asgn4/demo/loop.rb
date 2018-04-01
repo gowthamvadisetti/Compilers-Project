@@ -1,13 +1,11 @@
 i=0
 jj=0
 res=0
-while(i<9)
+for i in 0..9
 jj=0
-while(jj<9)
+for jj in 0..9
 res += 1
-jj+=1
 end
-i+=1
 end
+puts("res=")
 print(res)
-puts("\"#{res}")
