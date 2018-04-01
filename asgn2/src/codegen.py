@@ -148,6 +148,8 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg1+","+reg1+","+reg3+"\n"
+					if not type(ir[i].in1) is int:
+						mips+="lw "+reg3+","+str(ir[i].in1)+"\n"
 					mips+="sw "+reg2+",0("+reg1+")\n"
 					# if ir[i].out in addr_desc and addr_desc[ir[i].out][0]=="memory":
 					# 	mips+="lw "+reg1+","+ir[i].out+"\n"
@@ -155,8 +157,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					mips+="lw "+reg1+","+ir[i].out+"\n"
 					# else:
 					# 	mips+="move "+reg1+","+addr_desc[ir[i].out][1]+"\n"
-					if not type(ir[i].in1) is int:
-						mips+="lw "+reg3+","+str(ir[i].in1)+"\n"
+					
 				elif ir[i].typ == "assign_from_array":
 					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					reg2=getreg(ir[i],ir[i].in1,symbol_attach,i,True)#array pointer
@@ -302,4 +303,3 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			# pass
 			return mips
 		# return mips
-
