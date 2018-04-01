@@ -272,10 +272,12 @@ def p_term0(p):
         p[0].place=p[1].place
     elif len(p[1:]) == 5:
         p[0].code=[Instruction3AC("call",None,None,p[3],p[1].place,None)]
+        st.insert(p[1].place,"int")
         p[0].place=p[1].place
     elif len(p[1:]) == 6:
         p[0].code=p[5].code
         p[0].code+=[Instruction3AC("call",None,None,p[3],p[1].place,None)]
+        st.insert(p[1].place,"int")
         p[0].place=p[1].place
 
 def p_term1(p):
@@ -880,7 +882,7 @@ def p_varname(p):
             p[0].place=p[1]
             p[0].code=[]
         else:
-            print("Error not declared")
+            print("Error "+p[1]+" not declared")
             quit()
 
 def p_newline(p):
