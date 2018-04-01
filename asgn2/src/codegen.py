@@ -4,6 +4,7 @@ reg_desc={}
 mips=""
 #18 mips registers for our use
 registers=["$t0","$t1","$t2","$t3","$t4","$t5","$t6","$t7","$t8","$t9","$s0","$s1","$s2","$s3","$s4","$s5","$s6","$s7"]
+num_args=0
 
 def getEmptyRegister():
 	global reg_desc
@@ -83,6 +84,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 	global reg_desc
 	global mips
 	global is_exit
+	global num_args
 	is_exit = True
 	print(block_start,block_end)
 	for i in range(block_start,block_end+1):
@@ -276,8 +278,23 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			mips+="syscall\n"
 			mips+="move "+reg1+",$v0"+"\n"
 		elif ir[i].typ == "label":
+			num_args=0
 			mips+=ir[i].in1+":\n"
 			is_exit = False;
+		elif ir[i].typ == "param":
+			if num_args>3:
+				print("Number of function arguments > 4(NOT SUPPORTED)")
+				quit()
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			mips+="move $a"+str(num_args)+","+reg1+"\n"
+			num_args+=1
+		elif ir[i].typ == "deparam":
+			if num_args>3:
+				print("Number of function arguments > 4(NOT SUPPORTED)")
+				quit()
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			mips+="move "+reg1+",$a"+str(num_args)+"\n"
+			num_args+=1	
 		elif ir[i].typ == "call":
 			mips+="jal "+ir[i].in1 + "\n"
 			if ir[i].in2 != None:

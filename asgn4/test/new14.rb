@@ -1,5 +1,5 @@
-i = 0
-def foo()
-	i = 1
+i = 10
+def foo(a)
+print(a)
 end
-foo()
+foo(i)

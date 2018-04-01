@@ -155,6 +155,12 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="label":
 			ir[curr].typ="label"
 			ir[curr].in1=words[2]
+		elif words[1]=="param":
+			ir[curr].typ="param"
+			ir[curr].in1=words[2]
+		elif words[1]=="deparam":
+			ir[curr].typ="deparam"
+			ir[curr].in1=words[2]
 		elif words[1]=="print":
 			ir[curr].typ="print"
 			ir[curr].in1=words[2]
