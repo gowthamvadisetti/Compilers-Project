@@ -255,8 +255,7 @@ def p_function(p):
         p[0].place=None
 
 def p_arg(p):
-    '''arg : arg BIT_OR term0
-           | term0
+    '''arg : term0
     '''
     p[0]=SDT()
     p[0].code=p[1].code
@@ -396,6 +395,7 @@ def p_term5(p):
 
 def p_term6(p):
     '''term6 : term6 BIT_XOR term7
+            | term6 BIT_OR term7
             | term7
     '''
     if len(p[1:]) == 1:
