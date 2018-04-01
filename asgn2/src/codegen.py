@@ -154,8 +154,13 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					mips += "sw "+reg1+","+"0("+reg2+")\n"
 				elif ir[i].typ == "assign_to_array":
 					reg1=getreg(ir[i],ir[i].out,symbol_attach,i,True)
-					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+					# reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+					# reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+						reg_desc[reg3]="constant"
+					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
+					del reg_desc[reg3]
 					if not type(ir[i].in1) is int:
 						mips+="sw "+reg3+","+str(ir[i].in1)+"\n"
 					if not type(ir[i].in1) is int:
