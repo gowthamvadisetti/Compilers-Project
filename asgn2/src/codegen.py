@@ -97,46 +97,51 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
 			if (ir[i].op=="+" or ir[i].op == "++" or ir[i].op == "+="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-				if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 					reg_desc[reg1]="constant"
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-				del reg_desc[reg1]
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+					del reg_desc[reg1]
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="add "+reg3+","+reg1+","+reg2+"\n"
 			
 			elif (ir[i].op=="-" or ir[i].op == "--" or ir[i].op == "-="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-				if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 					reg_desc[reg1]="constant"
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-				del reg_desc[reg1]
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+					del reg_desc[reg1]
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="sub "+reg3+","+reg1+","+reg2+"\n"
 
 			elif (ir[i].op=="*" or ir[i].op == "*="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-				if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 					reg_desc[reg1]="constant"
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-				del reg_desc[reg1]
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+					del reg_desc[reg1]
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="mult "+reg1+","+reg2+"\n"
 				mips+="mflo "+reg3+"\n"
 			elif (ir[i].op=="/" or ir[i].op == "/="): 
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-				if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 					reg_desc[reg1]="constant"
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-				del reg_desc[reg1]
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+					del reg_desc[reg1]
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="div "+reg1+","+reg2+"\n"
 				mips+="mflo "+reg3+"\n"
 			elif (ir[i].op=="%" or ir[i].op == "%="):
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-				if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 					reg_desc[reg1]="constant"
 				reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-				del reg_desc[reg1]
+				if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+					del reg_desc[reg1]
 				reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 				mips+="div "+reg1+","+reg2+"\n"
 				mips+="mfhi "+reg3+"\n"
@@ -159,10 +164,11 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					# reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
 					# reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					reg3=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg3]="constant"
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-					del reg_desc[reg3]
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+						del reg_desc[reg3]
 					if not type(ir[i].in1) is int:
 						mips+="sw "+reg3+","+str(ir[i].in1)+"\n"
 					if not type(ir[i].in1) is int:
@@ -206,43 +212,48 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 		elif ir[i].typ=="logical":									#logical operaters
 				if (ir[i].op=="|" or ir[i].op == '|='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-					del reg_desc[reg1]
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+						del reg_desc[reg1]
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="or "+reg3+","+reg1+","+reg2+"\n"
 				elif (ir[i].op=="^" or ir[i].op == '^='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-					del reg_desc[reg1]
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+						del reg_desc[reg1]
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="xor "+reg3+","+reg1+","+reg2+"\n"
 				elif (ir[i].op==">>" or ir[i].op == '>>='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-					del reg_desc[reg1]
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+						del reg_desc[reg1]
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="srlv "+reg3+","+reg1+","+reg2+"\n"
 					
 				elif (ir[i].op=="<<" or ir[i].op == '<<='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-					del reg_desc[reg1]
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+						del reg_desc[reg1]
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="sllv "+reg3+","+reg1+","+reg2+"\n"
 				elif (ir[i].op=="&" or ir[i].op == '&='):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-					del reg_desc[reg1]
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+						del reg_desc[reg1]
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="and "+reg3+","+reg1+","+reg2+"\n"
 				elif ir[i].op == "~":
@@ -251,10 +262,11 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 					mips +="nor "+reg3+","+reg1+","+reg1+"\n"
 				elif ir[i].op == "~|":
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-					if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"
 					reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-					del reg_desc[reg1]
+					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+						del reg_desc[reg1]
 					reg3 = getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips += "nor "+reg3+","+reg1+","+reg2+"\n"
 		elif ir[i].typ=="array":
@@ -312,10 +324,11 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				is_exit = False
 		elif ir[i].typ=="ifgoto":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-			if (type(ir[i].in1) is int) and (type(ir[i].in1) is int):
+			if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 				reg_desc[reg1]="constant"
 			reg2=getreg(ir[i],ir[i].in2,symbol_attach,i,True)
-			del reg_desc[reg1]
+			if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
+				del reg_desc[reg1]
 			if ir[i].op=="<=":
 				if type(ir[i].target) is int:
 					mips+="ble "+reg1+","+reg2+",line"+str(ir[i].target)+"\n"
