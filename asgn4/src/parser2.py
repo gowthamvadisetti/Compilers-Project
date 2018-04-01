@@ -154,21 +154,27 @@ def p_expr(p):
         p[0].code += p[8].code
 
     elif p[1]=="for":
-        p[0].code = p[2].code
-        p[0].code += p[3].code+p[5].code
+        
+        #print (p[3].place)
         low = str(p[5].place[0])
         high = str(p[5].place[1])
         new_lab = newlabel()
-        p[0].code += [Instruction3AC("ifgoto",">=", None, p[3].place, low, new_lab)]
+        counter = st.newtemp()
+        p[0].code = p[3].code+p[5].code
+        p[0].code += [Instruction3AC(None, "=", counter, low, None, None)]
+
+        p[0].code += p[2].code
+
+        p[0].code += [Instruction3AC("ifgoto", ">=", None, counter, low, new_lab)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[10].label)]
         p[0].code += [Instruction3AC("label", new_lab, None, None, None, None)]
-        p[0].code += [Instruction3AC("ifgoto","<=", None, p[3].place, high, p[7].label)]
+        p[0].code += [Instruction3AC("ifgoto","<=", None, counter, high, p[7].label)]
         p[0].code += [Instruction3AC("goto",None,None,None,None,p[10].label)]
         for i in range(len(p[8].code)):
             if p[8].code[i]=="break":
                 p[8].code[i]=Instruction3AC("goto", None, None, None, None, p[10].label)
         p[0].code += p[7].code + p[8].code
-        p[0].code += [Instruction3AC(None, "+=", p[3].place, None, "1", None)]
+        p[0].code += [Instruction3AC(None, "+=", counter, None, "1", None)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]  
         p[0].code += p[10].code
 
@@ -665,6 +671,7 @@ def p_mlhsitem_1(p):
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].place=p[1]
+        #print (p[1])
         p[0].code=[]
 
 def p_mlhsitem_2(p):
