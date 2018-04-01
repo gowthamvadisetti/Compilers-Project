@@ -1,2 +1,2 @@
-puts "Hello World\n"
-puts "Hi again"
+puts ("Hello World\n")
+puts ("Hi again")

@@ -1,5 +1,5 @@
 a=2
 a+=1
-print (a.to_i),"\n"
+print (a)
 a-=1
-print (a.to_i),"\n"
+print (a)

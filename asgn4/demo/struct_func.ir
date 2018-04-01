@@ -8,4 +8,5 @@
 8,=,ee,32
 9,=,ff,58
 10,=,name,70
-11,ret
+11,print,ee
+12,ret

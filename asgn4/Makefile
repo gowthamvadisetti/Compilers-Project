@@ -3,8 +3,8 @@ all:
 	python -m compileall src/*
 	mv src/lexer.pyc bin/lexer.pyc
 	mv src/main.pyc bin/main.pyc
-	mv src/parser2.pyc bin/parser
-	chmod +x bin/parser
+	mv src/parser2.pyc bin/irgen
+	chmod +x bin/irgen
 
 clean:
 	rm -rf bin

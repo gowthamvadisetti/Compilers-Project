@@ -1,5 +1,7 @@
 1,call,foo
 2,ret
 3,label,foo
-4,=,i,1
-5,ret
+4,*,foo_t0,-1,2
+5,=,i,foo_t0
+6,print,i
+7,ret

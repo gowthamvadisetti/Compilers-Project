@@ -1,4 +1,3 @@
-i=0
 jj=0
 res=0
 for i in 0..9

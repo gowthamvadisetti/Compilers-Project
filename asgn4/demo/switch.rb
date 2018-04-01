@@ -18,4 +18,4 @@ case c
 end
 print(wflg)
 puts("\n")
-print(dflg)
+print(jj)

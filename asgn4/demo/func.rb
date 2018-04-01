@@ -1,4 +1,6 @@
 def foo()
-   i = 1
+   c=-2
+   i = c
+   print (i)
 end
 foo()
