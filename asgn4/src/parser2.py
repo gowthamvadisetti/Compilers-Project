@@ -126,10 +126,10 @@ def p_expr(p):
 
     elif p[1] == "if" and len(p[1:]) == 9:
         p[0].code = p[2].code
-        p[0].code += [Instruction3AC("ifgoto",">",None,p[2].place,"0",p[4].label)]
-        p[0].code += [Instruction3AC("goto",None,None,None,None,p[6].label)]
+        p[0].code += [Instruction3AC("ifgoto", ">", None, p[2].place, "0", p[4].label)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
         p[0].code += p[4].code+p[5].code
-        p[0].code += [Instruction3AC("goto",None,None,None,None,p[9].label)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[9].label)]
         p[0].code += p[6].code+p[7].code
         p[0].code += p[9].code
 
@@ -158,13 +158,15 @@ def p_expr(p):
         p[0].code += p[3].code+p[5].code
         low = str(p[5].place[0])
         high = str(p[5].place[1])
-        p[0].code += [Instruction3AC("ifgoto",">=", None, p[3].place, low, 2)]
-        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
+        new_lab = newlabel()
+        p[0].code += [Instruction3AC("ifgoto",">=", None, p[3].place, low, new_lab)]
+        p[0].code += [Instruction3AC("goto", None, None, None, None, p[10].label)]
+        p[0].code += [Instruction3AC("label", new_lab, None, None, None, None)]
         p[0].code += [Instruction3AC("ifgoto","<=", None, p[3].place, high, p[7].label)]
-        p[0].code+=[Instruction3AC("goto",None,None,None,None,p[10].label)]
+        p[0].code += [Instruction3AC("goto",None,None,None,None,p[10].label)]
         for i in range(len(p[8].code)):
             if p[8].code[i]=="break":
-                p[8].code[i]= Instruction3AC("goto", None, None, None, None, p[10].label)
+                p[8].code[i]=Instruction3AC("goto", None, None, None, None, p[10].label)
         p[0].code += p[7].code + p[8].code
         p[0].code += [Instruction3AC(None, "+=", p[3].place, None, "1", None)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[2].label)]  
