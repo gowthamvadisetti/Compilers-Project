@@ -1,0 +1,7 @@
+1,=,a,0
+2,ifgoto,<,50,50,l2
+3,=,a,5
+4,label,l2
+5,print,a
+6,puts,"\n"
+7,ret
