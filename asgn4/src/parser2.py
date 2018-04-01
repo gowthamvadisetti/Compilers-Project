@@ -131,7 +131,6 @@ def p_expr(p):
         p[0].code += p[4].code+p[5].code
         p[0].code += [Instruction3AC("goto",None,None,None,None,p[9].label)]
         p[0].code += p[6].code+p[7].code
-        #p[0].code += [Instruction3AC("goto",None,None,None,None,p[12].label)]
         p[0].code += p[9].code
 
 
@@ -578,7 +577,6 @@ def p_multcase(p):
     '''
     p[0] = SDT()
     if len(p[1:]) == 6:
-        # p[0].place=p[-2].place 
         p[0].code = [Instruction3AC("ifgoto", "==",None,None, p[2].place,p[4].label)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
         p[0].code += p[4].code+p[5].code
@@ -586,15 +584,10 @@ def p_multcase(p):
         #pass
 
     elif len(p[1:]) == 7:
-        # p[0].place=p[-2].place
-        # p[0].place=p[-2].place
         p[0].code = [Instruction3AC("ifgoto", "==",None,None, p[2].place, p[4].label)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
         p[0].code += p[4].code+p[5].code
         p[0].code += p[6].code+p[7].code
-
-
-    #getRule(p, 'multcase')
 
 def p_multelsif(p):
     '''multelsif : elsif expr pthen M_1 multstmt M_1 multelsif M_1
