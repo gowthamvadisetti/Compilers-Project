@@ -2,5 +2,7 @@ def foo()
    c=-2
    i = c
    print (i)
-end
+   i = -2
+   print(i)
+end   
 foo()

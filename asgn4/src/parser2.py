@@ -255,8 +255,7 @@ def p_function(p):
         p[0].place=None
 
 def p_arg(p):
-    '''arg : arg BIT_OR term0
-           | term0
+    '''arg : term0
     '''
     p[0]=SDT()
     p[0].code=p[1].code
@@ -346,12 +345,10 @@ def p_term3(p):
 
 def p_term4(p):
     '''term4 : term5 DOUBLE_EQUALS term5
-             | term5 TRIPLE_EQUALS term5
              | term5 NOT_EQUALS term5
              | term5 EQUAL_TILDE term5
-             | term5 BANG_TILDE term5
              | term5 COMPARISON term5
-            | term5
+             | term5
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
@@ -398,6 +395,7 @@ def p_term5(p):
 
 def p_term6(p):
     '''term6 : term6 BIT_XOR term7
+            | term6 BIT_OR term7
             | term7
     '''
     if len(p[1:]) == 1:
@@ -500,8 +498,7 @@ def p_term12(p):
         p[0].place=temp
 
 def p_term13(p):
-    '''term13 : primary POWER term13
-            | primary
+    '''term13 : primary 
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
@@ -567,7 +564,7 @@ def p_arraya(p):
 
 def p_array_args(p):
     '''array_args : primary COMMA array_args
-                | primary
+                  | primary
     '''
     p[0]=SDT()
     if len(p[1:]) == 1:
@@ -762,7 +759,7 @@ def p_callarglist(p):
 
 def p_callmultarglist(p):
     '''callmultarglist : COMMA primary callmultarglist
-                 | empty
+                       | empty
     '''
     p[0]=SDT()
     if len(p[1:]) == 1:
@@ -869,7 +866,6 @@ def p_opasgn(p):
               | MULTIPLY_EQUALS
               | LOGICAL_AND_EQUALS
               | LOGICAL_OR_EQUALS
-              | POWER_EQUALS
     '''
     p[0]=p[1]
 
