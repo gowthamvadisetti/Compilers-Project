@@ -107,7 +107,7 @@ def p_expr(p):
             | if expr1 pthen M_1 multstmt end M_1
             | while M_1 expr1 pdo M_1 multstmt end M_1
             | until M_1 expr1 pdo M_1 multstmt end M_1
-            | case expr1 M_1 newline multcase end M_1
+            | case expr1 newline multcase end M_1
             | for M_1 mlhs in expr1 pdo M_1 multstmt end M_1
             | expr1
     '''
@@ -180,9 +180,12 @@ def p_expr(p):
         p[0].code += p[8].code
         
     elif p[1]=="case":
+        for i in range(len(p[4].code)):
+            if p[4].code[i].typ=="ifgoto":
+                p[4].code[i].in1=p[2].place
         p[0].code = p[2].code
-        p[0].code += p[5].code
-        p[0].code += p[7].code
+        p[0].code += p[4].code
+        p[0].code += p[6].code
 
 
 
@@ -574,16 +577,18 @@ def p_multcase(p):
                 | when whenargs pthen M_1 multstmt M_1
     '''
     p[0] = SDT()
-    if len(p[1:]) == 6: 
-        p[0].code = [Instruction3AC("ifgoto", "==",p[-2].place, p[2].place,None, p[4].label)]
-        #print (p[-2].code)
+    if len(p[1:]) == 6:
+        # p[0].place=p[-2].place 
+        p[0].code = [Instruction3AC("ifgoto", "==",None,None, p[2].place,p[4].label)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
         p[0].code += p[4].code+p[5].code
         p[0].code += p[6].code
         #pass
 
     elif len(p[1:]) == 7:
-        p[0].code = [Instruction3AC("ifgoto", "==",p[-2].place, p[2].place,None, p[4].label)]
+        # p[0].place=p[-2].place
+        # p[0].place=p[-2].place
+        p[0].code = [Instruction3AC("ifgoto", "==",None,None, p[2].place, p[4].label)]
         p[0].code += [Instruction3AC("goto", None, None, None, None, p[6].label)]
         p[0].code += p[4].code+p[5].code
         p[0].code += p[6].code+p[7].code

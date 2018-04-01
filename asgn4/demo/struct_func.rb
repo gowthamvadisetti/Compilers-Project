@@ -1,9 +1,9 @@
 def f(x)
-x.a = 'a'
-x.b = 47114711
-x.c = 'c'
-x.d = 1234
-x.e = 3.2
-x.f = '*'
-x.name = "abc"
+a = 1
+bb = 47114711
+cc = 3
+dd = 1234
+ee = 32
+ff = 58
+name = 70
 end
