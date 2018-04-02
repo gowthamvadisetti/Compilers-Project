@@ -1,5 +1,7 @@
-i = 10
 def foo(a)
-print(a)
+while(a>0)
+	print(a)
+	a=a-1
 end
-foo(i)
+end
+foo(10)

@@ -1,5 +1,6 @@
 case 10
 when 10
-j=10
+jj=10
 end
-j = 5
+print (jj)
+jj = 5

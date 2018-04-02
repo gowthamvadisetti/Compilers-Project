@@ -1,3 +1,4 @@
-b=true
+bb=true
 a=false
-c=a&b
+c=~(a&bb)
+print(c)

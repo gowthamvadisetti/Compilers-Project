@@ -1,12 +1,14 @@
-def fib(num)
+def fibb(num)
   a = 0
-  b = 1
+  bb = 1
   c = 1
-  while c < num do
-    a = b
-    b = a+b
+  out=0
+  while c < num-1 do
+  	out=a+bb
+    a = bb
+    bb =out
     c = c+1
   end
-  print (b)
+  print (bb)
 end
-fib(8)
+fibb(8)

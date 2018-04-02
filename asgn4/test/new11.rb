@@ -1,10 +1,11 @@
-j = 20
-case 10 
+jj = 20
+case jj 
 when 10
-j = 1
+jj = 1
 when 20
-j = 2
+jj = 2
 when 30
-j = 3
+jj = 3
 end
-j = 5
+print(jj)
+jj = 5
