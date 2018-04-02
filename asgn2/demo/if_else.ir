@@ -3,7 +3,7 @@
 3,=,i,0
 4,=,bb,1
 5,=,sum,0
-6,goto,17
+6,goto,16
 7,%,D.1732,bb,10
 8,ifgoto,==,D.1732,0,10
 9,goto,13
@@ -13,9 +13,8 @@
 13,+,sum,sum,i
 14,+,i,i,1
 15,*,bb,i,2
-16,=,tt,bb
-17,ifgoto,<=,i,99,7
-18,goto,19
-19,print,sum
-20,=,D.1736,0
-21,ret
+16,ifgoto,<=,i,99,7
+17,goto,18
+18,print,sum
+19,=,D.1736,0
+20,ret

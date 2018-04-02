@@ -192,6 +192,7 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 				symbol_table[ir[i].in2]=["dead",None]
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_table[ir[i].out]=["live",None]
+			# print(symbol_table)
 
 	for i in range(block_end,block_start-1,-1):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "logical" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval":
@@ -204,6 +205,8 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].out]=["dead",None]
+			# print(symbol_table)
+			# print(block_end)
 
 ir=[]
 leaders=[1]
@@ -217,8 +220,6 @@ print(leaders)
 mips=""
 mips+=".data\n"
 num_vars=0
-print(num_vars)
-print(variables)
 # quit()
 for i in variables.keys():
 	if i is not None and type(i) is not int:
@@ -242,4 +243,3 @@ for i in range(len(leaders)):
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
 print (mips)
-# print(symbol_attach)
