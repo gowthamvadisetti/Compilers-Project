@@ -82,8 +82,8 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 	global num_args
 	is_exit = True
 	for i in range(block_start,block_end+1):
-		if ir[i].typ != "label":
-			mips+="line"+str(ir[i].lineno)+": \n"
+		# if ir[i].typ != "label":
+		# 	mips+="line"+str(ir[i].lineno)+": \n"
 		if i==block_end and ir[i].typ in ["ifgoto","goto","call"]:
 			if num_vars>=18:
 				end_block(symbol_attach,ir[i].lineno)
