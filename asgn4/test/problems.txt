@@ -1,10 +1,10 @@
 test folder
 
 new1.rb --correct
-new2.rb --wrong (error at line3)
+new2.rb --wrong ** not fixed but fine
 new3.rb --correct
-new4.rb --wrong(ir is logically correct. mips file not running)
-new5.rb --wrong(problem with arrays in mips)
+new4.rb --wrong **fixed
+new5.rb --wrong **fixed
 new6.rb --correct
 new7.rb --correct
 new8.rb --correct

@@ -165,7 +165,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 						del reg_desc[reg3]
 					if not type(ir[i].in1) is int:
 						mips+="sw "+reg3+","+str(ir[i].in1)+"\n"
-					if not type(ir[i].in1) is int:
+					if not type(ir[i].out) is int:
 						mips+="sw "+reg1+","+str(ir[i].out)+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
