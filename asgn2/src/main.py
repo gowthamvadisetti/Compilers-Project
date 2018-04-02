@@ -4,6 +4,7 @@ import codegen
 import re
 variables={}
 string_vars={}
+label_dict={}
 class Instruction3AC:
 	typ=None#if goto,goto,assignemnt,arithmetic
 	in1=None
@@ -17,6 +18,7 @@ def parse_input(file_location,ir,leaders):
 	#to read ir code to Instruction3AC format
 	global variables
 	global string_vars
+	global label_dict
 	fp=open(file_location,'r')
 	curr=0
 	for line in fp:
@@ -134,6 +136,7 @@ def parse_input(file_location,ir,leaders):
 				leaders.append(int(words[5]))
 			else:
 				ir[curr].target=words[5]
+				label_dict[ir[curr].target]=True
 			leaders.append(ir[curr].lineno+1)
 		elif words[1]=="goto":
 			ir[curr].typ="goto"
@@ -142,6 +145,7 @@ def parse_input(file_location,ir,leaders):
 				leaders.append(int(words[2]))
 			else:
 				ir[curr].target=words[2]
+				label_dict[ir[curr].target]=True
 			leaders.append(ir[curr].lineno+1)
 		elif words[1]=="call":
 			ir[curr].typ="call"
@@ -155,6 +159,8 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="label":
 			ir[curr].typ="label"
 			ir[curr].in1=words[2]
+			if ir[curr].in1 in label_dict:
+				leaders.append(ir[curr].lineno)
 		elif words[1]=="param":
 			ir[curr].typ="param"
 			ir[curr].in1=words[2]
