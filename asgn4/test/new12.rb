@@ -1,5 +1,6 @@
-j = 1
+jj = 0
 for i in 0..5
-j = 5
+jj = jj+1
 end
-j = 10
+print(jj)
+jj = 10

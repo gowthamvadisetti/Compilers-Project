@@ -1,4 +1,3 @@
-k=2
 def f(a,bb)
 i=a+2+3
 jj=bb

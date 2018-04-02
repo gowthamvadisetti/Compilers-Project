@@ -1,6 +1,6 @@
 1,=,a,2
 2,=,bb,a
-3,ifgoto,==,a,1,l0
+3,ifgoto,==,a,2,l0
 4,=,t0,0
 5,goto,l1
 6,label,l0

@@ -12,12 +12,13 @@
 12,=,c,t2
 13,puts,"output of 0 xor 1  is"
 14,print,c
-15,ifgoto,=~,c,4,l0
-16,=,t3,0
-17,goto,l1
-18,label,l0
-19,=,t3,1
-20,label,l1
-21,puts,"output of 4 nor 5  is"
-22,print,c
-23,ret
+15,|,t3,4,5
+16,ifgoto,=~,c,t3,l0
+17,=,t4,0
+18,goto,l1
+19,label,l0
+20,=,t4,1
+21,label,l1
+22,puts,"output of 4 nor 5  is"
+23,print,c
+24,ret
