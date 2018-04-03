@@ -1,0 +1,55 @@
+test folder
+
+new1.rb --correct
+new2.rb --wrong ** not fixed but fine(no ~ in grammar)
+new3.rb --correct
+new4.rb --wrong **fixed
+new5.rb --wrong **fixed
+new6.rb --correct
+new7.rb --correct
+new8.rb --correct
+new9.rb --correct
+new10.rb --correct
+new11.rb --correct
+new12.rb --correct
+new13.rb --correct
+new14.rb --correct
+new15.rb --correct
+new16.rb --correct
+new17.rb --correct
+new18.rb --correct
+new19.rb --correct
+new20.rb --correct
+new21.rb --correct
+test10.rb -- 		classes
+test11.rb --		classes
+test15.ir --correct
+recurion.rb --wrong (not exiting after running of program)
+
+
+test_assgn4 (all are correct)
+
+
+add_sub.rb --correct
+asgn.rb --correct
+identity.rb --correct
+factorial.rb --correct
+infiniteloop.rb --correct
+or.rb --correct
+logical.rb --correct
+summation.rb --correct
+string.rb --correct
+test17.rb --correct
+test19.rb --correct
+
+
+demo (all are correct)
+
+
+dangling --correct
+loop --correct
+func --correct
+for --correct
+struct --correct
+switch --correct
+

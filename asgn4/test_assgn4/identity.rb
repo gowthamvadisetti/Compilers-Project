@@ -1,5 +1,8 @@
 def identy(places)
-
-  puts (-places)
+	i= -places
+	print (i)
 end
-identy(1000)
+puts ("enter number")
+gets(num)
+puts("identity is ")
+identy(num)

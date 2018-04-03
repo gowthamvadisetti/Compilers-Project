@@ -1,8 +1,7 @@
-def foo()
-   c=-2
-   i = c
+def foo(p)
+   i = p
    print (i)
    i = -2
    print(i)
 end   
-foo()
+foo(10)

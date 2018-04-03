@@ -1,0 +1,12 @@
+1,puts,"enter number"
+2,scan,num
+3,puts,"identity is "
+4,param,num
+5,call,identy
+6,ret
+7,label,identy
+8,deparam,places
+9,*,identy_t0,-1,places
+10,=,i,identy_t0
+11,print,i
+12,ret

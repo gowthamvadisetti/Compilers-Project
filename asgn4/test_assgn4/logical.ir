@@ -1,6 +1,6 @@
 1,=,a,0
 2,=,bb,1
-3,+,t0,a,bb
+3,|,t0,a,bb
 4,=,c,t0
 5,puts,"output of 0 or 1  is"
 6,print,c
@@ -12,13 +12,4 @@
 12,=,c,t2
 13,puts,"output of 0 xor 1  is"
 14,print,c
-15,|,t3,4,5
-16,ifgoto,=~,c,t3,l0
-17,=,t4,0
-18,goto,l1
-19,label,l0
-20,=,t4,1
-21,label,l1
-22,puts,"output of 4 nor 5  is"
-23,print,c
-24,ret
+15,ret

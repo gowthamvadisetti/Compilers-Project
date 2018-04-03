@@ -8,6 +8,6 @@ temp4=n-1
 a=fibo(temp4)
 return a
 end
-num=1
+num=5
 dd=fibo(num)
 print(dd)

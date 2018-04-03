@@ -1,4 +1,4 @@
-i = 40
+gets(i)
 while i <= 50  do
    print (i)
    i +=5

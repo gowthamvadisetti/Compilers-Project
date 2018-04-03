@@ -1,1 +1,0 @@
-problem with declaration of variable name with b in mips.

@@ -2,6 +2,10 @@
 2,scan,num1
 3,puts,"Enter num2\n"
 4,scan,num2
-5,print,num1
-6,print,num2
-7,ret
+5,+,t0,num1,num2
+6,=,k,t0
+7,print,k
+8,-,t1,num1,num2
+9,=,k,t1
+10,print,k
+11,ret

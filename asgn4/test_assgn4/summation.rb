@@ -1,12 +1,13 @@
 def sum(places)
 
-  b = 0
+  bb = 0
   out=0
 
-  while b <= places do
-    out,b = out+b,b+1
+  while bb <= places do
+    out = out+bb
+    bb = bb+1
   end
-  puts out
+  print (out)
 end
 
 sum (10)

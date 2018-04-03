@@ -1,4 +1,4 @@
-1,=,num,1
+1,=,num,5
 2,param,num
 3,call,fibo,dd
 4,print,dd

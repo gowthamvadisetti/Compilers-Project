@@ -9,5 +9,7 @@ def fact(places)
   end
   print(out)
 end
-
-fact (4)
+puts("enter number ")
+gets(num)
+puts("factorial  =")
+fact (num)

@@ -1,4 +1,4 @@
 i = 1
-j = 2
-k = i==j
-print(k,"\n")
+jj = 2
+k = i==jj
+print(k)
