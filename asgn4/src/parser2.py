@@ -51,6 +51,7 @@ def p_stmt(p):
     '''stmt : keydef argdecl newline multstmt keyend
             | puts OPEN_BRACKET STRING CLOSE_BRACKET
             | print OPEN_BRACKET primary CLOSE_BRACKET
+            | gets OPEN_BRACKET IDENTIFIER CLOSE_BRACKET
             | break
             | expr
     '''
@@ -67,6 +68,10 @@ def p_stmt(p):
         p[0].place=None
     elif p[1]=="print":
         p[0].code=[Instruction3AC("print",None,None,p[3].place,None,None)]
+        p[0].place=None
+    elif p[1]=="gets":
+        p[0].code=[Instruction3AC("scan",None,p[3],None,None,None)]
+        st.insert(p[3],"int")
         p[0].place=None
     elif len(p[1:])==5:
         p[0].code=[]

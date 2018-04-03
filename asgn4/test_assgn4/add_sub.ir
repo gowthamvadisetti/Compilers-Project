@@ -1,0 +1,7 @@
+1,puts,"Enter num1\n"
+2,scan,num1
+3,puts,"Enter num2\n"
+4,scan,num2
+5,print,num1
+6,print,num2
+7,ret
