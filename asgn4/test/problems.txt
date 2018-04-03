@@ -1,7 +1,7 @@
 test folder
 
 new1.rb --correct
-new2.rb --wrong ** not fixed but fine
+new2.rb --wrong ** not fixed but fine(no ~ in grammar)
 new3.rb --correct
 new4.rb --wrong **fixed
 new5.rb --wrong **fixed

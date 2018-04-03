@@ -131,7 +131,7 @@ t_SEMI_COLON=r';'
 t_AT_THE_RATE=r'\@'
 
 t_ignore = " \t"
-t_ignore_COMMENT = r'\#.*'
+t_ignore_COMMENT = r'\#.*\n'
 
 def t_NEWLINE(t):
 	r'\n+'
