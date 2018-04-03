@@ -4,6 +4,7 @@ import codegen
 import re
 variables={}
 string_vars={}
+label_dict={}
 class Instruction3AC:
 	typ=None#if goto,goto,assignemnt,arithmetic
 	in1=None
@@ -17,6 +18,7 @@ def parse_input(file_location,ir,leaders):
 	#to read ir code to Instruction3AC format
 	global variables
 	global string_vars
+	global label_dict
 	fp=open(file_location,'r')
 	curr=0
 	for line in fp:
@@ -134,6 +136,7 @@ def parse_input(file_location,ir,leaders):
 				leaders.append(int(words[5]))
 			else:
 				ir[curr].target=words[5]
+				label_dict[ir[curr].target]=True
 			leaders.append(ir[curr].lineno+1)
 		elif words[1]=="goto":
 			ir[curr].typ="goto"
@@ -142,6 +145,7 @@ def parse_input(file_location,ir,leaders):
 				leaders.append(int(words[2]))
 			else:
 				ir[curr].target=words[2]
+				label_dict[ir[curr].target]=True
 			leaders.append(ir[curr].lineno+1)
 		elif words[1]=="call":
 			ir[curr].typ="call"
@@ -155,6 +159,8 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="label":
 			ir[curr].typ="label"
 			ir[curr].in1=words[2]
+			if ir[curr].in1 in label_dict:
+				leaders.append(ir[curr].lineno)
 		elif words[1]=="param":
 			ir[curr].typ="param"
 			ir[curr].in1=words[2]
@@ -192,6 +198,7 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 				symbol_table[ir[i].in2]=["dead",None]
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_table[ir[i].out]=["live",None]
+			# print(symbol_table)
 
 	for i in range(block_end,block_start-1,-1):
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "logical" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval":
@@ -204,6 +211,8 @@ def create_symbol_table(ir,block_start,block_end,symbol_attach):
 			if type(ir[i].out) is not int and (ir[i].out) is not None:
 				symbol_attach[i]=symbol_table.copy()
 				symbol_table[ir[i].out]=["dead",None]
+			# print(symbol_table)
+			# print(block_end)
 
 ir=[]
 leaders=[1]
@@ -217,8 +226,6 @@ print(leaders)
 mips=""
 mips+=".data\n"
 num_vars=0
-print(num_vars)
-print(variables)
 # quit()
 for i in variables.keys():
 	if i is not None and type(i) is not int:
@@ -242,4 +249,3 @@ for i in range(len(leaders)):
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
 print (mips)
-# print(symbol_attach)

@@ -210,7 +210,7 @@ def p_M_1(p):
     p[0].label=label1
 
 def p_expr1(p):
-    '''expr1 : return IDENTIFIER
+    '''expr1 : return primary
             | return
             | expr2
     '''
@@ -219,7 +219,7 @@ def p_expr1(p):
         p[0].code=[Instruction3AC("ret",None,None,None,None,None)]
         p[0].place=None
     elif p[1] == "return":
-        p[0].code=[Instruction3AC("ret",None,None,p[2],None,None)]
+        p[0].code=[Instruction3AC("ret",None,None,p[2].place,None,None)]
         p[0].place=None
     elif len(p[1:]) == 1:
         p[0].code=p[1].code
@@ -303,7 +303,7 @@ def p_term1(p):
                 st.insert(p[1].place,"int")
             else:
                 if st.lookup(p[1].place) is None:
-                    print("Error Not declared")
+                    print("Error"+p[1].place+"Not declared")
                     quit()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],p[1].place,p[3].place,None,None)]
         p[0].place=p[1].place
@@ -686,57 +686,8 @@ def p_mlhsitem_2(p):
         p[0].place=p[1].place
         p[0].code=p[1].code
 
-def p_arrayl(p):
-    '''arrayl : primary2 OPEN_SQUARE array_argsl CLOSE_SQUARE
-    '''
-    p[0]=SDT()
-    p[0].code=p[3].code
-    # p[0].code+=[Instruction3AC(None,"=",temp,p[1]+"["+str(p[3].place)+"]",None,None)]
-    p[0].place=p[1].place+"["+str(p[3].place)+"]"
-
-def p_array_argsl(p):
-    '''array_argsl : primary2 COMMA array_argsl
-                | primary2
-    '''
-    p[0]=SDT()
-    if len(p[1:]) == 1:
-        p[0].code=[]
-        p[0].place=p[1].place
-    elif len(p[1:]) == 3:
-        pass
-        # temp=st.newtemp()
-        # p[0].code=p[3].code
-        # p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None)]
-        # p[0].place=temp
-def p_primary2_1(p):
-    '''primary2 : IDENTIFIER
-    '''
-    p[0]=SDT()
-    if len(p[1:]) == 1:
-        p[0].code=[]
-        p[0].place=p[1]
-def p_primary2_2(p):
-    '''primary2 : literal
-    '''
-    p[0]=SDT()
-    if len(p[1:]) == 1:
-        p[0].code=[]
-        p[0].place=p[1].place
-
-def p_lhs(p):
-    '''lhs : variable
-           | variable OPEN_SQUARE args CLOSE_SQUARE
-           | variable OPEN_SQUARE CLOSE_SQUARE
-    '''
-    if len(p[1:]) == 1:
-        p[0]=SDT()
-        p[0].place=p[1].place
-        p[0].code=p[1].code
-
 def p_mrhs(p):
     '''mrhs : term2
-            | args COMMA MULTIPLY arg
-            | MULTIPLY arg
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
@@ -776,30 +727,6 @@ def p_callmultarglist(p):
         p[0].code=[Instruction3AC("param",None,None,p[2].place,None,None)]
         p[0].code+=p[3].code
         p[0].place=None
-
-def p_args(p):
-    '''args : arg multargs
-    '''
-    p[0] = SDT()
-    p[0].code = p[1].code
-    p[0].code += p[2].code
-    #getRule(p,'args')
-
-def p_multargs(p):
-    '''multargs : COMMA arg multargs
-                | empty
-    '''
-    p[0]=SDT()
-    if len(p[1:]) == 1:
-        p[0].code = []
-        p[0].place = None
-
-    elif len(p[1:]) == 3:
-        p[0].code = p[2].code+p[3].code
-        p[0].place=None
-
-
-    #getRule(p,'multargs')
 
 def p_argdecl(p):
     '''argdecl : OPEN_BRACKET arglist CLOSE_BRACKET
@@ -887,7 +814,7 @@ def p_varname(p):
             p[0].place=p[1]
             p[0].code=[]
         else:
-            print("Error "+p[1]+" not declared")
+            print("Error "+p[1]+"is not declared")
             quit()
 
 def p_newline(p):

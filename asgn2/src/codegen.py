@@ -17,13 +17,12 @@ def getEmptyRegister():
 def end_block(symbol_attach,line):
 	global reg_desc
 	global mips
+	if line >= len(symbol_attach):
+		return
 	del_keys=[]
 	for i in reg_desc.keys():
-		# print(line)
-		# print(symbol_attach)
 		if not(reg_desc[i] in symbol_attach[line] and symbol_attach[line][reg_desc[i]][0]=="live"):
 			mips+="sw "+i+","+reg_desc[i]+"\n"
-			print("sw "+i+","+reg_desc[i]+"\n")
 			addr_desc[reg_desc[i]]=["memory",None]
 			del_keys.append(i)
 	for i in del_keys:
@@ -53,16 +52,12 @@ def getreg(instruction,variable,symbol_attach,line,is_input):
 		maxnextuse=line
 		reqvar=None
 		for i in reg_desc.keys():
-			print(line)
-			print(symbol_attach[line])
 			if (reg_desc[i] in symbol_attach[line]) and symbol_attach[line][reg_desc[i]][1] is not None:
 				if symbol_attach[line][reg_desc[i]][1] > maxnextuse:
 					reqvar=reg_desc[i]
 					reg=i
 					maxnextuse=symbol_attach[line][i][1]
 			else:
-				print(i)
-				print(reg_desc[i])
 				reg=i
 				reqvar=reg_desc[i]
 				break
@@ -86,13 +81,12 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 	global is_exit
 	global num_args
 	is_exit = True
-	print(block_start,block_end)
 	for i in range(block_start,block_end+1):
 		# if ir[i].typ != "label":
 		# 	mips+="line"+str(ir[i].lineno)+": \n"
 		if i==block_end and ir[i].typ in ["ifgoto","goto","call"]:
 			if num_vars>=18:
-				end_block(symbol_attach,ir[i].lineno-1)
+				end_block(symbol_attach,ir[i].lineno)
 			pass
 		if ir[i].typ=="assign" or ir[i].typ=="arithmetic" or ir[i].typ == "ref" or ir[i].typ == "deref" or ir[i].typ == "assign_refval" or ir[i].typ == "assign_to_array" or ir[i].typ == "assign_from_array":
 			if (ir[i].op=="+" or ir[i].op == "++" or ir[i].op == "+="):
@@ -171,7 +165,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 						del reg_desc[reg3]
 					if not type(ir[i].in1) is int:
 						mips+="sw "+reg3+","+str(ir[i].in1)+"\n"
-					if not type(ir[i].in1) is int:
+					if not type(ir[i].out) is int:
 						mips+="sw "+reg1+","+str(ir[i].out)+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
 					mips+="add "+reg3+","+reg3+","+reg3+"\n"
@@ -366,11 +360,11 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				mips+="j "+str(ir[i].target)+"\n"
 		boolval=i==block_end and ir[i].typ not in ["ifgoto","goto","call"]
 		boolval=boolval
-		print(boolval)
+		# print(boolval)
 		if boolval:
 			if num_vars>=18:
-				end_block(symbol_attach,ir[i].lineno-1)
+				end_block(symbol_attach,ir[i].lineno)
 			#print(symbol_attach[ir[i].lineno-1],ir[i].lineno-1)
 			# pass
 			return mips
-		# return mips
+	return mips
