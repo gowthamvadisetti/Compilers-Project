@@ -7,11 +7,11 @@
 7,print,s
 8,ret
 9,label,f
-10,deparam,a
-11,deparam,bb
-12,+,f_t0,a,2
+10,deparam,f_a
+11,deparam,f_bb
+12,+,f_t0,f_a,2
 13,+,f_t1,f_t0,3
-14,=,i,f_t1
-15,=,jj,bb
-16,ret,i
+14,=,f_i,f_t1
+15,=,f_jj,f_bb
+16,ret,f_i
 17,ret

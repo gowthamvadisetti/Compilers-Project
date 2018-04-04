@@ -17,7 +17,7 @@ class SymbolTable():
 
     def newtemp(self):
         if self.fname:
-            tempname=self.fname+"_t"+str(self.tempcount)
+            tempname="t"+str(self.tempcount)
         else:
             tempname="t"+str(self.tempcount)
         self.table[tempname]="int"
@@ -31,12 +31,21 @@ class SDT():
         self.label=None
 
 class Instruction3AC:
-    def __init__(self,typ,op,out,in1,in2,target):
+    def __init__(self,typ,op,out,in1,in2,target,fname):
         self.typ=typ
         self.op=op
-        self.out=out
-        self.in1=in1
-        self.in2=in2
+        if not check_int(out) and out and fname:
+            self.out=fname+"_"+out
+        else:
+            self.out=out
+        if not check_int(in1) and in1 and fname and typ is not"label" and typ is not"call":
+            self.in1=fname+"_"+in1
+        else:
+            self.in1=in1
+        if not check_int(in2) and in2 and fname:
+            self.in2=fname+"_"+in2
+        else:
+            self.in2=in2
         self.target=target
 
 def Print3AC(TAClist,output_location):
@@ -68,3 +77,10 @@ def Print3AC(TAClist,output_location):
 
 def getRule(p,node_name):
     pass
+
+def check_int(num):
+    try:
+        num=int(num)
+        return True
+    except Exception as e:
+        return False

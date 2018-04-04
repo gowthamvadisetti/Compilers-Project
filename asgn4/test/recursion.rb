@@ -10,6 +10,6 @@ n=n+1
 temp5=a*2
 return temp5
 end
-num=1
+num=5
 dd=fibo(num)
 print(dd)
