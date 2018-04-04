@@ -2,10 +2,10 @@
 2,call,foo
 3,ret
 4,label,foo
-5,deparam,p
-6,=,i,p
-7,print,i
+5,deparam,foo_p
+6,=,foo_i,foo_p
+7,print,foo_i
 8,*,foo_t0,-1,2
-9,=,i,foo_t0
-10,print,i
+9,=,foo_i,foo_t0
+10,print,foo_i
 11,ret
