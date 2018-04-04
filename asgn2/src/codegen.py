@@ -300,9 +300,9 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				print("Number of function arguments > 4(NOT SUPPORTED)")
 				quit()
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-			#mips+="move "+reg1+",$a"+str(num_args)+"\n"
 			mips += "sw $ra,0($sp)\n"
-			mips+="move "+reg1+",$a0\n"
+			mips+="move "+reg1+",$a"+str(num_args)+"\n"
+			# mips+="move "+reg1+",$a0\n"
 			num_args+=1	
 		elif ir[i].typ == "call":
 			mips += "sub $sp, $sp,12\n"

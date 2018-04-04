@@ -1,5 +1,5 @@
 1,=,num,5
-2,param,num
+2,param,num,0
 3,call,fibo,dd
 4,print,dd
 5,ret
@@ -19,7 +19,7 @@
 19,label,l3
 20,-,fibo_t1,fibo_n,1
 21,=,fibo_temp4,fibo_t1
-22,param,fibo_temp4
+22,param,fibo_temp4,0
 23,call,fibo,fibo_a
 24,+,fibo_t2,fibo_n,1
 25,=,fibo_n,fibo_t2
