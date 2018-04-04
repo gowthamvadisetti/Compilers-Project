@@ -1,0 +1,7 @@
+def foo(a)
+while(a>0)
+	print(a)
+	a=a-1
+end
+end
+foo(10)
