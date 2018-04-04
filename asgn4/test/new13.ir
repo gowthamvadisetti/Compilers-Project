@@ -1,8 +1,8 @@
 1,+,t0,2,2
 2,=,k,t0
 3,=,l,2
-4,param,k
-5,param,l
+4,param,k,0
+5,param,l,1
 6,call,f,s
 7,print,s
 8,ret

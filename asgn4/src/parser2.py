@@ -255,6 +255,11 @@ def p_function(p):
         p[0].code=[Instruction3AC("call",None,None,p[1],None,None,st.fname)]
         p[0].place=None
     elif len(p[1:]) == 4:
+        num_args=0
+        for i in range(len(p[3].code)):
+            if p[3].code[i].typ == "param":
+                p[3].code[i].in2=str(num_args)
+                num_args+=1
         p[0].code=p[3].code
         p[0].code+=[Instruction3AC("call",None,None,p[1],None,None,st.fname)]
         p[0].place=None
@@ -280,6 +285,11 @@ def p_term0(p):
         st.insert(p[1].place,"int")
         p[0].place=p[1].place
     elif len(p[1:]) == 6:
+        num_args=0
+        for i in range(len(p[5].code)):
+            if p[5].code[i].typ == "param":
+                p[5].code[i].in2=str(num_args)
+                num_args+=1
         p[0].code=p[5].code
         p[0].code+=[Instruction3AC("call",None,None,p[3],p[1].place,None,st.fname)]
         st.insert(p[1].place,"int")
