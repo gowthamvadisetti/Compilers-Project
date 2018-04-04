@@ -301,11 +301,12 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				quit()
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			#mips+="move "+reg1+",$a"+str(num_args)+"\n"
+			mips += "sw $ra,0($sp)\n"
 			mips+="move "+reg1+",$a0\n"
 			num_args+=1	
 		elif ir[i].typ == "call":
 			mips += "sub $sp, $sp,12\n"
-			mips += "sw $ra,0($sp)\n"
+			#mips += "sw $ra,0($sp)\n"
 			mips += "sw $a0,4($sp)\n"
 			mips+="jal "+ir[i].in1 + "\n"
 			if ir[i].in2 != None:
