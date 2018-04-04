@@ -1,7 +1,0 @@
-1,=,a,2
-2,=,bb,7
-3,|,t0,a,bb
-4,=,c,t0
-5,puts,"output of 2 or 7  is"
-6,print,c
-7,ret

@@ -1,7 +1,4 @@
 class Sample
-	def hello
-      puts "Hello Ruby!"
-   end
+puts("Hello Ruby!")
 end
-a=Sample(a,b)
-object.hello
+a=Sample(2,3)

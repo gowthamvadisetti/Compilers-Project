@@ -52,6 +52,8 @@ def p_stmt(p):
             | puts OPEN_BRACKET STRING CLOSE_BRACKET
             | print OPEN_BRACKET primary CLOSE_BRACKET
             | gets OPEN_BRACKET IDENTIFIER CLOSE_BRACKET
+            | class IDENTIFIER newline multstmt end
+            | class IDENTIFIER LESS IDENTIFIER newline multstmt end
             | break
             | expr
     '''
@@ -73,11 +75,12 @@ def p_stmt(p):
         p[0].code=[Instruction3AC("scan",None,p[3],None,None,None,st.fname)]
         st.insert(p[3],"int")
         p[0].place=None
+    elif p[1]=="class":
+        p[0].code=[Instruction3AC("unimplemented",None,None,None,None,None,st.fname)]
     elif len(p[1:])==5:
         p[0].code=[]
         func_code+=p[1].code+p[2].code+p[4].code
         func_code+=[Instruction3AC("ret",None,None,None,None,None,st.fname)]
-
 def p_keydef(p):
     '''keydef : def IDENTIFIER
     '''
