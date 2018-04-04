@@ -1,4 +1,4 @@
-1,param,8
+1,param,100
 2,call,f,d
 3,print,d
 4,ret
@@ -8,11 +8,12 @@
 8,=,e,f_t0
 9,param,e
 10,call,g,h
-11,ret,h
-12,ret
-13,label,g
-14,deparam,n
-15,-,g_t0,n,8
-16,=,c,g_t0
-17,ret,c
-18,ret
+11,print,n
+12,ret,h
+13,ret
+14,label,g
+15,deparam,n
+16,-,g_t0,n,8
+17,=,c,g_t0
+18,ret,c
+19,ret
