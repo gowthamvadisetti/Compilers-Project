@@ -292,25 +292,33 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				print("Number of function arguments > 4(NOT SUPPORTED)")
 				quit()
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-			mips+="move $a"+str(num_args)+","+reg1+"\n"
+			mips+="move $a0,"+reg1+"\n"
+			#mips+="move $a"+str(num_args)+","+reg1+"\n"
 			num_args+=1
 		elif ir[i].typ == "deparam":
 			if num_args>3:
 				print("Number of function arguments > 4(NOT SUPPORTED)")
 				quit()
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-			mips+="move "+reg1+",$a"+str(num_args)+"\n"
+			#mips+="move "+reg1+",$a"+str(num_args)+"\n"
+			mips+="move "+reg1+",$a0\n"
 			num_args+=1	
 		elif ir[i].typ == "call":
+			mips += "sub $sp, $sp,12\n"
+			mips += "sw $ra,0($sp)\n"
+			mips += "sw $a0,4($sp)\n"
 			mips+="jal "+ir[i].in1 + "\n"
 			if ir[i].in2 != None:
-				mips+="sw $v0,"+ir[i].in2+"\n"
+				mips += "sw $v0,"+ir[i].in2+"\n"
 		elif ir[i].typ == "ret":
 			if ir[i].in1 != None:
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				mips+="move $v0,"+reg1+"\n"
 			if is_exit == False:
-				mips+="jr $ra\n"
+				mips += "lw $ra,0($sp)\n"
+				mips += "sw $v0,8($sp)\n"
+				mips += "addi $sp,$sp,12\n"
+				mips += "jr $ra\n"
 				is_exit = True
 			else:
 				mips+="li $v0,10\n"

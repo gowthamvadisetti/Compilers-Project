@@ -6,9 +6,10 @@
 6,label,fact
 7,*,out,out,aa
 8,-,aa,aa,1
-9,ifgoto,<=,aa,1,11
+9,ifgoto,<=,aa,1,l0
 10,call,fact
-11,puts,"factorial of number is  "
-12,print,out
-13,puts,"\n"
-14,ret
+11,label,l0
+12,puts,"factorial of number is  "
+13,print,out
+14,puts,"\n"
+15,ret

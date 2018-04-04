@@ -1,0 +1,11 @@
+1,param,7
+2,call,f,d
+3,print,d
+4,ret
+5,label,f
+6,deparam,n
+7,*,f_t0,2,n
+8,=,e,f_t0
+9,print,e
+10,ret,e
+11,ret
