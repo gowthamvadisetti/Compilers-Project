@@ -836,7 +836,7 @@ def p_error(p):
     quit()
 
 # Build the parser
-parser = yacc.yacc()
+parser = yacc.yacc(errorlog=yacc.NullLogger())
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
