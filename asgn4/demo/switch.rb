@@ -1,6 +1,7 @@
 wflg=0
 dflg = 0
 c = 100
+jj=0
 case c
     when 50
     	jj=10

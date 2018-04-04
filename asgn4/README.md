@@ -1,4 +1,4 @@
-# Compilers Assignment 4 - IR Code Generator
+# Compilers Assignment 4 - IR Generator
 Use the following set of commands to generate the IR code.
 
 test folder contains the sample test cases
@@ -8,7 +8,7 @@ src folder contains the main code
 ```
 cd asgn4
 make
-bin/parser test/test1.rb
+bin/irgen test/test1.rb
 ```
 
 This will generate a IR file in the same folder with name test1.ir

@@ -1,9 +1,0 @@
-1,ifgoto,==,10,10,l0
-2,goto,l1
-3,label,l0
-4,=,jj,10
-5,label,l1
-6,label,l2
-7,print,jj
-8,=,jj,5
-9,ret
