@@ -717,7 +717,7 @@ def p_callargs(p):
     p[0].place=None
 
 def p_callarglist(p):
-    '''callarglist : primary callmultarglist
+    '''callarglist : term2 callmultarglist
                | empty
     '''
     p[0]=SDT()
@@ -725,12 +725,13 @@ def p_callarglist(p):
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 2:
-        p[0].code=[Instruction3AC("param",None,None,p[1].place,None,None,st.fname)]
+        p[0].code=p[1].code
+        p[0].code+=[Instruction3AC("param",None,None,p[1].place,None,None,st.fname)]
         p[0].code+=p[2].code
         p[0].place=None
 
 def p_callmultarglist(p):
-    '''callmultarglist : COMMA primary callmultarglist
+    '''callmultarglist : COMMA term2 callmultarglist
                        | empty
     '''
     p[0]=SDT()
@@ -738,7 +739,8 @@ def p_callmultarglist(p):
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 3:
-        p[0].code=[Instruction3AC("param",None,None,p[2].place,None,None,st.fname)]
+        p[0].code=p[2].code
+        p[0].code+=[Instruction3AC("param",None,None,p[2].place,None,None,st.fname)]
         p[0].code+=p[3].code
         p[0].place=None
 
