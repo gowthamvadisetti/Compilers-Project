@@ -1,5 +1,4 @@
 def fibo(n)
-print(n)
 if n<=0
 temp1=0
 return temp1

@@ -161,6 +161,11 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].in1=words[2]
 			if ir[curr].in1 in label_dict:
 				leaders.append(ir[curr].lineno)
+		elif words[1]=="flabel":
+			ir[curr].typ="flabel"
+			ir[curr].in1=words[2]
+			if ir[curr].in1 in label_dict:
+				leaders.append(ir[curr].lineno)
 		elif words[1]=="param":
 			ir[curr].typ="param"
 			ir[curr].in1=words[2]
@@ -177,7 +182,7 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="scan":
 			ir[curr].typ="scan"
 			ir[curr].in1=words[2]
-		if ((ir[curr].typ != "label") and (ir[curr].typ != "puts") and (ir[curr].typ != "call")):
+		if ((ir[curr].typ != "label") and (ir[curr].typ != "flabel") and (ir[curr].typ != "puts") and (ir[curr].typ != "call")):
 			variables[ir[curr].in1]=True
 			variables[ir[curr].in2]=True
 			variables[ir[curr].out]=True
@@ -234,7 +239,7 @@ for i in variables.keys():
 		num_vars+=1
 for i in string_vars.keys():
 	mips+="str"+str(i)+": .asciiz "+string_vars[i]+"\n"
-mips+=".text\nmain:\n"
+mips+=".text\n"
 symbol_attach=[{} for i in range(len(ir))]
 for i in range(len(leaders)):
 	block_start=leaders[i]-1

@@ -283,10 +283,13 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			mips+="li $v0,5\n"
 			mips+="syscall\n"
 			mips+="move "+reg1+",$v0"+"\n"
-		elif ir[i].typ == "label":
+		elif ir[i].typ == "flabel":
 			num_args=0
 			mips+=ir[i].in1+":\n"
 			is_exit = False;
+		elif ir[i].typ == "label":
+			num_args=0
+			mips+=ir[i].in1+":\n"
 		elif ir[i].typ == "param":
 			if num_args>3:
 				print("Number of function arguments > 4(NOT SUPPORTED)")
@@ -306,7 +309,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			num_args+=1	
 		elif ir[i].typ == "call":
 			mips += "sub $sp, $sp,12\n"
-			#mips += "sw $ra,0($sp)\n"
+			# mips += "sw $ra,0($sp)\n"
 			mips += "sw $a0,4($sp)\n"
 			mips+="jal "+ir[i].in1 + "\n"
 			if ir[i].in2 != None:

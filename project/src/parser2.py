@@ -88,7 +88,7 @@ def p_keydef(p):
     p[0]=SDT()
     temp=SymbolTable(p[2],st)
     st=temp
-    p[0].code=[Instruction3AC("label",None,None,p[2],None,None,st.fname)]
+    p[0].code=[Instruction3AC("flabel",None,None,p[2],None,None,st.fname)]
     p[0].place=None
 def p_keyend(p):
     '''keyend : end
@@ -853,7 +853,9 @@ parser = yacc.yacc(errorlog=yacc.NullLogger())
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-output_location=file_location.replace(".rb",".ir")
+# output_location=file_location.replace(".rb",".ir")
+output_location="ir/test1.ir"
 ir_code+=[Instruction3AC("ret", None, None,None, None,None,st.fname)]
+ir_code=[Instruction3AC("label", None, None,"main", None,None,st.fname)]+ir_code
 ir_code+=func_code
 Print3AC(ir_code,output_location)
