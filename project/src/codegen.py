@@ -290,8 +290,6 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 		elif ir[i].typ == "label":
 			num_args=0
 			mips+=ir[i].in1+":\n"
-			if ir[i].in1 == "main":
-				is_exit=True
 		elif ir[i].typ == "param":
 			if num_args>3:
 				print("Number of function arguments > 4(NOT SUPPORTED)")
@@ -330,6 +328,9 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				mips+="li $v0,10\n"
 				mips+="syscall\n"
 				is_exit = False
+		elif ir[i].typ == "ret_main":
+			mips+="li $v0,10\n"
+			mips+="syscall\n"
 		elif ir[i].typ=="ifgoto":
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 			if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):

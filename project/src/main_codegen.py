@@ -156,6 +156,8 @@ def parse_input(file_location,ir,leaders):
 			ir[curr].typ="ret"
 			if (len(words) > 2):
 				ir[curr].in1=words[2]
+		elif words[1]=="ret_main":
+			ir[curr].typ="ret_main"
 		elif words[1]=="label":
 			ir[curr].typ="label"
 			ir[curr].in1=words[2]

@@ -2,7 +2,7 @@
 2,param,100,0
 3,call,g,dd
 4,print,dd
-5,ret
+5,ret_main
 6,flabel,f
 7,deparam,f_a
 8,*,f_t0,f_a,2
