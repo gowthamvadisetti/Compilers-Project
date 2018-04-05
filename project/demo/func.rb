@@ -1,7 +1,6 @@
 def foo(p)
    i = p
-   print (i)
-   i = -2
-   print(i)
+   return 2*2*i
 end   
-foo(10)
+bb=foo(10)
+print(bb)

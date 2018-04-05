@@ -213,7 +213,7 @@ def p_M_1(p):
     p[0].label=label1
 
 def p_expr1(p):
-    '''expr1 : return primary
+    '''expr1 : return term2
             | return
             | expr2
     '''
@@ -222,7 +222,8 @@ def p_expr1(p):
         p[0].code=[Instruction3AC("ret",None,None,None,None,None,st.fname)]
         p[0].place=None
     elif p[1] == "return":
-        p[0].code=[Instruction3AC("ret",None,None,p[2].place,None,None,st.fname)]
+        p[0].code=p[2].code
+        p[0].code+=[Instruction3AC("ret",None,None,p[2].place,None,None,st.fname)]
         p[0].place=None
     elif len(p[1:]) == 1:
         p[0].code=p[1].code
