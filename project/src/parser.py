@@ -836,6 +836,7 @@ def p_varname(p):
 def p_newline(p):
     '''newline : SEMI_COLON
                | NEWLINE
+               | empty
     '''
     getRule(p,'newline')
 

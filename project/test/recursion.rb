@@ -1,9 +1,6 @@
 def fact(n)
-if n<=0
-return 1
-end
-temp4=n-1
-a=fact(temp4)
+if n<=0 return 1 end
+a=fact(n-1)
 n=n+1
 return n*a
 end

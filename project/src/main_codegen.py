@@ -90,8 +90,6 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].out=match.group(1)
 			else:
 				print("Array declaration error")
-			print(ir[curr].in1)
-			print(ir[curr].out)
 		elif words[1] in ['+','-','*','/','%',"++","--","+=","-=","*=","/=",'%=']:
 			ir[curr].typ="arithmetic"
 			if words[1] == "++":
@@ -232,7 +230,7 @@ parse_input(file_location,ir,leaders)
 # 	print (i.in1,i.in2,i.out,i.typ,i.op)
 leaders=list(set(leaders))
 leaders=sorted(leaders)
-print(leaders)
+# print(leaders)
 mips=""
 mips+=".data\n"
 num_vars=0
@@ -258,4 +256,4 @@ for i in range(len(leaders)):
 		temp=codegen.generate_code(ir,block_start,block_end,symbol_attach,num_vars)
 with open("mips/test1.asm","w") as fp:
 	fp.write(mips)
-print (mips)
+# print (mips)

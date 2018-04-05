@@ -1,45 +1,62 @@
 .data
-f_a: .word 0
-f_i: .word 0
-s: .word 0
-k: .word 0
-f_t1: .word 0
-l: .word 0
-t0: .word 0
-f_t0: .word 0
-f_jj: .word 0
-f_bb: .word 0
+fact_t0: .word 0
+fact_t1: .word 0
+fact_t3: .word 0
+fact_t2: .word 0
+dd: .word 0
+num: .word 0
+fact_a: .word 0
+fact_n: .word 0
 .text
 main:
-li $t0,2
-li $t1,2
-li $t2,2
-add $t2,$t0,$t2
-move $a0,$t2
-move $a1,$t1
+li $t0,5
+move $a0,$t0
 sub $sp, $sp,12
 sw $a0,4($sp)
-jal f
-sw $v0,s
-lw $t3,s
+jal fact
+sw $v0,dd
+lw $t1,dd
 li $v0,1
-move $a0,$t3
+move $a0,$t1
 syscall
 li $v0,10
 syscall
-f:
+fact:
 sw $ra,0($sp)
-lw $t4,f_a
-move $t4,$a0
-lw $t5,f_bb
-move $t5,$a1
-li $t6,2
-add $t6,$t4,$t6
-li $t7,3
-add $t7,$t6,$t7
-move $t8,$t7
-move $t9,$t5
-move $v0,$t8
+lw $t2,fact_n
+move $t2,$a0
+li $t3,0
+ble $t2,$t3,l0
+li $t3,0
+j l1
+l0:
+li $t3,1
+l1:
+li $t4,0
+bgt $t3,$t4,l2
+j l3
+l2:
+li $t4,1
+move $v0,$t4
+sw $v0,8($sp)
+lw $ra,0($sp)
+addi $sp,$sp,12
+jr $ra
+l3:
+li $t4,1
+sub $t4,$t2,$t4
+move $a0,$t4
+sub $sp, $sp,12
+sw $a0,4($sp)
+jal fact
+sw $v0,fact_a
+li $t5,1
+add $t5,$t2,$t5
+move $t2,$t5
+lw $t6,fact_a
+mult $t2,$t6
+mflo $t7
+move $v0,$t7
 sw $v0,8($sp)
 lw $ra,0($sp)
 addi $sp,$sp,12
