@@ -318,16 +318,17 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			if ir[i].in1 != None:
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 				mips+="move $v0,"+reg1+"\n"
-			if is_exit == False:
-				mips += "lw $ra,0($sp)\n"
 				mips += "sw $v0,8($sp)\n"
-				mips += "addi $sp,$sp,12\n"
-				mips += "jr $ra\n"
+
+			#if is_exit == False:
+			mips += "lw $ra,0($sp)\n"
+			mips += "addi $sp,$sp,12\n"
+			mips += "jr $ra\n"
 				# is_exit = True
-			else:
-				mips+="li $v0,10\n"
-				mips+="syscall\n"
-				is_exit = False
+			#else:
+				#mips+="li $v0,10\n"
+				#mips+="syscall\n"
+				#is_exit = False
 		elif ir[i].typ == "ret_main":
 			mips+="li $v0,10\n"
 			mips+="syscall\n"
