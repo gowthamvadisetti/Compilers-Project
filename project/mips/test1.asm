@@ -1,63 +1,58 @@
 .data
-fibo_temp4: .word 0
+f_a: .word 0
 dd: .word 0
-fibo_a: .word 0
-num: .word 0
-fibo_t1: .word 0
-fibo_t0: .word 0
-fibo_n: .word 0
+f_t0: .word 0
+g_cc: .word 0
+g_bb: .word 0
+g_t0: .word 0
 .text
 main:
-li $t0,5
+li $t0,100
 move $a0,$t0
 sub $sp, $sp,12
 sw $a0,4($sp)
-jal fibo
+jal g
 sw $v0,dd
-lw $t1,dd
+lw $t0,dd
 li $v0,1
-move $a0,$t1
+move $a0,$t0
 syscall
 li $v0,10
 syscall
-fibo:
-lw $t2,fibo_n
+f:
+lw $t1,f_a
 sw $ra,0($sp)
-move $t2,$a0
-li $v0,1
-move $a0,$t2
-syscall
-li $t3,0
-ble $t2,$t3,l0
-li $t3,0
-j l1
-l0:
-li $t3,1
-l1:
-li $t4,0
-bgt $t3,$t4,l2
-j l3
-l2:
-li $t4,0
-move $v0,$t4
-li $v0,10
-syscall
-l3:
-li $t4,1
-sub $t4,$t2,$t4
-move $t5,$t4
-move $a0,$t5
+move $t1,$a0
+li $t2,2
+mult $t1,$t2
+mflo $t2
+move $v0,$t2
+lw $ra,0($sp)
+sw $v0,8($sp)
+addi $sp,$sp,12
+jr $ra
+lw $ra,0($sp)
+sw $v0,8($sp)
+addi $sp,$sp,12
+jr $ra
+g:
+lw $t3,g_bb
+sw $ra,0($sp)
+move $t3,$a0
+move $a0,$t3
 sub $sp, $sp,12
 sw $a0,4($sp)
-jal fibo
-sw $v0,fibo_a
-lw $t6,fibo_a
-li $v0,1
-move $a0,$t6
-syscall
-move $v0,$t6
-li $v0,10
-syscall
+jal f
+sw $v0,g_cc
+lw $t4,g_cc
+li $t5,3
+mult $t4,$t5
+mflo $t5
+move $v0,$t5
+lw $ra,0($sp)
+sw $v0,8($sp)
+addi $sp,$sp,12
+jr $ra
 lw $ra,0($sp)
 sw $v0,8($sp)
 addi $sp,$sp,12

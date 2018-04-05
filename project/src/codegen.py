@@ -80,7 +80,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 	global mips
 	global is_exit
 	global num_args
-	is_exit = True
+	is_exit = False
 	for i in range(block_start,block_end+1):
 		# if ir[i].typ != "label":
 		# 	mips+="line"+str(ir[i].lineno)+": \n"
@@ -290,6 +290,8 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 		elif ir[i].typ == "label":
 			num_args=0
 			mips+=ir[i].in1+":\n"
+			if ir[i].in1 == "main":
+				is_exit=True
 		elif ir[i].typ == "param":
 			if num_args>3:
 				print("Number of function arguments > 4(NOT SUPPORTED)")
@@ -323,7 +325,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				mips += "sw $v0,8($sp)\n"
 				mips += "addi $sp,$sp,12\n"
 				mips += "jr $ra\n"
-				is_exit = True
+				# is_exit = True
 			else:
 				mips+="li $v0,10\n"
 				mips+="syscall\n"
