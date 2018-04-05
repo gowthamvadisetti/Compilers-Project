@@ -320,10 +320,10 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				mips+="move $v0,"+reg1+"\n"
 				mips += "sw $v0,8($sp)\n"
 
-			#if is_exit == False:
-			mips += "lw $ra,0($sp)\n"
-			mips += "addi $sp,$sp,12\n"
-			mips += "jr $ra\n"
+			if is_exit == False:
+				mips += "lw $ra,0($sp)\n"
+				mips += "addi $sp,$sp,12\n"
+				mips += "jr $ra\n"
 				# is_exit = True
 			#else:
 				#mips+="li $v0,10\n"
