@@ -1,4 +1,5 @@
 1,label,main
+<<<<<<< HEAD
 2,param,5,0
 3,call,f,e
 4,print,e
@@ -15,3 +16,37 @@
 15,-,g_t0,g_m,1
 16,=,g_d,g_t0
 17,ret,g_d
+=======
+2,=,num,5
+3,=,num2,10
+4,param,num,0
+5,param,num2,1
+6,call,fact,dd
+7,print,dd
+8,ret_main
+9,flabel,fact
+10,deparam,fact_n
+11,deparam,fact_n2
+12,ifgoto,<=,fact_n,0,l0
+13,=,fact_t0,0
+14,goto,l1
+15,label,l0
+16,=,fact_t0,1
+17,label,l1
+18,ifgoto,>,fact_t0,0,l2
+19,goto,l3
+20,label,l2
+21,ret,1
+22,label,l3
+23,-,fact_t1,fact_n,1
+24,=,fact_temp4,fact_t1
+25,param,fact_temp4,0
+26,param,fact_n2,1
+27,call,fact,fact_a
+28,+,fact_t2,fact_n,1
+29,=,fact_n,fact_t2
+30,*,fact_t3,fact_n,fact_n2
+31,*,fact_t4,fact_t3,fact_a
+32,ret,fact_t4
+33,ret
+>>>>>>> ccc22439909d2f1b1d138bf2b57759fd21fa5d32
