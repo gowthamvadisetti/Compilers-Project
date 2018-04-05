@@ -5,7 +5,7 @@ all:
 	mv src/main_parser.pyc bin/main_parser.pyc
 	mv src/main_codegen.pyc bin/codegen
 	mv src/codegen.pyc bin/codegen.pyc
-	mv src/parser2.pyc bin/irgen
+	mv src/parser.pyc bin/irgen
 	chmod +x bin/irgen
 	chmod +x bin/codegen
 

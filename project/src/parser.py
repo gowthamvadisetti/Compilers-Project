@@ -548,7 +548,7 @@ def p_arrayd(p):
     p[0]=SDT()
     temp=st.newtemp()
     p[0].code=p[3].code
-    p[0].code+=[Instruction3AC("array",temp+"["+str(p[3].place)+"]",None,None,None,None,st.fname)]
+    p[0].code+=[Instruction3AC("array",None,None,temp+"["+str(p[3].place)+"]",None,None,st.fname)]
     p[0].place=temp
 
 def p_array_size(p):

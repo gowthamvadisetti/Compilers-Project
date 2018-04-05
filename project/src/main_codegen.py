@@ -90,6 +90,8 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].out=match.group(1)
 			else:
 				print("Array declaration error")
+			print(ir[curr].in1)
+			print(ir[curr].out)
 		elif words[1] in ['+','-','*','/','%',"++","--","+=","-=","*=","/=",'%=']:
 			ir[curr].typ="arithmetic"
 			if words[1] == "++":
