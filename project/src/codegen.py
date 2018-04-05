@@ -286,6 +286,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 		elif ir[i].typ == "flabel":
 			num_args=0
 			mips+=ir[i].in1+":\n"
+			mips += "sw $ra,0($sp)\n"
 			is_exit = False;
 		elif ir[i].typ == "label":
 			num_args=0
@@ -303,7 +304,6 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 				print("Number of function arguments > 4(NOT SUPPORTED)")
 				quit()
 			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
-			mips += "sw $ra,0($sp)\n"
 			mips+="move "+reg1+",$a"+str(num_args)+"\n"
 			# mips+="move "+reg1+",$a0\n"
 			num_args+=1	
