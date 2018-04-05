@@ -1,85 +1,59 @@
 .data
-fact_n2: .word 0
-fact_t1: .word 0
-fact_t5: .word 0
-num2: .word 0
-fact_t3: .word 0
-fact_t2: .word 0
-dd: .word 0
-fact_temp4: .word 0
-fact_t0: .word 0
-num: .word 0
-fact_a: .word 0
-fact_t4: .word 0
-fact_n: .word 0
+e: .word 0
+f_c: .word 0
+f_n: .word 0
+f_t0: .word 0
+g_m: .word 0
+g_d: .word 0
+g_t0: .word 0
+f_a: .word 0
 .text
 main:
 li $t0,5
-li $t1,1
 move $a0,$t0
-move $a1,$t1
 sub $sp, $sp,12
 sw $a0,4($sp)
-jal fact
-sw $v0,dd
-lw $t2,dd
+jal f
+sw $v0,e
+lw $t0,e
 li $v0,1
-move $a0,$t2
+move $a0,$t0
 syscall
 li $v0,10
 syscall
-fact:
-lw $t3,fact_n
+f:
+lw $t1,f_n
 sw $ra,0($sp)
-move $t3,$a0
-lw $t4,fact_n2
-sw $ra,0($sp)
-move $t4,$a1
-li $t5,0
-ble $t3,$t5,l0
-li $t5,0
-j l1
-l0:
-li $t5,1
-l1:
-li $t6,0
-bgt $t5,$t6,l2
-j l3
-l2:
-li $t6,1
-move $v0,$t6
-lw $ra,0($sp)
-sw $v0,8($sp)
-addi $sp,$sp,12
-jr $ra
-l3:
-li $t6,1
-sub $t6,$t3,$t6
-move $t7,$t6
-li $t8,1
-add $t8,$t4,$t8
-move $t4,$t8
-move $a0,$t7
-move $a1,$t4
+move $t1,$a0
+li $t2,1
+sub $t2,$t1,$t2
+move $t3,$t2
+move $a0,$t3
 sub $sp, $sp,12
 sw $a0,4($sp)
-jal fact
-sw $v0,fact_a
-li $t9,1
-sub $t9,$t4,$t9
-move $t4,$t9
-li $s0,1
-add $s0,$t3,$s0
-move $t3,$s0
-lw $s1,fact_a
-mult $t4,$s1
-mflo $s2
-move $v0,$s2
-lw $ra,0($sp)
+jal g
+sw $v0,f_c
+lw $t4,f_c
+move $v0,$t4
 sw $v0,8($sp)
+lw $ra,0($sp)
 addi $sp,$sp,12
 jr $ra
 lw $ra,0($sp)
+addi $sp,$sp,12
+jr $ra
+g:
+lw $t5,g_m
+sw $ra,0($sp)
+move $t5,$a0
+li $t6,1
+sub $t6,$t5,$t6
+move $t7,$t6
+move $v0,$t7
 sw $v0,8($sp)
+lw $ra,0($sp)
+addi $sp,$sp,12
+jr $ra
+lw $ra,0($sp)
 addi $sp,$sp,12
 jr $ra
