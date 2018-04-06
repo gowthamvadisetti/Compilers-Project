@@ -1,71 +1,47 @@
 .data
-dd: .word 0
-f_t1: .word 0
-f_t0: .word 0
-f_t2: .word 0
-num: .word 0
-f_n: .word 0
-f_a: .word 0
+bb: .word 0
+cc: .word 0
+t0: .word 0
+arr_a: .word 0
+arr_t0: .word 0
 .text
 main:
-li $t0,5
-move $a0,$t0
 sub $sp, $sp,12
 sw $a0,4($sp)
-jal f
-sw $v0,dd
-lw $t1,dd
+jal arr
+sw $v0,bb
+lw $t1,bb
+li $t2,0
+sw $t1,bb
+add $t2,$t2,$t2
+add $t2,$t2,$t2
+add $t1,$t1,$t2
+lw $t0,0($t1)
+lw $t1,bb
+move $t2,$t0
 li $v0,1
-move $a0,$t1
+move $a0,$t2
 syscall
 li $v0,10
 syscall
-f:
+arr:
 sw $ra,0($sp)
-lw $t2,f_n
-move $t2,$a0
-li $t3,0
-ble $t2,$t3,l0
-li $t3,0
-j l1
-l0:
-li $t3,1
-l1:
-li $t4,0
-bgt $t3,$t4,l2
-j l3
-l2:
-li $t4,1
+li $t3,10
+sll $a0,$t3,2
+li $v0,9
+syscall
+sw $v0,arr_t0
+lw $t3,arr_t0
+move $t4,$t3
+li $t5,0
+li $t6,10
+sw $t4,arr_a
+add $t5,$t5,$t5
+add $t5,$t5,$t5
+add $t4,$t4,$t5
+sw $t6,0($t4)
+lw $t4,arr_a
 move $v0,$t4
-sw $v0,8($sp)
-lw $ra,0($sp)
-addi $sp,$sp,12
-jr $ra
-l3:
-lw $t4,f_t1
-sub $sp, $sp,4
-sw $t4,0($sp)
-sub $sp, $sp,4
-sw $t3,0($sp)
-sub $sp, $sp,4
-sw $t2,0($sp)
-li $t5,1
-sub $t4,$t2,$t5
-move $a0,$t4
-sub $sp, $sp,12
-sw $a0,4($sp)
-jal f
-sw $v0,f_a
-lw $t2,0($sp)
-addi $sp, $sp,4
-lw $t3,0($sp)
-addi $sp, $sp,4
-lw $t4,0($sp)
-addi $sp, $sp,4
-lw $t5,f_a
-mult $t2,$t5
-mflo $t6
-move $v0,$t6
 sw $v0,8($sp)
 lw $ra,0($sp)
 addi $sp,$sp,12
