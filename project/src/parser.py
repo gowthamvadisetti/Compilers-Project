@@ -290,13 +290,23 @@ def p_term0(p):
         p[0].place=p[1].place
     elif len(p[1:]) == 6:
         num_args=0
+        p[0].code=[]
+        stack = []
+        if st.parent != None:
+            func_vars=st.table.keys()
+            for i in range(len(func_vars)):
+                p[0].code+=[Instruction3AC("push",None,None,func_vars[i],None,None,st.fname)]
+                stack.append(func_vars[i])
         for i in range(len(p[5].code)):
             if p[5].code[i].typ == "param":
                 p[5].code[i].in2=str(num_args)
                 num_args+=1
-        p[0].code=p[5].code
+        p[0].code+=p[5].code
         p[0].code+=[Instruction3AC("call",None,None,p[3],p[1].place,None,st.fname)]
         st.insert(p[1].place,"int")
+        while len(stack)>0:
+            varname=stack.pop()
+            p[0].code+=[Instruction3AC("pop",None,varname,None,None,None,st.fname)]
         p[0].place=p[1].place
 
 def p_term1(p):

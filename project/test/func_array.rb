@@ -1,6 +1,8 @@
 def arr()
-a=10
+a=Array(10)
+a[0]=10
+return a
 end
-arr()
-cc=2
+bb=arr()
+cc=bb[0]
 print(cc)

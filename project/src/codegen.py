@@ -288,6 +288,14 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			mips+=ir[i].in1+":\n"
 			mips += "sw $ra,0($sp)\n"
 			is_exit = False;
+		elif ir[i].typ == "push":
+			reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
+			mips += "sub $sp, $sp,4\n"
+			mips += "sw "+reg1+",0($sp)\n"
+		elif ir[i].typ == "pop":
+			reg1=getreg(ir[i],ir[i].out,symbol_attach,i,True)
+			mips += "lw "+reg1+",0($sp)\n"
+			mips += "addi $sp, $sp,4\n"
 		elif ir[i].typ == "label":
 			num_args=0
 			mips+=ir[i].in1+":\n"

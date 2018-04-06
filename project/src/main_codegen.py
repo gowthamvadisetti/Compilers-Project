@@ -184,6 +184,12 @@ def parse_input(file_location,ir,leaders):
 		elif words[1]=="scan":
 			ir[curr].typ="scan"
 			ir[curr].in1=words[2]
+		elif words[1]=="push":
+			ir[curr].typ="push"
+			ir[curr].in1=words[2]
+		elif words[1]=="pop":
+			ir[curr].typ="pop"
+			ir[curr].out=words[2]
 		if ((ir[curr].typ != "label") and (ir[curr].typ != "flabel") and (ir[curr].typ != "puts") and (ir[curr].typ != "call")):
 			variables[ir[curr].in1]=True
 			variables[ir[curr].in2]=True
