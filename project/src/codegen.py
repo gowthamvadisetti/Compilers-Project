@@ -322,6 +322,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 			mips+="jal "+ir[i].in1 + "\n"
 			if ir[i].in2 != None:
 				mips += "sw $v0,"+ir[i].in2+"\n"
+			num_args=0
 		elif ir[i].typ == "ret":
 			if ir[i].in1 != None:
 				reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
