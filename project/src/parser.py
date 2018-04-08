@@ -562,16 +562,17 @@ def p_arrayd(p):
     p[0].place=temp
 
 def p_array_size(p):
-    '''array_size : primary COMMA array_size
-                | primary
+    '''array_size : term2 COMMA array_size
+                | term2
     '''
     p[0]=SDT()
     if len(p[1:]) == 1:
-        p[0].code=[]
+        p[0].code=p[1].code
         p[0].place=p[1].place
     elif len(p[1:]) == 3:
         temp=st.newtemp()
-        p[0].code=p[3].code
+        p[0].code=p[1].code
+        p[0].code+=p[3].code
         p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
 

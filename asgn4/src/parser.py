@@ -1,7 +1,7 @@
 import ply.yacc as yacc
 import lexer
 import sys
-from main import *
+from main_parser import *
 tokens=lexer.tokens
 counter=0
 number_map={}
@@ -88,7 +88,7 @@ def p_keydef(p):
     p[0]=SDT()
     temp=SymbolTable(p[2],st)
     st=temp
-    p[0].code=[Instruction3AC("label",None,None,p[2],None,None,st.fname)]
+    p[0].code=[Instruction3AC("flabel",None,None,p[2],None,None,st.fname)]
     p[0].place=None
 def p_keyend(p):
     '''keyend : end
@@ -213,7 +213,7 @@ def p_M_1(p):
     p[0].label=label1
 
 def p_expr1(p):
-    '''expr1 : return primary
+    '''expr1 : return term2
             | return
             | expr2
     '''
@@ -222,7 +222,8 @@ def p_expr1(p):
         p[0].code=[Instruction3AC("ret",None,None,None,None,None,st.fname)]
         p[0].place=None
     elif p[1] == "return":
-        p[0].code=[Instruction3AC("ret",None,None,p[2].place,None,None,st.fname)]
+        p[0].code=p[2].code
+        p[0].code+=[Instruction3AC("ret",None,None,p[2].place,None,None,st.fname)]
         p[0].place=None
     elif len(p[1:]) == 1:
         p[0].code=p[1].code
@@ -289,13 +290,23 @@ def p_term0(p):
         p[0].place=p[1].place
     elif len(p[1:]) == 6:
         num_args=0
+        p[0].code=[]
+        stack = []
+        if st.parent != None:
+            func_vars=st.table.keys()
+            for i in range(len(func_vars)):
+                p[0].code+=[Instruction3AC("push",None,None,func_vars[i],None,None,st.fname)]
+                stack.append(func_vars[i])
         for i in range(len(p[5].code)):
             if p[5].code[i].typ == "param":
                 p[5].code[i].in2=str(num_args)
                 num_args+=1
-        p[0].code=p[5].code
+        p[0].code+=p[5].code
         p[0].code+=[Instruction3AC("call",None,None,p[3],p[1].place,None,st.fname)]
         st.insert(p[1].place,"int")
+        while len(stack)>0:
+            varname=stack.pop()
+            p[0].code+=[Instruction3AC("pop",None,varname,None,None,None,st.fname)]
         p[0].place=p[1].place
 
 def p_term1(p):
@@ -547,20 +558,21 @@ def p_arrayd(p):
     p[0]=SDT()
     temp=st.newtemp()
     p[0].code=p[3].code
-    p[0].code+=[Instruction3AC("array",temp+"["+str(p[3].place)+"]",None,None,None,None,st.fname)]
+    p[0].code+=[Instruction3AC("array",None,None,temp+"["+str(p[3].place)+"]",None,None,st.fname)]
     p[0].place=temp
 
 def p_array_size(p):
-    '''array_size : primary COMMA array_size
-                | primary
+    '''array_size : term2 COMMA array_size
+                | term2
     '''
     p[0]=SDT()
     if len(p[1:]) == 1:
-        p[0].code=[]
+        p[0].code=p[1].code
         p[0].place=p[1].place
     elif len(p[1:]) == 3:
         temp=st.newtemp()
-        p[0].code=p[3].code
+        p[0].code=p[1].code
+        p[0].code+=p[3].code
         p[0].code+=[Instruction3AC(None,"*",temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
 
@@ -716,7 +728,7 @@ def p_callargs(p):
     p[0].place=None
 
 def p_callarglist(p):
-    '''callarglist : primary callmultarglist
+    '''callarglist : term2 callmultarglist
                | empty
     '''
     p[0]=SDT()
@@ -724,12 +736,13 @@ def p_callarglist(p):
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 2:
-        p[0].code=[Instruction3AC("param",None,None,p[1].place,None,None,st.fname)]
+        p[0].code=p[1].code
+        p[0].code+=[Instruction3AC("param",None,None,p[1].place,None,None,st.fname)]
         p[0].code+=p[2].code
         p[0].place=None
 
 def p_callmultarglist(p):
-    '''callmultarglist : COMMA primary callmultarglist
+    '''callmultarglist : COMMA term2 callmultarglist
                        | empty
     '''
     p[0]=SDT()
@@ -737,7 +750,8 @@ def p_callmultarglist(p):
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 3:
-        p[0].code=[Instruction3AC("param",None,None,p[2].place,None,None,st.fname)]
+        p[0].code=p[2].code
+        p[0].code+=[Instruction3AC("param",None,None,p[2].place,None,None,st.fname)]
         p[0].code+=p[3].code
         p[0].place=None
 
@@ -833,6 +847,7 @@ def p_varname(p):
 def p_newline(p):
     '''newline : SEMI_COLON
                | NEWLINE
+               | empty
     '''
     getRule(p,'newline')
 
@@ -853,7 +868,9 @@ parser = yacc.yacc(errorlog=yacc.NullLogger())
 fp=open(file_location,'r')
 file_contents=fp.read()
 t=yacc.parse()
-output_location=file_location.replace(".rb",".ir")
-ir_code+=[Instruction3AC("ret", None, None,None, None,None,st.fname)]
+# output_location=file_location.replace(".rb",".ir")
+output_location="ir/test1.ir"
+ir_code+=[Instruction3AC("ret_main", None, None,None, None,None,st.fname)]
+ir_code=[Instruction3AC("label", None, None,"main", None,None,st.fname)]+ir_code
 ir_code+=func_code
 Print3AC(ir_code,output_location)

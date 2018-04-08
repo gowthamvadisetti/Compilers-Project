@@ -1,132 +1,52 @@
 .data
-f_a: .word 0
-f_b: .word 0
-f_t4: .word 0
-dd: .word 0
-f_t1: .word 0
-f_t0: .word 0
-f_t3: .word 0
-f_t2: .word 0
-num: .word 0
-f_n: .word 0
+res: .word 0
+t4: .word 0
+t5: .word 0
+t2: .word 0
+t3: .word 0
+t0: .word 0
+t1: .word 0
+jj: .word 0
+str31: .asciiz "res="
 .text
 main:
-li $t0,20
-move $a0,$t0
-sub $sp, $sp,12
-sw $a0,4($sp)
-jal f
-sw $v0,dd
-lw $t1,dd
+li $t0,0
+li $t1,0
+li $t2,0
+li $t3,9
+move $t4,$t2
+l0:
+bge $t4,$t2,l7
+j l6
+l7:
+ble $t4,$t3,l1
+j l6
+l1:
+li $t5,0
+li $t6,9
+move $t7,$t5
+l2:
+bge $t7,$t5,l5
+j l4
+l5:
+ble $t7,$t6,l3
+j l4
+l3:
+li $t8,1
+add $t1,$t1,$t8
+li $t8,1
+add $t7,$t7,$t8
+j l2
+l4:
+li $t8,1
+add $t4,$t4,$t8
+j l0
+l6:
+la $a0,str31
+li $v0,4
+syscall
 li $v0,1
 move $a0,$t1
 syscall
 li $v0,10
 syscall
-f:
-sw $ra,0($sp)
-lw $t2,f_n
-move $t2,$a0
-li $t3,1
-beq $t2,$t3,l0
-li $t3,0
-j l1
-l0:
-li $t3,1
-l1:
-li $t4,0
-bgt $t3,$t4,l2
-j l3
-l2:
-li $t4,1
-move $v0,$t4
-sw $v0,8($sp)
-lw $ra,0($sp)
-addi $sp,$sp,12
-jr $ra
-l3:
-li $t4,0
-beq $t2,$t4,l4
-li $t4,0
-j l5
-l4:
-li $t4,1
-l5:
-li $t5,0
-bgt $t4,$t5,l6
-j l7
-l6:
-li $t5,0
-move $v0,$t5
-sw $v0,8($sp)
-lw $ra,0($sp)
-addi $sp,$sp,12
-jr $ra
-l7:
-sub $sp, $sp,4
-sw $t4,0($sp)
-lw $t5,f_t2
-sub $sp, $sp,4
-sw $t5,0($sp)
-sub $sp, $sp,4
-sw $t3,0($sp)
-sub $sp, $sp,4
-sw $t2,0($sp)
-li $t6,1
-sub $t5,$t2,$t6
-move $a0,$t5
-sub $sp, $sp,12
-sw $a0,4($sp)
-jal f
-sw $v0,f_a
-lw $t2,0($sp)
-addi $sp, $sp,4
-lw $t3,0($sp)
-addi $sp, $sp,4
-lw $t5,0($sp)
-addi $sp, $sp,4
-lw $t4,0($sp)
-addi $sp, $sp,4
-lw $t6,f_a
-sub $sp, $sp,4
-sw $t6,0($sp)
-sub $sp, $sp,4
-sw $t5,0($sp)
-lw $t7,f_t3
-sub $sp, $sp,4
-sw $t7,0($sp)
-sub $sp, $sp,4
-sw $t3,0($sp)
-sub $sp, $sp,4
-sw $t4,0($sp)
-sub $sp, $sp,4
-sw $t2,0($sp)
-li $t8,2
-sub $t7,$t2,$t8
-move $a0,$t7
-sub $sp, $sp,12
-sw $a0,4($sp)
-jal f
-sw $v0,f_b
-lw $t2,0($sp)
-addi $sp, $sp,4
-lw $t4,0($sp)
-addi $sp, $sp,4
-lw $t3,0($sp)
-addi $sp, $sp,4
-lw $t7,0($sp)
-addi $sp, $sp,4
-lw $t5,0($sp)
-addi $sp, $sp,4
-lw $t6,0($sp)
-addi $sp, $sp,4
-lw $t8,f_b
-add $t9,$t6,$t8
-move $v0,$t9
-sw $v0,8($sp)
-lw $ra,0($sp)
-addi $sp,$sp,12
-jr $ra
-lw $ra,0($sp)
-addi $sp,$sp,12
-jr $ra
