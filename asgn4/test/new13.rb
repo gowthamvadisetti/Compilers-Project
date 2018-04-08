@@ -4,7 +4,7 @@ i=a+2+3
 jj=bb
 return i
 end
-k=2+2
+k=2
 l=2
-s=f(k,l)
+s=f(k+2,l)
 print(s)
