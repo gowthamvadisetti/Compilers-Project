@@ -1,0 +1,7 @@
+if (c)
+	if (d)
+		d++
+	else
+		d--
+	end
+end
