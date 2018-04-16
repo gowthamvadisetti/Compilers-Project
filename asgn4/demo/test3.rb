@@ -1,5 +1,3 @@
-i = 0
-while (i < 100)
+for i in 1..99
 a += 1
-i ++ 1 < 100
 end
