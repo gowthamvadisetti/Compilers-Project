@@ -1,7 +1,7 @@
 if (c)
 	if (d)
-		d++
+		d += 1
 	else
-		d--
+		d -= 1
 	end
 end

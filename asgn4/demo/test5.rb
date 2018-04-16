@@ -1,9 +1,7 @@
-c = 0
-d = 0
-if (c && d)
- d++
+if (c & d)
+d += 1
 elsif (d & e) 
-e++
+e += 1
 else
-d--
+d -= 1
 end
