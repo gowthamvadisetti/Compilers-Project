@@ -111,7 +111,7 @@ def parse_input(file_location,ir,leaders):
 				ir[curr].in1=words[3]
 				ir[curr].in2=words[4]
 				ir[curr].out=words[2] 
-		elif words[1] in ['|','^','>>','<<','&','~','~|','|=', '&=', '^=', '>>=', '<<=']:
+		elif words[1] in ['|','^','>>','<<','&','~','~|','|=', '&=', '^=', '>>=', '<<=', '||', '&&']:
 			ir[curr].typ="logical"
 			if words[1] == '~':
 				ir[curr].in1=words[3]

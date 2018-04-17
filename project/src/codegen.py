@@ -204,7 +204,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 						reg2=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 						mips+="move "+reg2+","+reg1+"\n"
 		elif ir[i].typ=="logical":									#logical operaters
-				if (ir[i].op=="|" or ir[i].op == '|='):
+				if (ir[i].op=="|" or ir[i].op == '|=' or ir[i].op == '||'):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"
@@ -241,7 +241,7 @@ def generate_code(ir,block_start,block_end,symbol_attach,num_vars):
 						del reg_desc[reg1]
 					reg3=getreg(ir[i],ir[i].out,symbol_attach,i,False)
 					mips+="sllv "+reg3+","+reg1+","+reg2+"\n"
-				elif (ir[i].op=="&" or ir[i].op == '&='):
+				elif (ir[i].op=="&" or ir[i].op == '&=' or ir[i].op == '&&'):
 					reg1=getreg(ir[i],ir[i].in1,symbol_attach,i,True)
 					if (type(ir[i].in1) is int) and (type(ir[i].in2) is int):
 						reg_desc[reg1]="constant"

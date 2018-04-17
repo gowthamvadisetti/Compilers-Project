@@ -362,7 +362,8 @@ def p_term2(p):
 
 def p_term3(p):
     '''term3 : term3 LOGICAL_OR term4
-            | term4
+            |  term3 LOGICAL_AND term4
+            |  term4
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()
