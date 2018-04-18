@@ -556,7 +556,6 @@ def p_term9(p):
     else:
         if (p[1].type == "ptr" or p[3].type == "ptr"):
             print ("Error: Type mismatch")
-            print ("plzzz")
             quit()
 
         print (p[1].type)
