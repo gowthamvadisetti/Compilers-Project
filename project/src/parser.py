@@ -36,7 +36,6 @@ def p_multcompstmt(p):
     '''multcompstmt : newline stmt1 multcompstmt
                 | stmt1 multcompstmt
                 | newline
-                | empty
     '''
     getRule(p,'multcompstmt')
 

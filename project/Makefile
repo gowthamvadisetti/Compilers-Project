@@ -10,6 +10,8 @@ all:
 	chmod +x bin/codegen
 
 clean:
+	rm -rf ir/*
+	rm -rf mips/*
 	rm -rf bin
 	rm -rf src/__*
 	rm -rf src/*.pyc

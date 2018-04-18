@@ -260,6 +260,6 @@ for i in range(len(leaders)):
 		mips+=codegen.generate_code(ir,block_start,block_end,symbol_attach,num_vars)
 	else:
 		temp=codegen.generate_code(ir,block_start,block_end,symbol_attach,num_vars)
-with open("mips/test1.asm","w") as fp:
+with open("mips/test1.asm","w+") as fp:
 	fp.write(mips)
 # print (mips)

@@ -60,7 +60,7 @@ def change_class(curr_class_code,object_name,class_name):
         #     curr_class_code[i].in2=object_name+"_"+class_name+"_"+curr_class_code[i].in2
     return
 def Print3AC(TAClist,output_location):
-    fp=open(output_location,'w')
+    fp=open(output_location,'w+')
     for i in range(len(TAClist)):
         currline=[]
         lineno=str(i+1)
