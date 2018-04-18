@@ -402,9 +402,16 @@ def p_term2(p):
             p[0].place = [temp1, temp2]
 
         elif (p[2:][0] == "..."):
-            p[0].code += [Instruction3AC(None, "=", None, temp1, str(int(p[1].place)+1), None,st.fname)]
-            p[0].code += [Instruction3AC(None, "=", None, temp2, str(int(p[3].place)-1), None,st.fname)]
-            p[0].place = [temp1, temp2] 
+            #print (p[1].place)
+            if st.lookup(p[1].place):
+                p[0].code += [Instruction3AC(None, "+", temp1, p[1].place, str(1), None,st.fname)]
+                p[0].code += [Instruction3AC(None, "-", temp2, p[3].place, str(1), None,st.fname)]
+                p[0].place = [temp1, temp2]
+
+            else: 
+                p[0].code += [Instruction3AC(None, "=", None, temp1, str(int(p[1].place)+1), None,st.fname)]
+                p[0].code += [Instruction3AC(None, "=", None, temp2, str(int(p[3].place)-1), None,st.fname)]
+                p[0].place = [temp1, temp2]
 
    
 
