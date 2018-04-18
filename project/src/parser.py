@@ -558,8 +558,8 @@ def p_term9(p):
             print ("Error: Type mismatch")
             quit()
 
-        print (p[1].type)
-        print (p[3].type)
+        #print (p[1].type)
+        #print (p[3].type)
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
