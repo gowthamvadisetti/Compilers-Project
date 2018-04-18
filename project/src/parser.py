@@ -226,7 +226,7 @@ def p_expr1(p):
         p[0].code=p[2].code
         p[0].code+=[Instruction3AC("ret",None,None,p[2].place,None,None,st.fname)]
         p[0].place=None
-        p[0].type = p[1].type
+        p[0].type = p[2].type
     elif len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
@@ -332,9 +332,10 @@ def p_term1(p):
             pass
         else:
             if p[2] == "=":
-                if (p[1].type == "ptr" or p[3].type == "ptr"):
-                    print ("Error: Type mismatch")
-                    quit()
+                # if (p[1].type == "ptr" or p[3].type == "ptr"):
+                #     print ("1")
+                #     print ("Error: Type mismatch")
+                #     quit()
 
                 p[0].type = p[1].type
                 st.insert(p[1].place,"int")

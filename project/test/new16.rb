@@ -7,7 +7,7 @@ i+=1
 end
 i=0
 while(i < 9)
-cc=a[i]
+cc = a[i]
 print(cc)
 puts("\n")
 i+=1
