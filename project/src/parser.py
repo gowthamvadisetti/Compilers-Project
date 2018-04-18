@@ -123,6 +123,7 @@ def p_expr(p):
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
 
     elif p[1]=="if" and len(p[1:]) == 11:
         p[0].code=p[2].code
@@ -225,9 +226,11 @@ def p_expr1(p):
         p[0].code=p[2].code
         p[0].code+=[Instruction3AC("ret",None,None,p[2].place,None,None,st.fname)]
         p[0].place=None
+        p[0].type = p[1].type
     elif len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
 
 def p_expr2_1(p):
     '''expr2 : arg
@@ -235,6 +238,7 @@ def p_expr2_1(p):
     p[0]=SDT()
     p[0].code=p[1].code
     p[0].place=p[1].place
+    p[0].type = p[1].type
 
 def p_expr2_2(p):
     '''expr2 : call
@@ -274,6 +278,7 @@ def p_arg(p):
     p[0]=SDT()
     p[0].code=p[1].code
     p[0].place=p[1].place
+    p[0].type = p[1].type
 
 def p_term0(p):
     '''term0 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
@@ -284,6 +289,8 @@ def p_term0(p):
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     elif len(p[1:]) == 5:
         p[0].code=[Instruction3AC("call",None,None,p[3],p[1].place,None,st.fname)]
         st.insert(p[1].place,"int")
@@ -318,19 +325,31 @@ def p_term1(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
     else:
         p[0]=SDT()
         if "[" in p[1].place and "]" in p[1].place:
             pass
         else:
             if p[2] == "=":
+                if (p[1].type == "ptr" or p[3].type == "ptr"):
+                    print ("Error: Type mismatch")
+                    quit()
+
+                p[0].type = p[1].type
                 st.insert(p[1].place,"int")
             else:
+                if (p[1].type == "ptr" or p[3].type == "ptr"):
+                    print ("Error: Type mismatch")
+                    quit()
+
                 if st.lookup(p[1].place) is None:
                     print("Error"+p[1].place+"Not declared")
                     quit()
+
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],p[1].place,p[3].place,None,None,st.fname)]
         p[0].place=p[1].place
+        p[0].type = p[1].type
 
 def p_term2(p):
     '''term2 : term3 INCL_RANGE term3
@@ -342,11 +361,17 @@ def p_term2(p):
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
 
     if len(p[1:]) == 3:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0].code = p[1].code+p[3].code
         temp1 = st.newtemp()
         temp2 = st.newtemp()
+
 
         if (p[2:][0] == ".."):
             p[0].code += [Instruction3AC(None, "=", None, temp1, p[1].place, None,st.fname)]
@@ -369,11 +394,18 @@ def p_term3(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term4(p):
     '''term4 : term5 DOUBLE_EQUALS term5
@@ -386,7 +418,13 @@ def p_term4(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code
@@ -399,6 +437,7 @@ def p_term4(p):
         p[0].code+=[Instruction3AC(None,"=",temp,"1",None,None,st.fname)]
         p[0].code+=[Instruction3AC("label",None,None,label2,None,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term5(p):
     '''term5 : term5 LESS term6
@@ -411,7 +450,13 @@ def p_term5(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code
@@ -424,6 +469,7 @@ def p_term5(p):
         p[0].code+=[Instruction3AC(None,"=",temp,"1",None,None,st.fname)]
         p[0].code+=[Instruction3AC("label",None,None,label2,None,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term6(p):
     '''term6 : term6 BIT_XOR term7
@@ -434,11 +480,18 @@ def p_term6(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term7(p):
     '''term7 : term7 BIT_AND term8
@@ -448,11 +501,18 @@ def p_term7(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term8(p):
     '''term8 : term8 LEFT_SHIFT term9
@@ -463,11 +523,18 @@ def p_term8(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term9(p):
     '''term9 : term9 PLUS term10
@@ -478,11 +545,18 @@ def p_term9(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[3].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term10(p):
     '''term10 : term10 MULTIPLY term11
@@ -494,11 +568,18 @@ def p_term10(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if (p[1].type == "ptr" or p[1].type == "ptr"):
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[1].type
 
 def p_term11(p):
     '''term11 : MINUS term11
@@ -508,11 +589,18 @@ def p_term11(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
+
     else:
+        if p[2].type == "ptr":
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[2].code+[Instruction3AC(None,"*",temp,"-1",p[2].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[2].type
 
 def p_term12(p):
     '''term12 : PLUS term12
@@ -522,12 +610,18 @@ def p_term12(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
     else:
+        if p[2].type == "ptr":
+            print ("Error: Type mismatch")
+            quit()
+
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[2].code+[temp+"="+p[2].place]
         p[0].code=p[2].code+[Instruction3AC(None,"*",temp,"1",p[2].place,None,st.fname)]
         p[0].place=temp
+        p[0].type = p[2].type
 
 def p_term13(p):
     '''term13 : primary 
@@ -536,6 +630,7 @@ def p_term13(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
 
 def p_primary(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
@@ -548,6 +643,7 @@ def p_primary(p):
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
     elif p[1]=="(":
         p[0]=SDT()
         p[0].code=p[2].code
@@ -561,6 +657,7 @@ def p_arrayd(p):
     p[0].code=p[3].code
     p[0].code+=[Instruction3AC("array",None,None,temp+"["+str(p[3].place)+"]",None,None,st.fname)]
     p[0].place=temp
+    p[0].type = "ptr"
 
 def p_array_size(p):
     '''array_size : term2 COMMA array_size
@@ -666,6 +763,7 @@ def p_literal(p):
         elif p[1] == "false":
             p[1]=0
         p[0].place=str(p[1])
+        p[0].type = "int"
         # print(p[0].place)
 
 def p_whenargs(p):
@@ -676,6 +774,7 @@ def p_whenargs(p):
         # print(p[1].place)
         p[0].code = p[1].code
         p[0].place=p[1].place
+        p[0].type = p[1].type
 
     elif len(p[1:]) == 2:
         pass
@@ -717,6 +816,7 @@ def p_mrhs(p):
         p[0]=SDT()
         p[0].place=p[1].place
         p[0].code=p[1].code
+        p[0].type = p[1].type
         # print(p[0].place)
 
 def p_callargs(p):
@@ -840,7 +940,7 @@ def p_varname(p):
             p[0].place=p[1]
             p[0].code=[]
         else:
-            print("Error "+p[1]+"is not declared")
+            print("Error: "+p[1]+" is not declared")
             quit()
 
 def p_newline(p):
