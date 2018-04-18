@@ -10,6 +10,8 @@ curr_derivation=[]
 html=""
 ir_code=[]
 func_code=[]
+class_code={}
+object_map={}
 
 st=SymbolTable("",None)
 
@@ -58,6 +60,7 @@ def p_stmt(p):
             | expr
     '''
     global func_code
+    global class_code
     p[0]=SDT()
     if len(p[1:])== 1 and p[1]=="break":
         p[0].code=["break"]
@@ -76,7 +79,8 @@ def p_stmt(p):
         st.insert(p[3],"int")
         p[0].place=None
     elif p[1]=="class":
-        p[0].code=[Instruction3AC("unimplemented",None,None,None,None,None,st.fname)]
+        class_code[p[2]]=p[4].code
+        # p[0].code=[Instruction3AC("unimplemented",None,None,None,None,None,st.fname)]
     elif len(p[1:])==5:
         p[0].code=[]
         func_code+=p[1].code+p[2].code+p[4].code
@@ -283,14 +287,27 @@ def p_arg(p):
 def p_term0(p):
     '''term0 : mlhs EQUALS IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
            | mlhs EQUALS IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
+           | mlhs EQUALS IDENTIFIER DOT new OPEN_BRACKET CLOSE_BRACKET
            | term1
     '''
+    global class_code
+    global object_map
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=p[1].code
         p[0].place=p[1].place
         p[0].type = p[1].type
-
+    elif len(p[1:]) == 7:
+        object_name=p[1].place
+        if p[3] in class_code:
+            class_temp=class_code.copy()
+            curr_class_code=list(class_temp[p[3]])
+        else:
+            Print("Error:Class "+p[3]+" not found")
+            quit()
+        object_map[object_name]=p[3]
+        change_class(curr_class_code,object_name,p[3])
+        p[0].code=curr_class_code
     elif len(p[1:]) == 5:
         p[0].code=[Instruction3AC("call",None,None,p[3],p[1].place,None,st.fname)]
         st.insert(p[1].place,"int")
@@ -644,6 +661,7 @@ def p_primary(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
             | arrayd
             | arraya
+            | classvar
             | literal
             | varname
     '''
@@ -656,6 +674,14 @@ def p_primary(p):
         p[0]=SDT()
         p[0].code=p[2].code
         p[0].place=p[2].place
+
+def p_classvar(p):
+    '''classvar : IDENTIFIER DOT IDENTIFIER
+    '''
+    global object_map
+    p[0]=SDT()
+    p[0].code=[]
+    p[0].place=p[1]+"_"+object_map[p[1]]+"_"+p[3]
 
 def p_arrayd(p):
     '''arrayd : Array OPEN_BRACKET array_size CLOSE_BRACKET
@@ -811,6 +837,14 @@ def p_mlhsitem_1(p):
 
 def p_mlhsitem_2(p):
     '''mlhsitem : arrayal
+    '''
+    if len(p[1:]) == 1:
+        p[0]=SDT()
+        p[0].place=p[1].place
+        p[0].code=p[1].code
+
+def p_mlhsitem_3(p):
+    '''mlhsitem : classvar
     '''
     if len(p[1:]) == 1:
         p[0]=SDT()

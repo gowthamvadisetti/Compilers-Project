@@ -6,9 +6,9 @@ class table
 a = 5
 c = 7
 end
-x = chair()
-y = table()
-z = table()
+x = chair.new()
+y = table.new()
+z = table.new()
 x.a = 4
 d = x.a+x.c
 e = y.c-y.a

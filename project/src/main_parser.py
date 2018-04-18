@@ -49,6 +49,16 @@ class Instruction3AC:
             self.in2=in2
         self.target=target
 
+def change_class(curr_class_code,object_name,class_name):
+    for i in range(len(curr_class_code)):
+        curr_class_code[i]=Instruction3AC(curr_class_code[i].typ,curr_class_code[i].op,curr_class_code[i].out,curr_class_code[i].in1,curr_class_code[i].in2,curr_class_code[i].target,object_name+"_"+class_name)
+        # if not check_int(curr_class_code[i].out) and curr_class_code[i].out:
+        #     curr_class_code[i].out=object_name+"_"+class_name+"_"+curr_class_code[i].out
+        # if not check_int(curr_class_code[i].in1) and curr_class_code[i].in1 and curr_class_code[i].typ is not"label" and curr_class_code[i].typ is not "flabel" and typ is not"call":
+        #     curr_class_code[i].in1=object_name+"_"+class_name+"_"+curr_class_code[i]
+        # if not check_int(curr_class_code[i].in2) and curr_class_code[i].in2:
+        #     curr_class_code[i].in2=object_name+"_"+class_name+"_"+curr_class_code[i].in2
+    return
 def Print3AC(TAClist,output_location):
     fp=open(output_location,'w')
     for i in range(len(TAClist)):
