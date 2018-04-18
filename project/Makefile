@@ -23,4 +23,4 @@ spim:
 	spim -file mips/test1.asm
 
 codegen:
-	bin/codegen ir/test1.ir
+	python bin/codegen ir/test1.ir
