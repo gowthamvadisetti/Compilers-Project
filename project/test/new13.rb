@@ -6,5 +6,5 @@ return i
 end
 k=2
 l=2
-s=f(k+2,l)
+s=f(k,l)
 print(s)
