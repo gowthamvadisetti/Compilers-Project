@@ -1,4 +1,4 @@
 i = 1
-jj = 2
+jj = 1
 k = i==jj
 print(k)
