@@ -1,0 +1,6 @@
+1,label,main
+2,=,x_chair_a,2
+3,=,x_chair_c,3
+4,+,t0,x,2
+5,=,c,t0
+6,ret_main

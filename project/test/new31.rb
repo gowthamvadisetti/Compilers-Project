@@ -1,4 +1,4 @@
 a = 2
 c = Array(10)
-d = a+c
+d = c+a
 print (d)
