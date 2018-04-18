@@ -655,8 +655,6 @@ def p_multelsif(p):
 
 def p_literal(p):
     '''literal : NUMBER
-               | FLOAT
-               | STRING
                | true
                | false
     '''
