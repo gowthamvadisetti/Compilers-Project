@@ -337,15 +337,20 @@ def p_term1(p):
                 #     print ("Error: Type mismatch")
                 #     quit()
 
-                p[0].type = p[1].type
-                st.insert(p[1].place,"int")
+                p[0].type = p[3].type
+
+                if p[0].type == None:
+                    st.insert(p[1].place,"int")
+                else:
+                    st.insert(p[1].place, p[0].type)
+
             else:
                 if (p[1].type == "ptr" or p[3].type == "ptr"):
                     print ("Error: Type mismatch")
                     quit()
 
                 if st.lookup(p[1].place) is None:
-                    print("Error"+p[1].place+"Not declared")
+                    print("Error: "+p[1].place+" not declared")
                     quit()
 
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],p[1].place,p[3].place,None,None,st.fname)]
@@ -551,8 +556,11 @@ def p_term9(p):
     else:
         if (p[1].type == "ptr" or p[3].type == "ptr"):
             print ("Error: Type mismatch")
+            print ("plzzz")
             quit()
 
+        print (p[1].type)
+        print (p[3].type)
         p[0]=SDT()
         temp=st.newtemp()
         p[0].code=p[1].code+p[3].code+[Instruction3AC(None,p[2],temp,p[1].place,p[3].place,None,st.fname)]
@@ -940,6 +948,7 @@ def p_varname(p):
             p[0]=SDT()
             p[0].place=p[1]
             p[0].code=[]
+            p[0].type = st.lookup(p[1])
         else:
             print("Error: "+p[1]+" is not declared")
             quit()
