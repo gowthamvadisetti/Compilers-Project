@@ -29,6 +29,7 @@ class SDT():
         self.code=[]
         self.place=None
         self.label=None
+        self.type = None
 
 class Instruction3AC:
     def __init__(self,typ,op,out,in1,in2,target,fname):

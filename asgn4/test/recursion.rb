@@ -1,13 +1,8 @@
-def fibo(n)
-print(n)
-if n<=0
-temp1=0
-return temp1
-end
-temp4=n-1
-a=fibo(temp4)
-return a
+def f(n)
+if n<=0 return 1 end
+a=f(n-1)
+return n*a
 end
 num=5
-dd=fibo(num)
+dd=f(num)
 print(dd)

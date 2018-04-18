@@ -1,4 +1,5 @@
 1,label,main
+<<<<<<< HEAD
 2,=,wflg,0
 3,=,dflg,0
 4,=,c,100
@@ -42,3 +43,12 @@
 42,puts,"\n"
 43,print,jj
 44,ret_main
+=======
+2,=,a,2
+3,array,t0[10]
+4,=,c,t0
+5,+,t1,a,c
+6,=,d,t1
+7,print,d
+8,ret_main
+>>>>>>> cd9b8982b0bd65ff55a440ee7a73e35b1c111c12
