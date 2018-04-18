@@ -5,6 +5,6 @@ a=f(n-1)
 b=f(n-2)
 return a+b
 end
-num=20
+num=9
 dd=f(num)
 print(dd)
