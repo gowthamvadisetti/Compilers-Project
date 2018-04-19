@@ -375,7 +375,7 @@ def p_term1(p):
                     st.insert(p[1].place, p[0].type)
 
             else:
-                if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+                if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
                     print ("Error: Type mismatch")
                     quit()
 
@@ -400,7 +400,7 @@ def p_term2(p):
         p[0].type = p[1].type
 
     if len(p[1:]) == 3:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -434,13 +434,14 @@ def p_term3(p):
             |  term4
     '''
     if len(p[1:]) == 1:
+
         p[0]=SDT()
         p[0].code=p[1].code
         p[0].place=p[1].place
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type != "bool" or p[3].type != "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -464,7 +465,7 @@ def p_term4(p):
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -496,7 +497,7 @@ def p_term5(p):
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -526,7 +527,7 @@ def p_term6(p):
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -547,7 +548,7 @@ def p_term7(p):
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -569,7 +570,7 @@ def p_term8(p):
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -591,7 +592,7 @@ def p_term9(p):
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -616,7 +617,7 @@ def p_term10(p):
         p[0].type = p[1].type
 
     else:
-        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class"):
+        if (p[1].type == "ptr" or p[3].type == "ptr" or p[1].type == "class" or p[3].type == "class" or p[1].type == "bool" or p[3].type == "bool"):
             print ("Error: Type mismatch")
             quit()
 
@@ -637,7 +638,7 @@ def p_term11(p):
         p[0].type = p[1].type
 
     else:
-        if p[2].type == "ptr" or p[2].type == "class":
+        if p[2].type == "ptr" or p[2].type == "class" or p[2].type == "bool":
             print ("Error: Type mismatch")
             quit()
 
@@ -657,7 +658,7 @@ def p_term12(p):
         p[0].place=p[1].place
         p[0].type = p[1].type
     else:
-        if p[2].type == "ptr" or p[2].type == "class":
+        if p[2].type == "ptr" or p[2].type == "class" or p[2].type == "bool":
             print ("Error: Type mismatch")
             quit()
 
@@ -812,12 +813,15 @@ def p_literal(p):
     if len(p[1:]) == 1:
         p[0]=SDT()
         p[0].code=[]
-        if p[1] == "true":
-            p[1]=1
-        elif p[1] == "false":
-            p[1]=0
-        p[0].place=str(p[1])
         p[0].type = "int"
+
+        if p[1] == "true":
+            p[1] = 1
+            p[0].type = "bool"
+        elif p[1] == "false":
+            p[0].type = "bool"
+
+        p[0].place=str(p[1])
         # print(p[0].place)
 
 def p_whenargs(p):
@@ -986,14 +990,11 @@ def p_opasgn(p):
               | RIGHT_SHIFT_EQUALS
               | LEFT_SHIFT_EQUALS
               | MULTIPLY_EQUALS
-              | LOGICAL_AND_EQUALS
-              | LOGICAL_OR_EQUALS
     '''
     p[0]=p[1]
 
 def p_varname(p):
     '''varname : GLOBAL 
-              | AT_THE_RATE IDENTIFIER
               | IDENTIFIER
     '''
     if len(p[1:]) == 1:
