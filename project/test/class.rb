@@ -1,6 +1,8 @@
 class Sample
-	def hello()
-puts("Hello Ruby!")
-   end
+	aa=2
+	bb=10
 end
-a=Sample(2,3)
+a=Sample.new()
+c=Sample.new()
+d=a.aa
+print(d)

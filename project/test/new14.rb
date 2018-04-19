@@ -1,7 +1,10 @@
 def foo(a)
 while(a>0)
 	print(a)
+	#puts("hcvhedvc")
 	a=a-1
 end
 end
-foo(10)
+puts("enter a number")
+gets(d)
+foo(d)

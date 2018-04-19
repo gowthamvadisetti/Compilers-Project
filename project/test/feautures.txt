@@ -1,0 +1,38 @@
+TYPE			feauture		
+class.rb		basic class def
+func_array.rb	array inside function
+new1.rb			basic arthemetic with Op precendence
+new2.rb			&, &&,boolean values,type checking
+new3.rb			==,&,print
+new4.rb			typechecking and output=error
+new5.rb			array and gets
+new6.rb			if else 
+new7.rb			dangling if else
+new8.rb			while loop
+new9.rb			switch case
+new10.rb		switch case
+new11.rb		switch case
+new12.rb		for loop
+new13.rb		basic function with return
+new14.rb		while with print inside the function --- error
+new15.rb		nested for loops.
+new16.rb		array and while
+new17.rb		for nested in while
+new18.rb		elsif,decrement and increment Op
+new19.rb		elsif,else
+new20.rb		until loop
+new21.rb		iterative fibonnaci,gets
+new24.rb		function call within other function
+new25.rb		function call within other function
+new26.rb		function with no arg --- error
+new27.rb		function call within other function
+new28.rb		boolean values type checking
+new29.rb		classes with operators
+new30.rb  		type checking for arrays
+new32.rb		for inclusive and exclusive range
+new33.rb		type checking for arrays
+new34.rb		classes type checking	
+new35.rb		logical with boolean
+new36.rb        logical with boolean, !=
+recurrion.rb	recurssion with single arg, factorial text case
+recursion3.rb	fibonnaci with recurssion

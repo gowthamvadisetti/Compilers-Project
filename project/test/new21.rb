@@ -11,4 +11,6 @@ def fibb(num)
   end
   print (bb)
 end
-fibb(10)
+puts("enter number")
+gets(dd)
+fibb(dd)
