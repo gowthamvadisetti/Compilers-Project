@@ -15,14 +15,15 @@ new11.rb		switch case
 new12.rb		for loop
 new13.rb		basic function with return
 new14.rb		while with print inside the function --- error
-new15.rb		nested for loops.
+new15.rb		nested for loops, both inclusive range and exclusive 				 range
 new16.rb		array and while
 new17.rb		for nested in while
 new18.rb		elsif,decrement and increment Op
 new19.rb		elsif,else
 new20.rb		until loop
 new21.rb		iterative fibonnaci,gets
-new24.rb		function call within other function
+new24.rb		function call within other function, functions with
+				return values
 new25.rb		function call within other function
 new26.rb		function with no arg --- error
 new27.rb		function call within other function
@@ -36,3 +37,18 @@ new35.rb		logical with boolean
 new36.rb        logical with boolean, !=
 recurrion.rb	recurssion with single arg, factorial text case
 recursion3.rb	fibonnaci with recurssion
+
+
+
+
+
+
+1) 2 test cases with 30 operators each. Cover all the operations *=, /=, +=, -=, %, %= etc.
+2) 1 test case for a function with 3 arguments
+3) 1 test case covering all gates - xor (^), bit or(|), bit and(&), left shift(<<) and right shift(>>)(inputs should be int for all of these gates)
+4) 1 test case with 2 different functions with same names for local variables(local variables in both the functions are a, c, d, e) - to show that the variables defined inside a function are local and not global
+5) 1 test case with 2 different classes with same names for local variables
+6) recursive factorial function
+7) while loop with break
+8) 1 test case with some basic operations in classes like declaring a
+variable d = a+c

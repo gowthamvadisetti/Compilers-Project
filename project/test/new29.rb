@@ -1,6 +1,7 @@
 class chair
 	a = 2
 	c = 3
+	d = c+a
 end
 class table
 	a = 5
@@ -13,7 +14,9 @@ x.a = 4
 d = x.a+x.c
 e = y.c-y.a
 f = z.c-x.a 
+h = x.d+2
 
 print (d)
 print (e)
 print (f)
+print (h)

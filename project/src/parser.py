@@ -678,7 +678,7 @@ def p_term13(p):
         p[0].place=p[1].place
         p[0].type = p[1].type
 
-def p_primary(p):
+def p_y(p):
     '''primary : OPEN_BRACKET expr2 CLOSE_BRACKET
             | arrayd
             | arraya
