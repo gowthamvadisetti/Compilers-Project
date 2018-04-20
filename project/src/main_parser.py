@@ -39,7 +39,7 @@ class Instruction3AC:
             self.out=fname+"_"+out
         else:
             self.out=out
-        if not check_int(in1) and in1 and fname and typ is not"label" and typ is not "flabel" and typ is not"call":
+        if not check_int(in1) and in1 and fname and typ is not"label" and typ is not "flabel" and typ is not "call" and typ is not "puts":
             self.in1=fname+"_"+in1
         else:
             self.in1=in1

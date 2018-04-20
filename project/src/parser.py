@@ -10,6 +10,8 @@ curr_derivation=[]
 html=""
 ir_code=[]
 func_code=[]
+func_args={}
+param_count=0
 class_code={}
 object_map={}
 
@@ -96,9 +98,11 @@ def p_keydef(p):
     '''keydef : def IDENTIFIER
     '''
     global st
+    global func_args
     p[0]=SDT()
     temp=SymbolTable(p[2],st)
     st=temp
+    func_args[p[2]]=0
     p[0].code=[Instruction3AC("flabel",None,None,p[2],None,None,st.fname)]
     p[0].place=None
 def p_keyend(p):
@@ -269,8 +273,15 @@ def p_function(p):
     '''function : IDENTIFIER OPEN_BRACKET callargs CLOSE_BRACKET
                 | IDENTIFIER OPEN_BRACKET CLOSE_BRACKET
     '''
+    global func_args
+    global param_count
     p[0]=SDT()
     if len(p[1:]) == 3:
+        if func_args[p[1]] != param_count:
+            print("ERROR:function arguments mismatch")
+            quit()
+        else:
+            param_count=0
         p[0].code=[Instruction3AC("call",None,None,p[1],None,None,st.fname)]
         p[0].place=None
     elif len(p[1:]) == 4:
@@ -280,6 +291,11 @@ def p_function(p):
                 p[3].code[i].in2=str(num_args)
                 num_args+=1
         p[0].code=p[3].code
+        if func_args[p[1]] != param_count:
+            print("ERROR:function arguments mismatch")
+            quit()
+        else:
+            param_count=0
         p[0].code+=[Instruction3AC("call",None,None,p[1],None,None,st.fname)]
         p[0].place=None
 
@@ -299,6 +315,8 @@ def p_term0(p):
     '''
     global class_code
     global object_map
+    global func_args
+    global param_count
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=p[1].code
@@ -322,6 +340,11 @@ def p_term0(p):
 
 
     elif len(p[1:]) == 5:
+        if func_args[p[3]] != param_count:
+            print("ERROR:function arguments mismatch")
+            quit()
+        else:
+            param_count=0
         p[0].code=[Instruction3AC("call",None,None,p[3],p[1].place,None,st.fname)]
         st.insert(p[1].place,"int")
         p[0].place=p[1].place
@@ -339,6 +362,11 @@ def p_term0(p):
                 p[5].code[i].in2=str(num_args)
                 num_args+=1
         p[0].code+=p[5].code
+        if func_args[p[3]] != param_count:
+            print("ERROR:function arguments mismatch")
+            quit()
+        else:
+            param_count=0
         p[0].code+=[Instruction3AC("call",None,None,p[3],p[1].place,None,st.fname)]
         st.insert(p[1].place,"int")
         while len(stack)>0:
@@ -896,12 +924,14 @@ def p_callarglist(p):
     '''callarglist : term2 callmultarglist
                | empty
     '''
+    global param_count
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 2:
         p[0].code=p[1].code
+        param_count+=1
         p[0].code+=[Instruction3AC("param",None,None,p[1].place,None,None,st.fname)]
         p[0].code+=p[2].code
         p[0].place=None
@@ -910,12 +940,14 @@ def p_callmultarglist(p):
     '''callmultarglist : COMMA term2 callmultarglist
                        | empty
     '''
+    global param_count
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 3:
         p[0].code=p[2].code
+        param_count+=1
         p[0].code+=[Instruction3AC("param",None,None,p[2].place,None,None,st.fname)]
         p[0].code+=p[3].code
         p[0].place=None
@@ -931,11 +963,13 @@ def p_arglist(p):
     '''arglist : IDENTIFIER multarglist
                | empty
     '''
+    global func_args
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 2:
+        func_args[st.fname]+=1
         p[0].code=[Instruction3AC("deparam",None,None,p[1],None,None,st.fname)]
         st.insert(p[1],"int")
         p[0].code+=p[2].code
@@ -945,11 +979,13 @@ def p_multarglist(p):
     '''multarglist : COMMA IDENTIFIER multarglist
                  | empty
     '''
+    global func_args
     p[0]=SDT()
     if len(p[1:]) == 1:
         p[0].code=[]
         p[0].place=None
     elif len(p[1:]) == 3:
+        func_args[st.fname]+=1
         p[0].code=[Instruction3AC("deparam",None,None,p[2],None,None,st.fname)]
         st.insert(p[2],"int")
         p[0].code+=p[3].code

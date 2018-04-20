@@ -1,7 +1,7 @@
 def foo(a)
 while(a>0)
 	print(a)
-	#puts("hcvhedvc")
+	puts("hcvhedvc")
 	a=a-1
 end
 end
