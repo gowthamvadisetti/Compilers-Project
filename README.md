@@ -28,6 +28,7 @@ After testing run ```make clean``` to remove the binaries
   * classes
   
  * Typechecking of data types
+ * Register spilling has been taken care of
  * Operators:
    * Arithmetic operators: +, -, *, /, %, +=, -=, *=, /=, %=
    * Logical operators: 
