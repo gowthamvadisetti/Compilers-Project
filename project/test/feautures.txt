@@ -42,11 +42,3 @@ new40.rb		1 test case with 2 different functions with same
                 names for local variables
 recurrion.rb	recurssion with single arg, factorial test case
 recursion3.rb	fibonnaci with recurssion
-
-
-
-
-
-
-1) 2 test cases with 30 operators each. Cover all the operations *=, /=, +=, -=, %, %= etc.
-4) 1 test case with 2 different functions with same names for local variables(local variables in both the functions are a, c, d, e) - to show that the variables defined inside a function are local and not global
