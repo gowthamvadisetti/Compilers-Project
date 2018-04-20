@@ -6,3 +6,4 @@ print(i)
 puts("\n")
 i = 10
 print(i)
+puts ("\n")
