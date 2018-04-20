@@ -28,7 +28,7 @@ new25.rb		function call within other function
 new26.rb		function with no arg --- error
 new27.rb		function call within other function
 new28.rb		boolean values type checking
-new29.rb		classes with operators, basic arithmetic operations 				inside classes
+new29.rb		classes with operators, basic arithmetic operations 				inside classes, multiple classes with same names for 				 attributes, creation of objects and accessing their 				 attributes
 new30.rb  		type checking for arrays
 new32.rb		for inclusive and exclusive range
 new33.rb		type checking for arrays
@@ -36,7 +36,11 @@ new34.rb		classes type checking
 new35.rb		logical with boolean
 new36.rb        logical with boolean, !=
 new37.rb 		while loop with break statement
-recurrion.rb	recurssion with single arg, factorial text case
+new38.rb        logical gates |, &, ^, <<, >>
+new39.rb  		function with 3 arguments
+new40.rb		1 test case with 2 different functions with same 
+                names for local variables
+recurrion.rb	recurssion with single arg, factorial test case
 recursion3.rb	fibonnaci with recurssion
 
 
@@ -45,8 +49,4 @@ recursion3.rb	fibonnaci with recurssion
 
 
 1) 2 test cases with 30 operators each. Cover all the operations *=, /=, +=, -=, %, %= etc.
-2) 1 test case for a function with 3 arguments
-3) 1 test case covering all gates - xor (^), bit or(|), bit and(&), left shift(<<) and right shift(>>)(inputs should be int for all of these gates)
 4) 1 test case with 2 different functions with same names for local variables(local variables in both the functions are a, c, d, e) - to show that the variables defined inside a function are local and not global
-5) 1 test case with 2 different classes with same names for local variables
-6) recursive factorial function
