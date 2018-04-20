@@ -12,8 +12,7 @@ Use the following commands to run the compiler
 
 ```
 cd project
-make
-bin/lexer test/test1.rb
+./ruby.sh test/1.basic_arithmetic.rb
 ```
 
 After testing run ```make clean``` to remove the binaries
@@ -28,6 +27,7 @@ After testing run ```make clean``` to remove the binaries
   * classes
   
  * Typechecking of data types
+ * Register spilling has been taken care of
  * Operators:
    * Arithmetic operators: +, -, *, /, %, +=, -=, *=, /=, %=
    * Logical operators: 

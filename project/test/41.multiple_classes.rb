@@ -1,7 +1,7 @@
 class chair
 	a = 2
 	c = 3
-	d = c+a
+	d = c
 end
 class table
 	a = 5
