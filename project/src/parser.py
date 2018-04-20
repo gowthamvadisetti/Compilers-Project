@@ -30,13 +30,12 @@ def newlabel():
 #The Actual Grammar Rules Below
 
 def p_compstmt(p):
-    '''compstmt : multcompstmt
+    '''compstmt : stmt1 multcompstmt
     '''
     getRule(p,'compstmt')
 
 def p_multcompstmt(p):
-    '''multcompstmt : newline stmt1 multcompstmt
-                | stmt1 multcompstmt
+    '''multcompstmt : compnewline stmt1 multcompstmt
                 | newline
     '''
     getRule(p,'multcompstmt')
@@ -110,9 +109,11 @@ def p_keyend(p):
     '''
     global st
     st=st.parent
+
+
 def p_multstmt(p):
-    '''multstmt : stmt newline multstmt
-                | empty 
+    '''multstmt : stmt compnewline multstmt
+                | newline
     '''
     p[0]=SDT()
     if len(p[1:]) == 1:
@@ -120,6 +121,14 @@ def p_multstmt(p):
         p[0].place=None
     elif len(p[1:]) == 3:
         p[0].code=p[1].code+p[3].code
+        p[0].place=None
+
+def p_multstmt2(p):
+    '''multstmt : stmt
+    '''
+    p[0]=SDT()
+    if len(p[1:]) == 1:
+        p[0].code=p[1].code
         p[0].place=None
 
 
@@ -1043,12 +1052,15 @@ def p_varname(p):
             print("Error: "+p[1]+" is not declared")
             quit()
 
+def p_compnewline(p):
+    '''compnewline : SEMI_COLON
+                   | NEWLINE
+    '''
+
 def p_newline(p):
-    '''newline : SEMI_COLON
-               | NEWLINE
+    '''newline : compnewline
                | empty
     '''
-    getRule(p,'newline')
 
 
 #For epsilon definitions
