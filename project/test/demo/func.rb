@@ -1,4 +1,5 @@
-def foo()
+def foo(p)
    i = 1
-end
+   return
+end   
 foo()
